@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "cmet_demo_icon_normalized.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

@@ -9,9 +9,25 @@ import SwiftUI
 
 @main
 struct cmet_ios_demoApp: App {
+    @StateObject private var alertsManager = AlertsManager()
+    @StateObject private var vehiclesManager = VehiclesManager()
+    @StateObject private var linesManager = LinesManager()
+//    @StateObject private var stopsManager = StopsManager()
+    
+    @StateObject private var locationManager = LocationManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(alertsManager)
+                .environmentObject(vehiclesManager)
+                .environmentObject(locationManager)
+                .environmentObject(linesManager)
+                .onAppear {
+                    UINavigationBar.appearance().prefersLargeTitles = true
+                }
+//            TestPreview()
+//            NewsView()
         }
     }
 }

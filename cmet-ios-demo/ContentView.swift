@@ -9,13 +9,41 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            HomeView()
+                .tabItem {
+                    Label("Home", systemImage: "person.crop.circle.fill")
+                }
+            
+            LinesView()
+                .tabItem {
+                    Label("Linhas", systemImage: "arrow.triangle.swap")
+                }
+            
+            StopsView()
+                .tabItem {
+                    Label("Paragens", systemImage: "map")
+                }
+            
+            MoreView()
+                .tabItem {
+                    Label("Mais", systemImage: "ellipsis")
+                }
+
         }
-        .padding()
+        .onAppear {
+                    let appearance = UITabBarAppearance()
+//                    appearance.configureWithOpaqueBackground()
+            appearance.backgroundEffect = UIBlurEffect(style: .systemMaterial)
+                    appearance.stackedLayoutAppearance.normal.iconColor = .gray
+                    appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.gray]
+                    
+            appearance.stackedLayoutAppearance.selected.iconColor = UIColor(.primary)
+            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(.primary)]
+                    
+                    UITabBar.appearance().standardAppearance = appearance
+                    UITabBar.appearance().scrollEdgeAppearance = appearance
+                }
     }
 }
 
