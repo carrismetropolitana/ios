@@ -11,6 +11,7 @@ import MapKit
 struct StopsView: View {
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var vehiclesManager: VehiclesManager
+    @EnvironmentObject var stopsManager: StopsManager
     
     @State private var isSheetPresented = false
     
@@ -23,14 +24,14 @@ struct StopsView: View {
     @State var shouldPresentVehicleDetailsView = false
     @State var vehicleIdToBePresented: String? = nil
 
-    @State private var stops: [Stop] = []
+//    @State private var stops: [Stop] = []
     @State private var selectedStopId: String?
     
     var body: some View {
-        let suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!, stops: stops, maxResults: 10) : Array(stops.prefix(10))
+        let suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
         NavigationStack {
             ZStack {
-                if let stop = stops.first(where: {$0.id == selectedStopId}) {
+                if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
                     NavigationLink(destination: StopDetailsView(stop: stop), isActive: $shouldPresentStopDetailsView) { EmptyView() }
                 }
                 
@@ -40,7 +41,7 @@ struct StopsView: View {
 //                    }
                 }
                 
-                MapLibreMapView(stops: stops, selectedStopId: $selectedStopId)
+                MapLibreMapView(stops: stopsManager.stops, selectedStopId: $selectedStopId)
                     .ignoresSafeArea()
                 
                 HStack {
@@ -61,19 +62,19 @@ struct StopsView: View {
                 searchBar()
                 
             }
-            .onAppear {
-                if stops.count == 0 {
-                    Task {
-                        stops = await CMAPI.shared.getStops()
-                        print(stops.count)
-                    }
-                }
-//                if shouldPresentStopDetailsView {
-//                    shouldPresentStopDetailsView = false
+//            .onAppear {
+//                if stops.count == 0 {
+//                    Task {
+//                        stops = await CMAPI.shared.getStops()
+//                        print(stops.count)
+//                    }
 //                }
-            }
-            .onChange(of: stops) {
-                if stops.count > 0 {
+////                if shouldPresentStopDetailsView {
+////                    shouldPresentStopDetailsView = false
+////                }
+//            }
+            .onChange(of: stopsManager.stops) {
+                if stopsManager.stops.count > 0 {
                     searchFilteredStops = suggestedStops
                     print("suggested: \(suggestedStops.count)")
                     print("initfilteredshouldbeequaltosuggested: \(searchFilteredStops.count)")
@@ -90,7 +91,7 @@ struct StopsView: View {
             }
             .onChange(of: searchTerm) {
                 print(searchTerm)
-                let filtered = stops.chunkedFilter({
+                let filtered = stopsManager.stops.chunkedFilter({
                     $0.name.localizedCaseInsensitiveContains(searchTerm) || $0.id.localizedCaseInsensitiveContains(searchTerm)
                 }, maxResults: 10)
                 if filtered.count > 0 {
@@ -118,7 +119,7 @@ struct StopsView: View {
             }
             .sheet(isPresented: $isSheetPresented) {
                 VStack {
-                    if let stop = stops.first(where: {$0.id == selectedStopId}) {
+                    if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
                         StopDetailsSheetView(shouldPresentStopDetailsView: $shouldPresentStopDetailsView, onEtaClick: { vehicleId in
                             print("got vehid from etas sheet on parent; vid: \(vehicleId)")
                             vehicleIdToBePresented = vehicleId

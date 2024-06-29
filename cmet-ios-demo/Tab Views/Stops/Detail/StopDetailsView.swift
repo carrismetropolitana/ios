@@ -9,12 +9,15 @@ import SwiftUI
 
 struct StopDetailsView: View {
     @EnvironmentObject var alertsManager: AlertsManager
+    @EnvironmentObject var linesManager: LinesManager
     @Environment(\.colorScheme) var colorScheme
     
     @State private var isAlertsSheetPresented = false
     
     @GestureState private var zoom = 1.0
     @State var offset: CGSize = .zero
+    
+    @State private var stopRoutes: [Route] = []
 
     
     let stop: Stop
@@ -164,88 +167,111 @@ struct StopDetailsView: View {
                     Spacer()
                 }
                 
-                VStack {
-                    HStack {
-                        LineEntry(
-                            line: Line(
-                                id: "1523",
-                                shortName: "1523",
-                                longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
-                                color: "#C61D23",
-                                textColor: "#FFFFFF",
-                                routes: ["1523_0"],
-                                patterns: ["1523_0_1", "1523_0_2"],
-                                municipalities: ["1111", "1110"],
-                                localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
-                                facilities: []
-                            )
-                        )
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                            .padding(.trailing, 3.0)
+                if stopRoutes.count > 0 {
+                    VStack {
+                        
+                        ForEach(stopRoutes.indices, id: \.hashValue) { routeIndex in
+                            let route = stopRoutes[routeIndex]
+                            
+                            // TODO: this might lead to a crash if a new line is introduced and the lines in linesManager haven't been updated yet, fix
+                            NavigationLink(destination: LineDetailsView(line: linesManager.lines.first(where: { $0.id == route.lineId })!)) {
+                                StopRouteEntry(route: route)
+                                    .padding(.horizontal, 10.0)
+                                    .padding(.vertical, 5.0)
+                                //                            .padding(.vertical, routeIndex == 0 ? nil : 2.0)
+                                    .padding(.top, routeIndex == 0 ? 8.0 : 0.0)
+                                    .padding(.bottom, routeIndex == stopRoutes.count - 1 && stopRoutes.count <= 3 ? 2.0 : 0.0)
+                            }.buttonStyle(.plain)
+                            if routeIndex != stopRoutes.count - 1 {
+                                Divider()
+                            }
+                            
+                        }
+//                        HStack {
+//                            LineEntry(
+//                                line: Line(
+//                                    id: "1523",
+//                                    shortName: "1523",
+//                                    longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
+//                                    color: "#C61D23",
+//                                    textColor: "#FFFFFF",
+//                                    routes: ["1523_0"],
+//                                    patterns: ["1523_0_1", "1523_0_2"],
+//                                    municipalities: ["1111", "1110"],
+//                                    localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
+//                                    facilities: []
+//                                )
+//                            )
+//                            Image(systemName: "chevron.right")
+//                                .foregroundStyle(.secondary)
+//                                .padding(.trailing, 3.0)
+//                        }
+//                        .padding(.horizontal, 10.0)
+//                        .padding(.top, 8.0)
+//                        .padding(.bottom, 2.0)
+//                        Divider()
+//                        HStack {
+//                            LineEntry(
+//                                line: Line(
+//                                    id: "1523",
+//                                    shortName: "1523",
+//                                    longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
+//                                    color: "#C61D23",
+//                                    textColor: "#FFFFFF",
+//                                    routes: ["1523_0"],
+//                                    patterns: ["1523_0_1", "1523_0_2"],
+//                                    municipalities: ["1111", "1110"],
+//                                    localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
+//                                    facilities: []
+//                                )
+//                            )
+//                            Image(systemName: "chevron.right")
+//                                .foregroundStyle(.secondary)
+//                                .padding(.trailing, 3.0)
+//                        }
+//                        .padding(.horizontal, 10.0)
+//                        .padding(.vertical, 2.0)
+//                        Divider()
+//                        HStack {
+//                            LineEntry(
+//                                line: Line(
+//                                    id: "1523",
+//                                    shortName: "1523",
+//                                    longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
+//                                    color: "#C61D23",
+//                                    textColor: "#FFFFFF",
+//                                    routes: ["1523_0"],
+//                                    patterns: ["1523_0_1", "1523_0_2"],
+//                                    municipalities: ["1111", "1110"],
+//                                    localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
+//                                    facilities: []
+//                                )
+//                            )
+//                            Image(systemName: "chevron.right")
+//                                .foregroundStyle(.secondary)
+//                                .padding(.trailing, 3.0)
+//                        }
+//                        .padding(.horizontal, 10.0)
+//                        .padding(.vertical, 2.0)
+                        
+                        
+                        if stopRoutes.count > 500 { // while collapsed routes are not implemented
+                            Divider()
+                            
+                            HStack {
+                                Text("Ver mais destinos")
+                                    .font(.headline)
+                                Spacer()
+                                Image(systemName: "chevron.down")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.horizontal, 10.0)
+                            .padding(.top, 10.0)
+                            .padding(.bottom, 20.0)
+                        }
                     }
-                    .padding(.horizontal, 10.0)
-                    .padding(.top, 8.0)
-                    .padding(.bottom, 2.0)
-                    Divider()
-                    HStack {
-                        LineEntry(
-                            line: Line(
-                                id: "1523",
-                                shortName: "1523",
-                                longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
-                                color: "#C61D23",
-                                textColor: "#FFFFFF",
-                                routes: ["1523_0"],
-                                patterns: ["1523_0_1", "1523_0_2"],
-                                municipalities: ["1111", "1110"],
-                                localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
-                                facilities: []
-                            )
-                        )
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                            .padding(.trailing, 3.0)
-                    }
-                    .padding(.horizontal, 10.0)
-                    .padding(.vertical, 2.0)
-                    Divider()
-                    HStack {
-                        LineEntry(
-                            line: Line(
-                                id: "1523",
-                                shortName: "1523",
-                                longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
-                                color: "#C61D23",
-                                textColor: "#FFFFFF",
-                                routes: ["1523_0"],
-                                patterns: ["1523_0_1", "1523_0_2"],
-                                municipalities: ["1111", "1110"],
-                                localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
-                                facilities: []
-                            )
-                        )
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                            .padding(.trailing, 3.0)
-                    }
-                    .padding(.horizontal, 10.0)
-                    .padding(.vertical, 2.0)
-                    
-                    Divider()
-                    
-                    HStack {
-                        Text("Ver mais destinos")
-                            .font(.headline)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 10.0)
-                    .padding(.top, 10.0)
-                    .padding(.bottom, 20.0)
+                    .background(RoundedRectangle(cornerRadius: 15.0).fill(.white))
                 }
-                .background(RoundedRectangle(cornerRadius: 15.0).fill(.white))
             }
             .padding()
             
@@ -261,7 +287,7 @@ struct StopDetailsView: View {
                 
                 VStack {
                     HStack {
-                       AboutStopItem(title: "Estado do Piso", description: "Em estado razoável")
+                       AboutStopItem(title: "Estado do Piso", description: "Desconhecido")
                     }
                     .padding(.horizontal, 20.0)
                     .padding(.top, 12.0)
@@ -270,7 +296,7 @@ struct StopDetailsView: View {
                     Divider()
                     
                     HStack {
-                        AboutStopItem(title: "Material do Piso", description: "Calçada Portuguesa")
+                        AboutStopItem(title: "Material do Piso", description: "Desconhecido")
                     }
                     .padding(.horizontal, 20.0)
                     .padding(.vertical, 5.0)
@@ -278,7 +304,7 @@ struct StopDetailsView: View {
                     Divider()
                     
                     HStack {
-                        AboutStopItem(title: "Tipo de Acesso à Paragem", description: "Acesso nivelado (rampa)")
+                        AboutStopItem(title: "Tipo de Acesso à Paragem", description: "Desconhecido")
                     }
                     .padding(.horizontal, 20.0)
                     .padding(.vertical, 5.0)
@@ -286,16 +312,7 @@ struct StopDetailsView: View {
                     Divider()
                     
                     HStack {
-                        AboutStopItem(title: "Estado da Passadeira", description: "Existe, em bom estado")
-                    }
-                    .padding(.horizontal, 20.0)
-                    .padding(.vertical, 5.0)
-                    
-                    
-                    Divider()
-                    
-                    HStack {
-                        AboutStopItem(title: "Estacionamento Abusivo", description: "Sim")
+                        AboutStopItem(title: "Estado da Passadeira", description: "Desconhecido")
                     }
                     .padding(.horizontal, 20.0)
                     .padding(.vertical, 5.0)
@@ -304,7 +321,16 @@ struct StopDetailsView: View {
                     Divider()
                     
                     HStack {
-                        AboutStopItem(title: "Data da Última Verificação de Acessibilidade", description: "20 de Abril de 2024")
+                        AboutStopItem(title: "Estacionamento Abusivo", description: "Desconhecido")
+                    }
+                    .padding(.horizontal, 20.0)
+                    .padding(.vertical, 5.0)
+                    
+                    
+                    Divider()
+                    
+                    HStack {
+                        AboutStopItem(title: "Data da Última Verificação de Acessibilidade", description: "Desconhecida")
                     }
                     .padding(.horizontal, 20.0)
                     .padding(.top, 5.0)
@@ -316,7 +342,7 @@ struct StopDetailsView: View {
             
             VStack {
                 HStack {
-                   AboutStopItem(title: "Estado do Painel de Informação Real-Time", description: "Existe e está OK")
+                   AboutStopItem(title: "Estado do Painel de Informação Real-Time", description: "Desconhecido")
                 }
                 .padding(.horizontal, 20.0)
                 .padding(.top, 12.0)
@@ -325,7 +351,7 @@ struct StopDetailsView: View {
                 Divider()
                 
                 HStack {
-                    AboutStopItem(title: "Estado da Sinalética H2OA", description: "Existe mas está danificada / errada")
+                    AboutStopItem(title: "Estado da Sinalética H2OA", description: "Descohecido")
                 }
                 .padding(.horizontal, 20.0)
                 .padding(.vertical, 5.0)
@@ -333,7 +359,7 @@ struct StopDetailsView: View {
                 Divider()
                 
                 HStack {
-                    AboutStopItem(title: "Disponibilização de Horários", description: "Existem mas estão danificados / desatualizados")
+                    AboutStopItem(title: "Disponibilização de Horários", description: "Desconhecido")
                 }
                 .padding(.horizontal, 20.0)
                 .padding(.vertical, 5.0)
@@ -341,7 +367,7 @@ struct StopDetailsView: View {
                 Divider()
                 
                 HStack {
-                    AboutStopItem(title: "Data da Última Verificação de Horários", description: "20 de Abril de 2024")
+                    AboutStopItem(title: "Data da Última Verificação de Horários", description: "Desconhecida")
                 }
                 .padding(.horizontal, 20.0)
                 .padding(.top, 5.0)
@@ -362,7 +388,7 @@ struct StopDetailsView: View {
             )
         }
         .navigationTitle("Paragem")
-        .background(Color(uiColor: UIColor.secondarySystemBackground))
+        .background(Color(uiColor: UIColor.secondarySystemBackground)) // mimics list background, apparently cant have specific unstyled items on list wihtout unstyling all (unstyled here is plain style)
         .sheet(isPresented: $isAlertsSheetPresented) {
             // try await AlertsService.fetchNew()
             AlertsSheetView(isSelfPresented: $isAlertsSheetPresented, alerts: stopAlerts, source: .stop) // AlertsService.alerts.find(where: { $0.alert.informedEntities blableblibloblu })
@@ -377,6 +403,18 @@ struct StopDetailsView: View {
                 images = await IMLAPI.shared.getStopPictures(imlStop.id)
                 
                 print("Got \(images.count) IML images for stop.")
+                
+                var routes: [Route] = []
+                
+                if let routeIds = stop.routes {
+                    for routeId in routeIds {
+                        let route = try await CMAPI.shared.getRoute(routeId)
+                        
+                        routes.append(route)
+                    }
+                    
+                    stopRoutes = routes
+                }
             }
         }
     }
@@ -398,6 +436,28 @@ struct AboutStopItem: View {
                     .fontWeight(.medium)
             }
             Spacer()
+        }
+    }
+}
+
+struct StopRouteEntry: View {
+    let route: Route
+    var body: some View {
+        HStack {
+                HStack {
+                    Pill(text: route.shortName, color: .init(hex: route.color), textColor: .init(hex: route.textColor), size: 60)
+                        .padding(.horizontal, 5.0)
+                    Text(route.longName)
+                        .bold()
+                        .font(.subheadline)
+                        .lineLimit(2)
+                    Spacer()
+                }
+                .frame(height: 40)
+                .padding(.vertical, 5)
+            Image(systemName: "chevron.right")
+                .foregroundStyle(.secondary)
+                .padding(.trailing, 3.0)
         }
     }
 }

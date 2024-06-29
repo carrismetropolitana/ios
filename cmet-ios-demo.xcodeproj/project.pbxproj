@@ -80,6 +80,7 @@
 		79E88CBF2BAAEC3A001F3227 /* SearchInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CBE2BAAEC3A001F3227 /* SearchInput.swift */; };
 		79E88CC22BAB76D3001F3227 /* LiveActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CC12BAB76D3001F3227 /* LiveActivityService.swift */; };
 		79E9D4F32C2F855500C6D181 /* UserFeedbackForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E9D4F22C2F855500C6D181 /* UserFeedbackForm.swift */; };
+		79E9D4F72C2F9CF700C6D181 /* StopsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E9D4F62C2F9CF700C6D181 /* StopsManager.swift */; };
 		79EA0B122BECC101006808AA /* VehicleDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EA0B112BECC101006808AA /* VehicleDetailsView.swift */; };
 		79EE5FC52BB7BE980060820F /* GenericMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EE5FC42BB7BE970060820F /* GenericMapView.swift */; };
 		79F0ABD92C02B2F1008FA0D9 /* VehicleIdentifier1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F0ABD82C02B2F1008FA0D9 /* VehicleIdentifier1.swift */; };
@@ -164,6 +165,7 @@
 		79E88CBE2BAAEC3A001F3227 /* SearchInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInput.swift; sourceTree = "<group>"; };
 		79E88CC12BAB76D3001F3227 /* LiveActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityService.swift; sourceTree = "<group>"; };
 		79E9D4F22C2F855500C6D181 /* UserFeedbackForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedbackForm.swift; sourceTree = "<group>"; };
+		79E9D4F62C2F9CF700C6D181 /* StopsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsManager.swift; sourceTree = "<group>"; };
 		79EA0B112BECC101006808AA /* VehicleDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDetailsView.swift; sourceTree = "<group>"; };
 		79EE5FC42BB7BE970060820F /* GenericMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericMapView.swift; sourceTree = "<group>"; };
 		79F0ABD82C02B2F1008FA0D9 /* VehicleIdentifier1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleIdentifier1.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			children = (
 				799E63B82C02D19E00BCBEB8 /* FavoritesService.swift */,
 				797D32152C1379460063F57C /* AlertsManager.swift */,
+				79E9D4F62C2F9CF700C6D181 /* StopsManager.swift */,
 				79FA6A242C1DF5B600E043C8 /* LinesManager.swift */,
 				79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */,
 				79C6C4FE2C146B89003277A7 /* LocationManager.swift */,
@@ -594,6 +597,7 @@
 				79DB836C2BA19A5D0023DD93 /* ContentView.swift in Sources */,
 				797C32E52C2A25B500E5860D /* CustomerSupportView.swift in Sources */,
 				799C0D442BB8C50C005A7512 /* LoadingBar.swift in Sources */,
+				79E9D4F72C2F9CF700C6D181 /* StopsManager.swift in Sources */,
 				79E88CBB2BAAEAA5001F3227 /* SmartNotificationCustomizationView.swift in Sources */,
 				79BA1A612C2D8D1700B841F5 /* ETATesting.swift in Sources */,
 				797C32E72C2A308900E5860D /* ImageViewer.swift in Sources */,
@@ -737,7 +741,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
 				DEVELOPMENT_TEAM = CWY6HA7572;
 				ENABLE_PREVIEWS = YES;
@@ -771,7 +775,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
 				DEVELOPMENT_TEAM = CWY6HA7572;
 				ENABLE_PREVIEWS = YES;

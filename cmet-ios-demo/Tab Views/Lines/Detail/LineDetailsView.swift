@@ -13,6 +13,7 @@ struct LineDetailsView: View {
     @EnvironmentObject var alertsManager: AlertsManager
     @EnvironmentObject var vehiclesManager: VehiclesManager
     
+    
     @State private var timer: Timer?
     let line: Line
     
@@ -328,6 +329,8 @@ private struct EtaEntryWithStopId {
 }
 
 struct PatternLegs: View {
+    @EnvironmentObject var stopsManager: StopsManager
+    
     let pattern: Pattern
     @State private var isSheetPresented = false
     @State private var selectedSchedulesDate = Date()
@@ -443,15 +446,23 @@ struct PatternLegs: View {
                                         }
                                         .buttonStyle(StopOptionsButtonStyle())
                                         
-                                        Button {
-                                            
-                                        } label: {
+                                        
+                                        NavigationLink(destination: StopDetailsView(stop: stopsManager.stops.first(where: { $0.id == pathStep.stop.id })!)) {
                                             HStack {
                                                 Image(systemName: "mappin.and.ellipse")
                                                 Text("Sobre a Paragem")
                                             }
-                                        }
-                                        .buttonStyle(StopOptionsButtonStyle())
+                                        }.buttonStyle(StopOptionsButtonStyle())
+                                        
+//                                        Button {
+//                                            
+//                                        } label: {
+//                                            HStack {
+//                                                Image(systemName: "mappin.and.ellipse")
+//                                                Text("Sobre a Paragem")
+//                                            }
+//                                        }
+//                                        .buttonStyle(StopOptionsButtonStyle())
                                     }
                                     .padding(.horizontal, 10)
                                 }

@@ -115,8 +115,9 @@ struct MapLibreMapView: UIViewRepresentable {
 //        }
         
 //        uiView.styleURL = URL(string: colorScheme == .light ? "https://maps.carrismetropolitana.pt/styles/default/style.json" : "https://api.maptiler.com/maps/e9d3c77d-4552-4ed6-83dd-1075b67bd977/style.json?key=NvTfdJJxC0xa6dknGF48")
-        
+        print("MAPLIBREMAPVIEW Got \(stops.count) stops!! on updateUIView, \(selectedStopId)")
         if selectedStopId == nil {
+            print("Adding stops to map")
             // Convert Stop objects to MGLPointFeature objects
             let features = stops.map { stop -> MLNPointFeature in
                 let feature = MLNPointFeature()
@@ -149,6 +150,8 @@ struct MapLibreMapView: UIViewRepresentable {
             
             // Add the layer to the map view
             uiView.style?.addLayer(layer)
+            
+            print("FInished adding stops")
             
 //            print(uiView.style?.sources.first(where: {$0.identifier == "stops"}))
 //            print(uiView.style?.layers)

@@ -12,7 +12,7 @@ struct cmet_ios_demoApp: App {
     @StateObject private var alertsManager = AlertsManager()
     @StateObject private var vehiclesManager = VehiclesManager()
     @StateObject private var linesManager = LinesManager()
-//    @StateObject private var stopsManager = StopsManager()
+    @StateObject private var stopsManager = StopsManager()
     
     @StateObject private var locationManager = LocationManager()
     
@@ -23,6 +23,7 @@ struct cmet_ios_demoApp: App {
                 .environmentObject(vehiclesManager)
                 .environmentObject(locationManager)
                 .environmentObject(linesManager)
+                .environmentObject(stopsManager)
                 .onAppear {
                     UINavigationBar.appearance().prefersLargeTitles = true
                 }
