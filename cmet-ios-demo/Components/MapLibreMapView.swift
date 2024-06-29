@@ -14,7 +14,6 @@ struct MapLibreMapView: UIViewRepresentable {
     @Binding var selectedStopId: String?
     
     func makeUIView(context: Context) -> MLNMapView {
-        
         let styleURL = URL(string: "https://maps.carrismetropolitana.pt/styles/default/style.json")
 //        let styleURL = URL(string: colorScheme == .light ? "https://maps.carrismetropolitana.pt/styles/default/style.json" : "https://api.maptiler.com/maps/e9d3c77d-4552-4ed6-83dd-1075b67bd977/style.json?key=NvTfdJJxC0xa6dknGF48")
 
@@ -43,7 +42,59 @@ struct MapLibreMapView: UIViewRepresentable {
         return mapView
     }
     
-//    func updateUIView(_ uiView: MLNMapView, context: Context) {}
+    private func addStops(to mapView: MLNMapView) {
+        print("Adding stops layer with \(stops.count) stops")
+        // Convert Stop objects to MGLPointFeature objects
+        let features = stops.map { stop -> MLNPointFeature in
+            let feature = MLNPointFeature()
+            feature.coordinate = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
+            feature.attributes = ["id": stop.id, "name": stop.name]
+            return feature
+        }
+        
+        // Create a MGLShapeSource with the features
+        let source = MLNShapeSource(identifier: "stops", features: features, options: nil)
+        
+        // Create a MGLCircleStyleLayer using the source
+        let layer = MLNCircleStyleLayer(identifier: "stops-layer", source: source)
+        
+        
+        // Set the layer properties
+        //        layer.circleColor = NSExpression(format: "mgl_step:from:stops:($zoomLevel, '#ffdd01', 9, '#ffffff')")
+        layer.circleColor = NSExpression(forConstantValue: UIColor(.cmYellow))
+        layer.circleRadius = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
+                                          [9: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 5), falseExpression: NSExpression(forConstantValue: 1)),
+                                           26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 25), falseExpression: NSExpression(forConstantValue: 20))])
+        layer.circleStrokeWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
+                                               [9: NSExpression(forConstantValue: 0.01),
+                                                26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 8), falseExpression: NSExpression(forConstantValue: 7))])
+        layer.circleStrokeColor = NSExpression(forConstantValue: UIColor(.black))
+        layer.circlePitchAlignment = NSExpression(forConstantValue: "map")
+        
+        
+        // Add the source to the map view
+        mapView.style?.addSource(source)
+        
+        // Add the layer to the map view
+        mapView.style?.addLayer(layer)
+    }
+    
+    private func updateStops(on mapView: MLNMapView) {
+        print("Updating stops layer with \(stops.count) stops")
+        guard let source = mapView.style?.source(withIdentifier: "stops") as? MLNShapeSource else {
+            print("Stops source not found")
+            return
+        }
+
+        let features = stops.map { stop -> MLNPointFeature in
+            let feature = MLNPointFeature()
+            feature.coordinate = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
+            feature.attributes = ["id": stop.id, "name": stop.name]
+            return feature
+        }
+
+        source.shape = MLNShapeCollectionFeature(shapes: features)
+    }
     
     class Coordinator: NSObject, MLNMapViewDelegate {
         var control: MapLibreMapView
@@ -57,27 +108,18 @@ struct MapLibreMapView: UIViewRepresentable {
             let mapView = sender.view as! MLNMapView
             let point = sender.location(in: mapView)
             let features = mapView.visibleFeatures(at: point, styleLayerIdentifiers: ["stops-layer"])
-
-//            for feature in features {
-//                if let stopId = feature.attribute(forKey: "id") as? String {
-//                    print(stopId)
-//                    // Find the stop with the tapped id
-//                    print(control.stops.count)
-//                    if let stop = control.stops.first(where: { $0.id == stopId }) {
-//                        // Update the selected stop
-//                        print(stop.id)
-//                        print(stop.name)
-//                        control.selectedStopId = stop
-//                        break
-//                    }
-//                }
-//            }
-//            for feature in features {
+            
             if let feature = features.last { // if there are multiple overlapping select the last
                 if let stopId = feature.attribute(forKey: "id") as? String {
                     control.selectedStopId = stopId
                 }
             }
+        }
+        
+        func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
+            print("finished loading mapstyle")
+            control.addStops(to: mapView)
+            print("added stops, \(style.source(withIdentifier: "stops-layer")), \(style.layer(withIdentifier: "stops"))")
         }
 
         func mapViewDidFinishLoadingMap(_ mapView: MLNMapView) {
@@ -101,76 +143,16 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: MLNMapView, context: Context) {
-//        var didChangeStyle = false
-//
-//
-//        if uiView.styleURL.absoluteString.contains("carrismetropolitana") && colorScheme == .dark {
-//            uiView.styleURL = URL(string: "https://api.maptiler.com/maps/e9d3c77d-4552-4ed6-83dd-1075b67bd977/style.json?key=NvTfdJJxC0xa6dknGF48")
-//            didChangeStyle = true
-//        }
-//
-//        if uiView.styleURL.absoluteString.contains("maptiler") && colorScheme == .light {
-//            uiView.styleURL = URL(string: "https://maps.carrismetropolitana.pt/styles/default/style.json")
-//            didChangeStyle = true
-//        }
-        
-//        uiView.styleURL = URL(string: colorScheme == .light ? "https://maps.carrismetropolitana.pt/styles/default/style.json" : "https://api.maptiler.com/maps/e9d3c77d-4552-4ed6-83dd-1075b67bd977/style.json?key=NvTfdJJxC0xa6dknGF48")
-        print("MAPLIBREMAPVIEW Got \(stops.count) stops!! on updateUIView, \(selectedStopId)")
-        if selectedStopId == nil {
-            print("Adding stops to map")
-            // Convert Stop objects to MGLPointFeature objects
-            let features = stops.map { stop -> MLNPointFeature in
-                let feature = MLNPointFeature()
-                feature.coordinate = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
-                feature.attributes = ["id": stop.id, "name": stop.name]
-                return feature
-            }
-            
-            // Create a MGLShapeSource with the features
-            let source = MLNShapeSource(identifier: "stops", features: features, options: nil)
-            
-            // Add the source to the map view
-            uiView.style?.addSource(source)
-            
-            // Create a MGLCircleStyleLayer using the source
-            let layer = MLNCircleStyleLayer(identifier: "stops-layer", source: source)
-            
-            
-            // Set the layer properties
-            //        layer.circleColor = NSExpression(format: "mgl_step:from:stops:($zoomLevel, '#ffdd01', 9, '#ffffff')")
-            layer.circleColor = NSExpression(forConstantValue: UIColor(.cmYellow))
-            layer.circleRadius = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-                                              [9: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 5), falseExpression: NSExpression(forConstantValue: 1)),
-                                               26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 25), falseExpression: NSExpression(forConstantValue: 20))])
-            layer.circleStrokeWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-                                                   [9: NSExpression(forConstantValue: 0.01),
-                                                    26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 8), falseExpression: NSExpression(forConstantValue: 7))])
-            layer.circleStrokeColor = NSExpression(forConstantValue: UIColor(.black))
-            layer.circlePitchAlignment = NSExpression(forConstantValue: "map")
-            
-            // Add the layer to the map view
-            uiView.style?.addLayer(layer)
-            
-            print("FInished adding stops")
-            
-//            print(uiView.style?.sources.first(where: {$0.identifier == "stops"}))
-//            print(uiView.style?.layers)
-            
-//            if stops.count > 0 {
-//                if let userLocation = uiView.userLocation {
-//                    print("setUL")
-//                    let camera = MLNMapCamera(
-//                        lookingAtCenter: userLocation.coordinate,
-//                        altitude: 4500,
-//                        pitch: 0,
-//                        heading: 0)
-//                    
-//                    uiView.setCamera(
-//                        camera,
-//                        withDuration: 2,
-//                        animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut))
-//                }
-//            }
+        print("updateUIView called with \(stops.count) stops")
+        guard let style = uiView.style else {
+            print("Style not loaded yet")
+            return
+        }
+
+        if style.source(withIdentifier: "stops") == nil {
+            addStops(to: uiView)
+        } else {
+            updateStops(on: uiView)
         }
     }
 }
