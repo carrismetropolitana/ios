@@ -108,6 +108,104 @@ struct PatternStop: View {
     }
 }
 
+struct PatternStopWithInvisibleLeg: View {
+    let stop: Stop
+    //    let etas: [RealtimeETA]
+    let active: Bool
+    let expanded: Bool
+    let isNextStop: Bool
+    let relativePosition: PatternStopPosition
+    let text: String
+    
+    
+    /*
+     Constants
+     */
+    
+    let nextStopTopPadding = 20.0
+    
+    
+    /* VIEW */
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(stop.name)
+                    .fontWeight(expanded ? .heavy : .semibold)
+                    .font(.callout)
+                    .foregroundStyle(.primary)
+                Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
+                    .fontWeight(.semibold)
+                    .font(.system(size: 14.0))
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.bottom)
+            .padding(.leading, 50.0)
+            .padding(.top, isNextStop ? nextStopTopPadding : 0.0)
+            .background {
+                HStack(alignment: .top, spacing: 2) {
+                    UnevenRoundedRectangle(cornerRadii: getCornerRadii(for: relativePosition))
+                        .fill(.clear)
+                        .frame(width: 15.0)
+                        .padding(.horizontal)
+                        .overlay {
+                            VStack {
+                                if (relativePosition != .end) {
+                                    Circle()
+                                        .fill(active ? .white : .gray.opacity(0.5))
+                                        .frame(height: 5.0)
+                                        .padding(.top, 7)
+                                        .padding(.top, isNextStop ? nextStopTopPadding : 0.0)
+                                }
+                                Spacer()
+                                if (relativePosition == .end) {
+                                    Circle()
+                                        .fill(active ? .white : .gray.opacity(0.5))
+                                        .frame(height: 5.0)
+                                        .padding(.bottom, 7)
+                                        .padding(.top, isNextStop ? nextStopTopPadding : 0.0)
+                                }
+                            }
+                        }
+                        .background {
+                            VStack {
+                                if (relativePosition == .end) {
+                                    Spacer()
+                                }
+                                Text("—")
+                                    .bold()
+                                    .offset(x: 12)
+                                    .frame(height: 6.0)
+                                    .padding(.top, relativePosition != .end ? 5.0 : 0.0)
+                                    .padding(.bottom, relativePosition == .end ? 10.0 : 0.0)
+                                    .padding(.top, isNextStop ? nextStopTopPadding : 0.0)
+                                    .frame(width: 10.0)
+                                if (relativePosition != .end) {
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .padding(.top, relativePosition == .start ? 1.0 : 0.0)
+                        .padding(.bottom, relativePosition == .end ? 35.0 : 0.0)
+                    Spacer()
+                }
+            }
+            Spacer()
+        }
+    }
+    
+    /* Helpers */
+    private func getCornerRadii(for relativePosition: PatternStopPosition) -> RectangleCornerRadii {
+        switch relativePosition {
+        case .start:
+            RectangleCornerRadii(topLeading: 10.0, topTrailing: 10.0)
+        case .end:
+            RectangleCornerRadii(bottomLeading: 10.0, bottomTrailing: 10.0)
+        case .middle:
+            RectangleCornerRadii()
+        }
+    }
+}
+
 //#Preview {
 //    PatternStop(
 //        stop: .init(
@@ -213,6 +311,8 @@ struct TestPreview: View {
     @State private var stops: [Stop] = []
     @State private var patternLegsHeights: [CGFloat] = []
     
+    @State private var isCollapsed = true
+    
     @State private var nextStopIndex = 5
     
 //    let nextStopIndex = 5
@@ -287,6 +387,11 @@ struct TestPreview: View {
                                 })
                         } else if (stopIndex > 1 && stopIndex < nextStopIndex - 1) {
                             EmptyView()
+                                .onAppear {
+                                    DispatchQueue.main.async {
+                                        patternLegsHeights[stopIndex] = 0.0
+                                    }
+                                }
                         } else {
                             PatternStop(active: stopIndex > nextStopIndex-1, expanded: false, isNextStop: stopIndex == nextStopIndex, relativePosition: stopIndex == 0 ? .start : stopIndex == stops.count - 1 ? .end : .middle, text: "\(stopIndex)")
                                 .background(GeometryReader { geo in
@@ -358,6 +463,170 @@ struct PatternItemBoundsPreferenceKey: PreferenceKey {
 }
 
 
-#Preview {
-    TestPreview()
+enum VehicleStatus {
+    case inTransitTo, incomingAt, stoppedAt
 }
+
+struct OtherTestPreview: View {
+    let stops: [Stop]
+    let nextStopIndex: Int
+    let vehicleStatus: VehicleStatus?
+    
+    @State private var circlePosition: CGFloat = 0
+    @State private var ____test_isRandomStopActive = true
+//    @State private var stops: [Stop] = []
+    @State private var patternLegsHeights: [CGFloat] = []
+    
+    
+    @State private var isCircleAnimating = false
+    
+    @State private var isCollapsed = true
+    
+    @State private var activeLegTopPadding = 0.0
+    
+//    @State private var nextStopIndex = 5
+    
+    //    let nextStopIndex = 5
+    let circleDistanceFromPathStep: CGFloat = 30.0
+    
+    
+    
+    @State private var scale: CGFloat = 1.0
+    
+    
+    var body: some View {
+        VStack {
+//            if (stops.count > 0) {
+//                VStack {
+//                    Stepper("Active Leg Top Padding", value: $activeLegTopPadding.animation(.snappy), step: 30)
+//                        .padding()
+//                    Stepper("Next Stop Index", value: $nextStopIndex.animation(.snappy), in: 1...stops.count-1)
+//                        .padding()
+//                    Text("Stops: \(stops.count)")
+//                }
+//            }
+            VStack(spacing: 0) {
+                ForEach(stops.indices, id: \.hashValue) { stopIndex in
+                    if (stopIndex == 1 && nextStopIndex > 3 && isCollapsed) {
+                        CollapsedPatternStop(collapsedStops: nextStopIndex - 2)
+                            .onAppear {
+                                print("Some stops are collapsed")
+                            }
+                            .onDisappear {
+                                print("No stops are collapsed")
+                            }
+                            .onTapGesture {
+                                withAnimation {
+                                    isCollapsed.toggle()
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                    withAnimation {
+                                        isCollapsed.toggle()
+                                    }
+                                }
+                            }
+                    } else if (stopIndex > 1 && stopIndex < nextStopIndex - 1 && isCollapsed) {
+                        EmptyView()
+                    } else {
+                        PatternStopWithInvisibleLeg(stop: stops[stopIndex], active: stopIndex > nextStopIndex-1, expanded: false, isNextStop: stopIndex == nextStopIndex, relativePosition: stopIndex == 0 ? .start : stopIndex == stops.count - 1 ? .end : .middle, text: "\(stopIndex)")
+                            .animation(.snappy, value: stopIndex == nextStopIndex)
+                    }
+                }
+            }
+            .background {
+                HStack {
+                    RoundedRectangle(cornerRadius: 10.0)
+                        .fill(Color(hex: "F0F0FA"))
+                        .frame(width: 15.0)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10.0)
+                                .fill(.red)
+                                .frame(width: 15.0)
+                                .padding(.horizontal)
+                                .padding(.top, getActiveLegTopPadding())
+                            
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom, 35.0)
+                    Spacer()
+                }
+            }
+            .overlay {
+                HStack {
+                    VStack {
+                        Circle()
+                            .fill(.black)
+                            .frame(height: 15.0)
+                            .overlay {
+                                Image(systemName: "chevron.down")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: 10.0))
+                                    .bold()
+                            }
+                            .scaleEffect(scale)
+                            .animation(vehicleStatus == .incomingAt ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true) : .default)
+                            .onAppear {
+                                if vehicleStatus == .incomingAt  {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                        self.scale = 1.5
+                                    }
+                                }
+                            }
+                            .onChange(of: vehicleStatus) {
+                                if vehicleStatus == .incomingAt  {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                        self.scale = 1.5
+                                    }
+
+                                } else {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                        self.scale = 1.0
+                                    }
+                                }
+                            }
+                                        
+                        
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, getActiveLegTopPadding())
+                    
+                    
+                    Spacer()
+                }
+            }
+        }
+//        .onAppear {
+//            Task {
+//                stops = Array(await CMAPI.shared.getStops().prefix(upTo: 20))
+//                print(stops[0])
+//            }
+//        }
+    }
+    
+    func getActiveLegTopPadding() -> CGFloat {
+        let sum: CGFloat = vehicleStatus == .stoppedAt ? 30.0 : vehicleStatus == .incomingAt ? 15.0 : 0.0
+        if (!isCollapsed &&  getStopsCollapsed() > 0) {
+            return CGFloat(50 * getStopsCollapsed()) + 70 + sum
+        }
+        if (getStopsCollapsed() > 0) {
+            return 50 + 70 + 50 + sum
+        }
+        return (CGFloat(nextStopIndex) * 51) - CGFloat(getStopsCollapsed()) * 15 + sum
+    }
+    
+    
+    func getStopsCollapsed() -> Int {
+        if (nextStopIndex > 3) { // stops collapsed
+            return nextStopIndex - 1
+        }
+        return 0
+    }
+}
+
+
+//#Preview {
+//    OtherTestPreview()
+//}

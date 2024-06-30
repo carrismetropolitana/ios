@@ -28,6 +28,7 @@ struct cmet_ios_demoApp: App {
                     UINavigationBar.appearance().prefersLargeTitles = true
                 }
 //            TestPreview()
+//            OtherTestPreview()
 //            NewsView()
         }
     }

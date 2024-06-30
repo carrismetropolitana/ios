@@ -11,7 +11,6 @@
 		790817DB2BEE277C00EC0C82 /* CMLoadingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790817DA2BEE277C00EC0C82 /* CMLoadingAnimation.swift */; };
 		790817DD2BEE2F7700EC0C82 /* UserProfileSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790817DC2BEE2F7700EC0C82 /* UserProfileSheetView.swift */; };
 		790CB9832BE29E0D0011B0EA /* EasterEggView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790CB9822BE29E0D0011B0EA /* EasterEggView.swift */; };
-		790CB9862BE29E9B0011B0EA /* cm_logo.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 790CB9852BE29E9B0011B0EA /* cm_logo.usdz */; };
 		7912F69E2C09DD73005D31DF /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7912F69D2C09DD73005D31DF /* NewsView.swift */; };
 		7912F6A02C09DF70005D31DF /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7912F69F2C09DF70005D31DF /* WebView.swift */; };
 		7913C13E2BB1B7EF000F0DFA /* AnimatedLiveCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7913C13D2BB1B7EF000F0DFA /* AnimatedLiveCircle.swift */; };
@@ -96,7 +95,6 @@
 		790817DA2BEE277C00EC0C82 /* CMLoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMLoadingAnimation.swift; sourceTree = "<group>"; };
 		790817DC2BEE2F7700EC0C82 /* UserProfileSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileSheetView.swift; sourceTree = "<group>"; };
 		790CB9822BE29E0D0011B0EA /* EasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasterEggView.swift; sourceTree = "<group>"; };
-		790CB9852BE29E9B0011B0EA /* cm_logo.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = cm_logo.usdz; sourceTree = "<group>"; };
 		7912F69D2C09DD73005D31DF /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
 		7912F69F2C09DF70005D31DF /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		7913C13D2BB1B7EF000F0DFA /* AnimatedLiveCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedLiveCircle.swift; sourceTree = "<group>"; };
@@ -192,7 +190,6 @@
 		790CB9842BE29E800011B0EA /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				790CB9852BE29E9B0011B0EA /* cm_logo.usdz */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -340,10 +337,10 @@
 			children = (
 				7913C13F2BB1C2AB000F0DFA /* Info.plist */,
 				79DB83692BA19A5D0023DD93 /* cmet_ios_demoApp.swift */,
+				79DB836B2BA19A5D0023DD93 /* ContentView.swift */,
 				790CB9842BE29E800011B0EA /* Assets */,
 				79DB83822BA1B2600023DD93 /* Components */,
 				79DB83772BA19B4C0023DD93 /* Tab Views */,
-				79DB836B2BA19A5D0023DD93 /* ContentView.swift */,
 				79DB83852BA1B5CC0023DD93 /* Services */,
 				79DB836D2BA19A5E0023DD93 /* Assets.xcassets */,
 				79DB836F2BA19A5E0023DD93 /* Preview Content */,
@@ -521,7 +518,6 @@
 			files = (
 				79DB83712BA19A5E0023DD93 /* Preview Assets.xcassets in Resources */,
 				79DB836E2BA19A5E0023DD93 /* Assets.xcassets in Resources */,
-				790CB9862BE29E9B0011B0EA /* cm_logo.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -741,7 +737,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
 				DEVELOPMENT_TEAM = CWY6HA7572;
 				ENABLE_PREVIEWS = YES;
@@ -775,7 +771,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
 				DEVELOPMENT_TEAM = CWY6HA7572;
 				ENABLE_PREVIEWS = YES;

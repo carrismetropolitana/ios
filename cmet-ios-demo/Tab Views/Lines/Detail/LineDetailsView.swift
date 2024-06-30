@@ -521,7 +521,7 @@ struct PatternLegs: View {
                 }
                 Spacer()
             }
-            .presentationDetents([.fraction(0.45)])
+            .presentationDetents([.fraction(0.45)]) // TODO: dynamic detents, wrap to content height
         }
     }
 }

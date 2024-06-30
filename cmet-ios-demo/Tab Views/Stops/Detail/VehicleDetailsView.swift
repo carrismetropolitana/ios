@@ -35,8 +35,10 @@ struct VehicleDetailsView: View {
     @EnvironmentObject var vehiclesManager: VehiclesManager
     @EnvironmentObject var linesManager: LinesManager
     let vehicleId: String
-    @State var vehicleStaticInfo: StaticVehicleInfo? = nil
-    @State var vehiclePattern: Pattern? = nil
+    @State private var vehicleStaticInfo: StaticVehicleInfo? = nil
+    @State private var vehiclePattern: Pattern? = nil
+    @State private var vehicleStops: [Stop] = []
+    @State private var vehicleShape: CMShape? = nil
     
     @State private var vehicle: Vehicle? = nil
     
@@ -50,7 +52,7 @@ struct VehicleDetailsView: View {
                 $0.id == vehicle.lineId
             }
             
-            VStack {
+            ScrollView {
                 VStack(spacing: 10.0) {
                     Pill(text: vehicle.lineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor), size: 60)
                     Text("para")
@@ -84,22 +86,26 @@ struct VehicleDetailsView: View {
                 .padding(.vertical, 10)
                 Divider()
                 
+                if let pattern = vehiclePattern, let _ = vehicleShape {
+                    ShapeAndVehiclesMapView(stops: $vehicleStops, vehicles: .constant([vehicle]), shape: $vehicleShape, lineColor: Color(hex: pattern.color))
+                        .frame(height: 300)
+                }
                 
-                Text("\(vehicle.currentStatus) \(vehicle.stopId)")
-                
-                Text("\(vehicle.id)")
-                
-                Text("\(vehicle.lineId)")
-                
-                Text("\(vehicle.timestamp)")
-                
-                
+                if (vehicleStops.count > 0) {
+                    OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicle.currentStatus))
+                }
+            
                 Spacer()
             }
+            .navigationTitle("Autocarro")
             .onAppear {
                 vehiclesManager.startFetching()
                 Task {
                     vehiclePattern = try await CMAPI.shared.getPattern(vehicle.patternId)
+                    if let pattern = vehiclePattern {
+                        vehicleStops = pattern.path.compactMap {$0.stop}
+                        vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
+                    }
                     print(vehiclePattern?.headsign)
                     vehicleStaticInfo = try await VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
                     print(vehicleStaticInfo)
@@ -108,6 +114,19 @@ struct VehicleDetailsView: View {
             .onDisappear {
                 vehiclesManager.stopFetching()
             }
+        }
+    }
+    
+    func getVehicleStatus(for statusString: String) -> VehicleStatus? {
+        switch statusString {
+        case "IN_TRANSIT_TO":
+            return .inTransitTo
+        case "INCOMING_AT":
+            return .incomingAt
+        case "STOPPED_AT":
+            return .stoppedAt
+        default:
+            return nil
         }
     }
 }
