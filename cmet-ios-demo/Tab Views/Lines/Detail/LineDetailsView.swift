@@ -16,6 +16,7 @@ struct LineDetailsView: View {
     
     @State private var timer: Timer?
     let line: Line
+    let overrideDisplayedPatternId: String?
     
     @State private var isAlertsSheetPresented = false
     
@@ -201,7 +202,14 @@ struct LineDetailsView: View {
                         }
                     }
                     
-                    selectedPattern = patterns.first
+                    
+                    if let _ = overrideDisplayedPatternId {
+                        selectedPattern = patterns.first {
+                            $0.id == overrideDisplayedPatternId
+                        }
+                    } else {
+                        selectedPattern = patterns.first
+                    }
                     
                     if selectedPattern != nil {
                         shape = (try await CMAPI.shared.getShape(selectedPattern!.shapeId))

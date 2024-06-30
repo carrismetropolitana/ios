@@ -96,7 +96,7 @@ struct LinesListView: View {
             }
             Section(header: isSearching ? nil :  Text("Todas").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
                 ForEach(isSearching ? searchFilteredLines : lines) { line in
-                    NavigationLink(destination: LineDetailsView(line: line)) {
+                    NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
                         LineEntry(line: line)
                     }
                     .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))

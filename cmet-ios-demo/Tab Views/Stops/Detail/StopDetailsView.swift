@@ -17,7 +17,7 @@ struct StopDetailsView: View {
     @GestureState private var zoom = 1.0
     @State var offset: CGSize = .zero
     
-    @State private var stopRoutes: [Route] = []
+    @State private var stopPatterns: [Pattern] = []
 
     
     let stop: Stop
@@ -167,22 +167,22 @@ struct StopDetailsView: View {
                     Spacer()
                 }
                 
-                if stopRoutes.count > 0 {
+                if stopPatterns.count > 0 {
                     VStack {
                         
-                        ForEach(stopRoutes.indices, id: \.hashValue) { routeIndex in
-                            let route = stopRoutes[routeIndex]
+                        ForEach(stopPatterns.indices, id: \.hashValue) { patternIndex in
+                            let pattern = stopPatterns[patternIndex]
                             
-                            // TODO: this might lead to a crash if a new line is introduced and the lines in linesManager haven't been updated yet, fix
-                            NavigationLink(destination: LineDetailsView(line: linesManager.lines.first(where: { $0.id == route.lineId })!)) {
-                                StopRouteEntry(route: route)
+                            // TODO: this will lead to a crash if a new line is introduced and the lines in linesManager haven't been updated yet, fix
+                            NavigationLink(destination: LineDetailsView(line: linesManager.lines.first(where: { $0.id == pattern.lineId })!, overrideDisplayedPatternId: pattern.id)) {
+                                StopPatternEntry(pattern: pattern)
                                     .padding(.horizontal, 10.0)
                                     .padding(.vertical, 5.0)
                                 //                            .padding(.vertical, routeIndex == 0 ? nil : 2.0)
-                                    .padding(.top, routeIndex == 0 ? 8.0 : 0.0)
-                                    .padding(.bottom, routeIndex == stopRoutes.count - 1 && stopRoutes.count <= 3 ? 2.0 : 0.0)
+                                    .padding(.top, patternIndex == 0 ? 8.0 : 0.0)
+                                    .padding(.bottom, patternIndex == stopPatterns.count - 1 && stopPatterns.count <= 3 ? 2.0 : 0.0)
                             }.buttonStyle(.plain)
-                            if routeIndex != stopRoutes.count - 1 {
+                            if patternIndex != stopPatterns.count - 1 {
                                 Divider()
                             }
                             
@@ -255,7 +255,7 @@ struct StopDetailsView: View {
 //                        .padding(.vertical, 2.0)
                         
                         
-                        if stopRoutes.count > 500 { // while collapsed routes are not implemented
+                        if stopPatterns.count > 500 { // while collapsed routes are not implemented
                             Divider()
                             
                             HStack {
@@ -404,16 +404,16 @@ struct StopDetailsView: View {
                 
                 print("Got \(images.count) IML images for stop.")
                 
-                var routes: [Route] = []
+                var patterns: [Pattern] = []
                 
-                if let routeIds = stop.routes {
-                    for routeId in routeIds {
-                        let route = try await CMAPI.shared.getRoute(routeId)
+                if let patternIds = stop.patterns {
+                    for patternId in patternIds {
+                        let pattern = try await CMAPI.shared.getPattern(patternId)
                         
-                        routes.append(route)
+                        patterns.append(pattern)
                     }
                     
-                    stopRoutes = routes
+                    stopPatterns = patterns
                 }
             }
         }
@@ -440,14 +440,14 @@ struct AboutStopItem: View {
     }
 }
 
-struct StopRouteEntry: View {
-    let route: Route
+struct StopPatternEntry: View {
+    let pattern: Pattern
     var body: some View {
         HStack {
                 HStack {
-                    Pill(text: route.shortName, color: .init(hex: route.color), textColor: .init(hex: route.textColor), size: 60)
+                    Pill(text: pattern.shortName, color: .init(hex: pattern.color), textColor: .init(hex: pattern.textColor), size: 60)
                         .padding(.horizontal, 5.0)
-                    Text(route.longName)
+                    Text(pattern.headsign)
                         .bold()
                         .font(.subheadline)
                         .lineLimit(2)
