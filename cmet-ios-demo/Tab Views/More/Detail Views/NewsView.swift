@@ -10,6 +10,8 @@ import UIKit
 
 // TODO: work on the header constraints -- stuff is moving where it shouldnt on smaller devices. fix (literally) header btns position
 struct NewsView: View {
+    @EnvironmentObject var alertsManager: AlertsManager
+    
     // ios15 and up @Environment(\.dismiss) private var dismiss // this is really fucking cool
     @Environment(\.presentationMode) var presentationMode
     @State private var webViewScrollOffset: CGPoint = .zero
@@ -80,6 +82,9 @@ struct NewsView: View {
                 }
                 .zIndex(1)
             WebView(url: URL.init(string: news.link)!, onLoadFailureErrorMessage: "Ocorreu um erro ao carregar a notícia.", onRedirectToNative: { redirect in
+                if redirect.type == .alert && alertsManager.alerts.contains(where: {$0.id == redirect.id}) {
+                    print("Would natively display alert \(redirect.id) because it exists in current feed")
+                }
             }, scrollOffset: $webViewScrollOffset)
             .offset(y: getHeaderHeightForWebViewScrollOffset(offset: webViewScrollOffset.y))
             .padding(.bottom, 100)

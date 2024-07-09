@@ -28,6 +28,10 @@ let staticWidgets = [
 ]
 
 struct CustomizeWidgetsSheetView: View {
+    @EnvironmentObject var favoritesManager: FavoritesManager
+    @EnvironmentObject var stopsManager: StopsManager
+    @EnvironmentObject var linesManager: LinesManager
+    
     @Binding var isSheetOpen: Bool
     
     @State var editMode: EditMode = .active
@@ -41,26 +45,53 @@ struct CustomizeWidgetsSheetView: View {
             VStack(spacing: 0) {
                 List {
                     Section {
-                        ForEach(widgets, id: \.self.type) { widget in
-                            NavigationLink(destination: SmartNotificationCustomizationView()) {
-                                HStack {
-                                    Image(systemName: "line.3.horizontal")
-                                        .font(.title2)
-                                        .foregroundStyle(.tertiary)
-                                        .padding(.trailing, 10)
-                                    VStack(alignment: .leading) {
-                                        Text(widget.name)
-                                            .font(.footnote)
-                                            .foregroundStyle(.secondary)
-                                        Text(widget.defaultValue)
-                                            .bold()
+//                        ForEach(widgets, id: \.self.type) { widget in
+//                            NavigationLink(destination: SmartNotificationCustomizationView()) {
+//                                HStack {
+//                                    Image(systemName: "line.3.horizontal")
+//                                        .font(.title2)
+//                                        .foregroundStyle(.tertiary)
+//                                        .padding(.trailing, 10)
+//                                    VStack(alignment: .leading) {
+//                                        Text(widget.name)
+//                                            .font(.footnote)
+//                                            .foregroundStyle(.secondary)
+//                                        Text(widget.defaultValue)
+//                                            .bold()
+//                                    }
+//                                }
+//                            }
+//                        }
+                        if favoritesManager.favorites.count > 0{
+                            ForEach(favoritesManager.favorites) { fav in
+                                NavigationLink(destination: getDestinationForWidgetEditLink(favorite: fav, isSheetOpen: $isSheetOpen)) {
+                                    HStack {
+                                        Image(systemName: "line.3.horizontal")
+                                            .font(.title2)
+                                            .foregroundStyle(.tertiary)
+                                            .padding(.trailing, 10)
+                                        VStack(alignment: .leading) {
+                                            Text("\(fav.type == .stop ? "Paragem" : "Linha") Favorita")
+                                                .font(.footnote)
+                                                .foregroundStyle(.secondary)
+                                            if fav.type == .stop {
+                                                Text(stopsManager.stops.first { $0.id == fav.stopId }!.name)
+                                                    .bold()
+                                            } else {
+                                                Text(fav.displayName!)
+                                                    .bold()
+                                            }
+                                        }
                                     }
                                 }
                             }
+                            .onMove(perform: { indices, newOffset in
+                                favoritesManager.moveFavorites(fromOffsets: indices, toOffset: newOffset)
+                            })
+                        } else {
+                            Text("Ainda não tem favoritos.\nExperimente adicionar um abaixo!")
+                                .foregroundStyle(.secondary)
                         }
-                        .onMove(perform: { indices, newOffset in
-                            widgets.move(fromOffsets: indices, toOffset: newOffset)
-                        })
                     } header: {
                         VStack(alignment: .leading) {
                             Text("Ordenar Cartões")
@@ -88,7 +119,7 @@ struct CustomizeWidgetsSheetView: View {
                                     .font(.title2)
                                     .foregroundStyle(.green)
                             }
-                            .background(NavigationLink("", destination: getDestinationForNewWidgetLink(widget: widget)))
+                            .background(NavigationLink("", destination: getDestinationForNewWidgetLink(widget: widget, isSheetOpen: $isSheetOpen)))
                         }
                     } header: {
                         VStack(alignment: .leading) {
@@ -118,16 +149,28 @@ struct CustomizeWidgetsSheetView: View {
     }
 }
 
-func getDestinationForNewWidgetLink(widget: Widget) -> some View {
+func getDestinationForNewWidgetLink(widget: Widget, isSheetOpen: Binding<Bool>) -> some View {
     switch widget.type {
     case .favoriteStop:
-        return AnyView(Text("New FavoriteStop Widget"))
+        return AnyView(FavoriteCustomizationView(type: .stop, isSelfPresented: isSheetOpen))
     case .favoriteLine:
-        return AnyView(Text("New FavoriteLine Widget"))
+        return AnyView(FavoriteCustomizationView(type: .line, isSelfPresented: isSheetOpen))
     case .smartNotification:
         return AnyView(SmartNotificationCustomizationView())
     }
 }
+
+func getDestinationForWidgetEditLink(favorite: FavoriteItem, isSheetOpen: Binding<Bool>) -> some View {
+    switch favorite.type {
+    case .stop:
+        return AnyView(FavoriteCustomizationView(type: .stop, isSelfPresented: isSheetOpen, overrideFavoriteItem: favorite))
+    case .pattern:
+        return AnyView(FavoriteCustomizationView(type: .line, isSelfPresented: isSheetOpen, overrideFavoriteItem: favorite))
+//    case .smartNotification:
+//        return AnyView(SmartNotificationCustomizationView())
+    }
+}
+
 
 
 

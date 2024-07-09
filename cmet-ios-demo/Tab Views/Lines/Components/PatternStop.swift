@@ -133,6 +133,7 @@ struct PatternStopWithInvisibleLeg: View {
                     .fontWeight(expanded ? .heavy : .semibold)
                     .font(.callout)
                     .foregroundStyle(.primary)
+                    .lineLimit(1)
                 Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
                     .fontWeight(.semibold)
                     .font(.system(size: 14.0))
@@ -565,7 +566,7 @@ struct OtherTestPreview: View {
                                     .bold()
                             }
                             .scaleEffect(scale)
-                            .animation(vehicleStatus == .incomingAt ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true) : .default)
+                            .animation(vehicleStatus == .incomingAt ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true) : .default, value: scale)
                             .onAppear {
                                 if vehicleStatus == .incomingAt  {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {

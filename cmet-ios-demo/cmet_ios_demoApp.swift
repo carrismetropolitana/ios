@@ -14,6 +14,8 @@ struct cmet_ios_demoApp: App {
     @StateObject private var linesManager = LinesManager()
     @StateObject private var stopsManager = StopsManager()
     
+    @StateObject private var favoritesManager = FavoritesManager()
+    
     @StateObject private var locationManager = LocationManager()
     
     var body: some Scene {
@@ -24,9 +26,11 @@ struct cmet_ios_demoApp: App {
                 .environmentObject(locationManager)
                 .environmentObject(linesManager)
                 .environmentObject(stopsManager)
+                .environmentObject(favoritesManager)
                 .onAppear {
                     UINavigationBar.appearance().prefersLargeTitles = true
                 }
+//            ErrorBannerDemo()
 //            TestPreview()
 //            OtherTestPreview()
 //            NewsView()

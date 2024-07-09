@@ -23,9 +23,13 @@ struct StopsView: View {
     @State var shouldPresentStopDetailsView = false
     @State var shouldPresentVehicleDetailsView = false
     @State var vehicleIdToBePresented: String? = nil
-
-//    @State private var stops: [Stop] = []
+    
+    //    @State private var stops: [Stop] = []
     @State private var selectedStopId: String?
+    
+    @State private var isErrorBannerPresented = false
+    @State private var errorTitle = ""
+    @State private var errorMessage = ""
     
     var body: some View {
         let suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
@@ -36,9 +40,9 @@ struct StopsView: View {
                 }
                 
                 if let vehicleId = vehicleIdToBePresented {
-//                    if vehiclesManager.vehicles.contains({$0.id == vehicleId}) {
-                        NavigationLink(destination: VehicleDetailsView(vehicleId: vehicleId), isActive: $shouldPresentVehicleDetailsView) { EmptyView() }
-//                    }
+                    //                    if vehiclesManager.vehicles.contains({$0.id == vehicleId}) {
+                    NavigationLink(destination: VehicleDetailsView(vehicleId: vehicleId), isActive: $shouldPresentVehicleDetailsView) { EmptyView() }
+                    //                    }
                 }
                 
                 MapLibreMapView(stops: stopsManager.stops, selectedStopId: $selectedStopId)
@@ -49,30 +53,37 @@ struct StopsView: View {
                     VStack(alignment: .trailing) {
                         Spacer()
                         MapFloatingButton(systemImage: "line.3.horizontal.decrease.circle")
-                        MapFloatingButton(systemImage: "location.fill")
+                        Button {
+                            errorTitle = "O veículo não está disponível."
+                            errorMessage = "Por favor tente mais tarde."
+                            isErrorBannerPresented = true
+                        } label: {
+                            MapFloatingButton(systemImage: "location.fill")
+                        }.buttonStyle(.plain)
+                        
                         MapFloatingButton(systemImage: "map")
                     }
                 }
                 .padding()
                 
                 if (isSearching) {
-                   searchResultsOverlay()
+                    searchResultsOverlay()
                 }
                 
                 searchBar()
                 
             }
-//            .onAppear {
-//                if stops.count == 0 {
-//                    Task {
-//                        stops = await CMAPI.shared.getStops()
-//                        print(stops.count)
-//                    }
-//                }
-////                if shouldPresentStopDetailsView {
-////                    shouldPresentStopDetailsView = false
-////                }
-//            }
+            //            .onAppear {
+            //                if stops.count == 0 {
+            //                    Task {
+            //                        stops = await CMAPI.shared.getStops()
+            //                        print(stops.count)
+            //                    }
+            //                }
+            ////                if shouldPresentStopDetailsView {
+            ////                    shouldPresentStopDetailsView = false
+            ////                }
+            //            }
             .onChange(of: stopsManager.stops) {
                 if stopsManager.stops.count > 0 {
                     searchFilteredStops = suggestedStops
@@ -89,11 +100,20 @@ struct StopsView: View {
                     searchTerm = ""
                 }
             }
-            .onChange(of: searchTerm) {
+            .onChange(of: searchTerm) {                    
                 print(searchTerm)
-                let filtered = stopsManager.stops.chunkedFilter({
+                let t1 = Date().timeIntervalSince1970
+                //                let filtered = stopsManager.stops.chunkedFilter({
+                //                    $0.name.localizedCaseInsensitiveContains(searchTerm) || $0.id.localizedCaseInsensitiveContains(searchTerm)
+                //                }, maxResults: 10)
+                let filtered = stopsManager.stops.filter({
                     $0.name.localizedCaseInsensitiveContains(searchTerm) || $0.id.localizedCaseInsensitiveContains(searchTerm)
-                }, maxResults: 10)
+                })
+                
+                let t2 = Date().timeIntervalSince1970
+                
+                print("SEARCH TOOK \(t2-t1)s")
+                
                 if filtered.count > 0 {
                     searchFilteredStops = filtered
                 } else {
@@ -121,8 +141,20 @@ struct StopsView: View {
                 VStack {
                     if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
                         StopDetailsSheetView(shouldPresentStopDetailsView: $shouldPresentStopDetailsView, onEtaClick: { vehicleId in
-                            print("got vehid from etas sheet on parent; vid: \(vehicleId)")
-                            vehicleIdToBePresented = vehicleId
+                            print("got vehicleid from etas sheet on parent; vid: \(vehicleId)")
+                            if vehiclesManager.vehicles.contains(where: { $0.id  == vehicleId }) { vehicleIdToBePresented = vehicleId
+                            } else {
+                                errorTitle = "O veículo não está disponível."
+                                errorMessage = "Por favor tente mais tarde."
+                                isErrorBannerPresented = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                    withAnimation {
+                                        isErrorBannerPresented = false
+                                    }
+                                }
+                                
+                                
+                            }
                         }, stop: stop)
                     }
                 }
@@ -132,7 +164,8 @@ struct StopsView: View {
                 .onDisappear {
                     selectedStopId = "" // TODO: (fixme) empty string because mapView checks for nil
                 }
-        }
+            }
+            .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
         }
     }
     
@@ -152,9 +185,9 @@ struct StopsView: View {
                 TextField("", text: $searchTerm, prompt: Text("Nome ou número da paragem").foregroundColor(.gray).fontWeight(.semibold))
                     .padding(.leading, isSearching ? 18 : 0)
                 
-                .frame(height: 50)
+                    .frame(height: 50)
                     .focused($isSearchFieldFocused)
-//                            .background(.red)
+                //                            .background(.red)
                 if (isSearching) {
                     Button {
                         isSearchFieldFocused = false
@@ -169,16 +202,16 @@ struct StopsView: View {
                 }
             }
             .background {
-//                        if (isSearching) { // needs to be here to avoid background tap gesture taking precedence over backgrounded views's gestures
-//                            RoundedRectangle(cornerRadius: 15.0)
-//                                .fill(.white)
-//                        } else {
-//                            RoundedRectangle(cornerRadius: 15.0)
-//                                .fill(.white)
-//                                .onTapGesture {
-//                                    isSearchFieldFocused = true
-//                                }
-//                        }
+                //                        if (isSearching) { // needs to be here to avoid background tap gesture taking precedence over backgrounded views's gestures
+                //                            RoundedRectangle(cornerRadius: 15.0)
+                //                                .fill(.white)
+                //                        } else {
+                //                            RoundedRectangle(cornerRadius: 15.0)
+                //                                .fill(.white)
+                //                                .onTapGesture {
+                //                                    isSearchFieldFocused = true
+                //                                }
+                //                        }
                 RoundedRectangle(cornerRadius: 15.0)
                     .fill(.white)
             }
@@ -192,13 +225,12 @@ struct StopsView: View {
         ZStack {
             Color.clear
                 .background(.ultraThinMaterial)
-            .ignoresSafeArea()
-            .onTapGesture {
-                isSearchFieldFocused = false
-            }
-            
+                .ignoresSafeArea()
+                .onTapGesture {
+                    isSearchFieldFocused = false
+                }
             ScrollView {
-                VStack {
+                LazyVStack {
                     ForEach(searchFilteredStops) { stop in
                         Button {} label: {
                             RoundedRectangle(cornerRadius: 15)
@@ -244,7 +276,7 @@ struct StopsView: View {
                         )
                     }
                 }
-
+                
             }
             .contentMargins(.top, 70, for: .scrollContent)
         }
@@ -276,34 +308,34 @@ struct MapFloatingButton: View {
 extension Array {
     func chunkedFilter(_ isIncluded: @escaping (Element) -> Bool, chunkSize: Int = 1000, maxResults: Int) -> [Element] {
         print("Chunked ARR Filter Start:: \(Date.now)")
-            let queue = DispatchQueue(label: "pt.carrismetropolitana.chunkedFilter", attributes: .concurrent)
-            let group = DispatchGroup()
-
-            var filteredElements: [Element] = []
-            let lock = NSLock()
-            var isDone = false
-
-            for chunk in stride(from: 0, to: self.count, by: chunkSize) {
-                if isDone { break }
-                let end = Swift.min(chunk + chunkSize, self.count)
-                group.enter()
-                queue.async {
-                    let chunkFiltered = self[chunk..<end].filter(isIncluded)
-                    lock.lock()
-                    if !isDone {
-                        filteredElements.append(contentsOf: chunkFiltered)
-                        if filteredElements.count >= maxResults {
-                            filteredElements = Array(filteredElements.prefix(maxResults))
-                            isDone = true
-                        }
+        let queue = DispatchQueue(label: "pt.carrismetropolitana.chunkedFilter", attributes: .concurrent)
+        let group = DispatchGroup()
+        
+        var filteredElements: [Element] = []
+        let lock = NSLock()
+        var isDone = false
+        
+        for chunk in stride(from: 0, to: self.count, by: chunkSize) {
+            if isDone { break }
+            let end = Swift.min(chunk + chunkSize, self.count)
+            group.enter()
+            queue.async {
+                let chunkFiltered = self[chunk..<end].filter(isIncluded)
+                lock.lock()
+                if !isDone {
+                    filteredElements.append(contentsOf: chunkFiltered)
+                    if filteredElements.count >= maxResults {
+                        filteredElements = Array(filteredElements.prefix(maxResults))
+                        isDone = true
                     }
-                    lock.unlock()
-                    group.leave()
                 }
+                lock.unlock()
+                group.leave()
             }
-
-            group.wait()
-        print("Chunked ARR Filter return, end:: \(Date.now)")
-            return filteredElements
         }
+        
+        group.wait()
+        print("Chunked ARR Filter return, end:: \(Date.now)")
+        return filteredElements
+    }
 }

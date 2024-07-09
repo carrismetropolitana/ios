@@ -10,9 +10,12 @@ import SwiftUI
 struct StopDetailsView: View {
     @EnvironmentObject var alertsManager: AlertsManager
     @EnvironmentObject var linesManager: LinesManager
+    @EnvironmentObject var favoritesManager: FavoritesManager
+    
     @Environment(\.colorScheme) var colorScheme
     
     @State private var isAlertsSheetPresented = false
+    @State private var isFavoriteCustomizationSheetPresented = false
     
     @GestureState private var zoom = 1.0
     @State var offset: CGSize = .zero
@@ -57,19 +60,28 @@ struct StopDetailsView: View {
                         .foregroundStyle(.secondary)
                     
                     HStack(spacing: 10.0) {
-                        RoundedRectangle(cornerRadius: 15.0)
-                            .fill(.windowBackground)
-                            .overlay {
-                                Image(systemName: "star")
-                                    .foregroundStyle(.yellow)
-                                    .font(.title)
-                            }
-                            .frame(width: 60, height: 60)
-                            .shadow(color: .black.opacity(0.1), radius: 10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)
-                            )
+//                        RoundedRectangle(cornerRadius: 15.0)
+//                            .fill(.windowBackground)
+//                            .overlay {
+//                                Image(systemName: "star")
+//                                    .foregroundStyle(.yellow)
+//                                    .font(.title)
+//                            }
+//                            .frame(width: 60, height: 60)
+//                            .shadow(color: .black.opacity(0.1), radius: 10)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 15)
+//                                    .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)
+//                            )
+                        
+                        SquaredButton(
+                            action: {
+                                isFavoriteCustomizationSheetPresented.toggle()
+                            },
+                            systemIcon: favoritesManager.isFavorited(itemId: stop.id, itemType: .stop) ? "star.fill" : "star",
+                            iconColor: .yellow,
+                            badgeValue: 0
+                        )
                         
                         RoundedRectangle(cornerRadius: 15.0)
                             .fill(.windowBackground)
@@ -101,9 +113,6 @@ struct StopDetailsView: View {
                                 isAlertsSheetPresented.toggle()
                             },
                             systemIcon: "exclamationmark.triangle",
-                            //                                    systemIcon: nil,
-                            //                                    imageResourceIcon: .exclamationMarkTriangleFilled,
-                            imageResourceIcon: nil,
                             iconColor: .primary,
                             badgeValue: stopAlerts.count
                         )
@@ -393,6 +402,11 @@ struct StopDetailsView: View {
             // try await AlertsService.fetchNew()
             AlertsSheetView(isSelfPresented: $isAlertsSheetPresented, alerts: stopAlerts, source: .stop) // AlertsService.alerts.find(where: { $0.alert.informedEntities blableblibloblu })
                 .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $isFavoriteCustomizationSheetPresented) {
+            NavigationStack {
+                FavoriteCustomizationView(type: .stop, isSelfPresented: $isFavoriteCustomizationSheetPresented, overrideItemId: stop.id)
+            }
         }
         .onAppear {
             Task {

@@ -24,46 +24,74 @@ struct SmartNotificationConfiguration {
 struct SmartNotificationWidgetView: View {
 //    let config: SmartNotificationConfiguration
     var body: some View {
-        RoundedRectangle(cornerRadius: 10.0)
-            .fill(.white)
-            .frame(height: 200)
-            .overlay {
-                VStack {
+        VStack(spacing: 0) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Hospital (Elvas)")
+                        .bold()
                     HStack {
-                        VStack(alignment: .leading) {
-                            Text("Hospital (Elvas)")
-                                .bold()
-                            HStack {
-                                Text("Cova da Piedade, Almada")
-                                    .foregroundStyle(.secondary)
-                                Text("020497")
-                                    .font(.custom("Menlo", size: 12.0).monospacedDigit())
+                        Text("Cova da Piedade, Almada")
+                            .foregroundStyle(.secondary)
+                        Text("020497")
+                            .font(.custom("Menlo", size: 12.0).monospacedDigit())
 //                                    .font(.footnote)
-                                    .bold()
-                                    .foregroundStyle(.gray)
-                                    .padding(.horizontal, 10)
-                                    .background(Capsule().stroke(.gray, lineWidth: 2.0))
-                            }
-                        }
-                        Spacer()
-                        Image(systemName: "bell.badge")
-                            .background {
-                                Circle()
-                                    .fill(.green)
-//                                    .background {
-//                                        Circle()
-//                                            .fill(.black)
-//                                            .padding()
-//                                    }
-                                    .padding()
-                            }
+                            .bold()
+                            .foregroundStyle(.gray)
+                            .padding(.horizontal, 10)
+                            .background(Capsule().stroke(.gray, lineWidth: 2.0))
                     }
-                    .padding(10)
-                    Divider()
-                    
-                    Spacer()
                 }
+                Spacer()
+                Image(systemName: "bell.badge.fill")
+                    .foregroundStyle(.white)
+                    .padding()
+                    .background {
+                        ZStack {
+                            Circle()
+                                .fill(Color(hex: "0C807E"))
+                                .frame(height: 35)
+                            Circle()
+                                .fill(Color(hex: "0C807E"))
+                                .opacity(0.1)
+                        }
+                    }
             }
+            .padding(.leading, 15)
+            .padding(.trailing, 5)
+            .padding(.vertical, 10)
+            
+            Rectangle()
+                .fill(.gray.opacity(0.1))
+                .frame(height: 3.0)
+            
+            HStack {
+                Text("\(Image(systemName: "bell.badge")) 7:30 \(Image(systemName: "arrow.right")) 8:30")
+                    .foregroundStyle(Color(hex:"5f5f5f"))
+                    .bold()
+                    .padding(5.0)
+                    .background(RoundedRectangle(cornerRadius: 5.0).fill(.quinary))
+                
+                Text("S  T  Q  Q  S  S  D")
+                    .foregroundStyle(Color(hex:"5f5f5f"))
+                    .bold()
+                    .padding(5.0)
+                    .background(RoundedRectangle(cornerRadius: 5.0).fill(.quinary))
+                
+                Spacer()
+            }
+            .padding(10)
+            
+            Rectangle()
+                .fill(.gray.opacity(0.1))
+                .frame(height: 3.0)
+            
+            Spacer()
+                .frame(height: 300)
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 15.0)
+                .fill(.white)
+        )
     }
 }
 

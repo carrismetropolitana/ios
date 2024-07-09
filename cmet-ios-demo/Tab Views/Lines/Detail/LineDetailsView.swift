@@ -12,13 +12,14 @@ import MapKit
 struct LineDetailsView: View {
     @EnvironmentObject var alertsManager: AlertsManager
     @EnvironmentObject var vehiclesManager: VehiclesManager
-    
+    @EnvironmentObject var favoritesManager: FavoritesManager
     
     @State private var timer: Timer?
     let line: Line
     let overrideDisplayedPatternId: String?
     
     @State private var isAlertsSheetPresented = false
+    @State private var isFavoriteCustomizationSheetPresented = false
     
     @State private var selectedPattern: Pattern?
     @State private var selectedStop: Stop?
@@ -34,7 +35,7 @@ struct LineDetailsView: View {
     
     @State private var isMapExpanded = false
     
-    @State private var _______tempForUiDemoPurposes_isFavorited = false
+//    @State private var _______tempForUiDemoPurposes_isFavorited = false
     
     var body: some View {
         let lineAlerts = alertsManager.alerts.filter {
@@ -55,123 +56,129 @@ struct LineDetailsView: View {
             return isLineAffected
         }
         
-        ScrollView {
-            VStack(alignment: .leading) {
-                if let selectedPattern = selectedPattern {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Pill(text: line.shortName, color: Color(hex: line.color), textColor: Color(hex: line.textColor), size: 60)
-                                .padding(.vertical, 10)
-                                .padding(.horizontal)
-                            if (isMapExpanded) {
-                                Text(line.longName)
-                                    .bold()
-                                    .lineLimit(1)
-                            }
-                        }
-                        if (!isMapExpanded) {
-                            Text(line.longName)
-                                .bold()
-                                .padding(.horizontal)
-                            HStack(spacing: 10.0) {
-                                SquaredButton(
-                                    action: {
-                                        // FavoritesService.addLineToFavorites(lineId: line.id)
-                                        _______tempForUiDemoPurposes_isFavorited.toggle()
-                                    },
-                                    systemIcon: _______tempForUiDemoPurposes_isFavorited ? "star.fill" : "star",
-                                    imageResourceIcon: nil, // FavoritesService.isFavorite(lineId: line.id) ? "star.fill" : "star"
-                                    iconColor: .yellow,
-                                    badgeValue: 0
-                                )
-                                SquaredButton(
-                                    action: {
-                                        isAlertsSheetPresented.toggle()
-                                    },
-                                    systemIcon: "exclamationmark.triangle",
-                                    //                                    systemIcon: nil,
-                                    //                                    imageResourceIcon: .exclamationMarkTriangleFilled,
-                                    imageResourceIcon: nil,
-                                    iconColor: .primary,
-                                    badgeValue: lineAlerts.count
-                                )
-                            }
-                            .padding(.horizontal)
-                            .padding(.vertical, 10.0)
-                        }
-                        
-                        
-                        Divider()
-                        
-                        
-                        Group {
-                            Text("Selecionar destino")
-                            Picker("Selecionar destino", selection: $selectedPattern) {
-                                ForEach(patterns, id: \.id) { pattern in // why the fuck does it need me to specify id if Pattern conforms to identifiable? is it because it is an optional? (Pattern?)
-                                    //                            Text("\(pattern.headsign) (\(routes.first(where: {$0.id == pattern.routeId})?.longName ?? ""))")
-                                    //                                .tag(pattern.id)
-                                    Text(pattern.headsign)
-                                        .tag(pattern as Pattern?) // FUCK MEEEEE @see https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
+        GeometryReader { geo in
+            ScrollView {
+                VStack(alignment: .leading) {
+                    if let selectedPattern = selectedPattern {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Pill(text: line.shortName, color: Color(hex: line.color), textColor: Color(hex: line.textColor), size: 60)
+                                    .padding(.vertical, 10)
+                                    .padding(.horizontal)
+                                if (isMapExpanded) {
+                                    Text(line.longName)
+                                        .bold()
+                                        .lineLimit(1)
                                 }
                             }
-                            .frame(maxWidth: .infinity)
-                            .clipped()
-                            .background(RoundedRectangle(cornerRadius: 10.0).fill(.gray.quinary))
-                            .pickerStyle(.menu)
+                            if (!isMapExpanded) {
+                                Text(line.longName)
+                                    .bold()
+                                    .padding(.horizontal)
+                                HStack(spacing: 10.0) {
+                                    SquaredButton(
+                                        action: {
+                                            // FavoritesService.addLineToFavorites(lineId: line.id)
+                                            isFavoriteCustomizationSheetPresented.toggle()
+                                        },
+                                        systemIcon: favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? "star.fill" : "star",
+                                        //imageResourceIcon: nil, // FavoritesService.isFavorite(lineId: line.id) ? "star.fill" : "star"
+                                        iconColor: .yellow,
+                                        badgeValue: 0
+                                    )
+                                    SquaredButton(
+                                        action: {
+                                            isAlertsSheetPresented.toggle()
+                                        },
+                                        systemIcon: "exclamationmark.triangle",
+                                        //                                    systemIcon: nil,
+                                        //                                    imageResourceIcon: .exclamationMarkTriangleFilled,
+                                        iconColor: .primary,
+                                        badgeValue: lineAlerts.count
+                                    )
+                                }
+                                .padding(.horizontal)
+                                .padding(.vertical, 10.0)
+                            }
+                            
+                            
+                            Divider()
+                            
+                            
+                            Group {
+                                Text("Selecionar destino")
+                                Picker("Selecionar destino", selection: $selectedPattern) {
+                                    ForEach(patterns, id: \.id) { pattern in // why the fuck does it need me to specify id if Pattern conforms to identifiable? is it because it is an optional? (Pattern?)
+                                        //                            Text("\(pattern.headsign) (\(routes.first(where: {$0.id == pattern.routeId})?.longName ?? ""))")
+                                        //                                .tag(pattern.id)
+                                        Text(pattern.headsign)
+                                            .tag(pattern as Pattern?) // FUCK MEEEEE @see https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .clipped()
+                                .background(RoundedRectangle(cornerRadius: 10.0).fill(.gray.quinary))
+                                .pickerStyle(.menu)
+                            }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
-                    }
-                    .padding(.vertical)
+                        .padding(.vertical)
 
-                    if let _ = shape {
-                        ShapeAndVehiclesMapView(stops: .constant(selectedPattern.path.compactMap {$0.stop}), vehicles: $vehicles, shape: $shape, lineColor: Color(hex: line.color))
-                            .frame(height: isMapExpanded ? 600 : 300)
-                            .overlay {
-                                VStack {
-                                    Spacer()
-                                    HStack {
-                                        HStack {
-                                            Circle()
-                                                .fill(.green.gradient.opacity(0.3))
-                                                .frame(height: 20.0)
-                                            Text("\(vehicles.count) veículo\(vehicles.count == 1 ? "" : "s") em circulação")
-                                                .foregroundStyle(.green)
-                                                .bold()
-                                                .font(.footnote)
-                                                .padding(.horizontal, 5.0)
-                                        }
-                                        .padding(5.0)
-                                        .background {
-                                            Capsule()
-                                                .fill(.white.shadow(.drop(color: .black.opacity(0.2), radius: 10)))
-                                        }
-                                        .padding()
+                        if let _ = shape {
+                            ShapeAndVehiclesMapView(stops: .constant(selectedPattern.path.compactMap {$0.stop}), vehicles: $vehicles, shape: $shape, lineColor: Color(hex: line.color))
+                                .frame(height: isMapExpanded ? 600 : 300)
+                                .overlay {
+                                    VStack {
                                         Spacer()
-                                        Button {
-                                            withAnimation {
-                                                isMapExpanded.toggle()
+                                        HStack {
+                                            HStack {
+                                                Circle()
+                                                    .fill(.green.gradient.opacity(0.3))
+                                                    .frame(height: 20.0)
+                                                Text("\(vehicles.count) veículo\(vehicles.count == 1 ? "" : "s") em circulação")
+                                                    .foregroundStyle(.green)
+                                                    .bold()
+                                                    .font(.footnote)
+                                                    .padding(.horizontal, 5.0)
                                             }
-                                        } label: {
-                                            Image(systemName: isMapExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
-                                                .padding(10.0)
-                                                .background {
-                                                    Circle()
-                                                        .fill(.thickMaterial)
+                                            .padding(5.0)
+                                            .background {
+                                                Capsule()
+                                                    .fill(.white.shadow(.drop(color: .black.opacity(0.2), radius: 10)))
+                                            }
+                                            .padding()
+                                            Spacer()
+                                            Button {
+                                                withAnimation {
+                                                    isMapExpanded.toggle()
                                                 }
-                                                .padding()
+                                            } label: {
+                                                Image(systemName: isMapExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+                                                    .padding(10.0)
+                                                    .background {
+                                                        Circle()
+                                                            .fill(.thickMaterial)
+                                                    }
+                                                    .padding()
+                                            }
                                         }
                                     }
                                 }
-                            }
-                    }
-                
-                
-                
-                    PatternLegs(pattern: selectedPattern, selectedStop: $selectedStop, etasWithStopIds: currentPatternEtas)
-                        .padding(.vertical)
+                        }
                     
-                } else {
-                    LoadingBar(size: 10)
+                    
+                    
+                        PatternLegs(pattern: selectedPattern, selectedStop: $selectedStop, etasWithStopIds: currentPatternEtas)
+                            .padding(.vertical)
+                        
+                    } else {
+    //                    LoadingBar(size: 10)
+                        VStack {
+                            CMLoadingAnimation()
+                        }
+                        .frame(width: geo.size.width)
+                        .frame(minHeight: geo.size.height)
+                    }
                 }
             }
         }
@@ -189,7 +196,13 @@ struct LineDetailsView: View {
             AlertsSheetView(isSelfPresented: $isAlertsSheetPresented, alerts: lineAlerts, source: .line) // AlertsService.alerts.find(where: { $0.alert.informedEntities blableblibloblu })
                 .presentationDragIndicator(.visible)
         }
+        .sheet(isPresented: $isFavoriteCustomizationSheetPresented) {
+            NavigationStack {
+                FavoriteCustomizationView(type: .line, isSelfPresented: $isFavoriteCustomizationSheetPresented, overrideItemId: line.id)
+            }
+        }
         .onAppear {
+            LinesSearchHistoryManager.shared.addSearchResult(line.id)
             if patterns.count == 0 {
                 Task {
                     for routeId in line.routes {

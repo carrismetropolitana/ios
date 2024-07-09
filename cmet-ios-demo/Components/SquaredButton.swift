@@ -11,7 +11,7 @@ struct SquaredButton: View {
     @Environment(\.colorScheme) private var colorScheme
     let action: () -> Void
     let systemIcon: String?
-    let imageResourceIcon: ImageResource?
+    let imageResourceIcon: ImageResource? = nil
     let iconColor: Color
     let badgeValue: Int
     let size: CGFloat? = 60
@@ -63,5 +63,5 @@ struct SquaredButton: View {
 
 
 #Preview {
-    SquaredButton(action: {print("SquaredButton clicked!")}, systemIcon: "exclamationmark.triangle", imageResourceIcon: nil, iconColor: .black, badgeValue: 1)
+    SquaredButton(action: {print("SquaredButton clicked!")}, systemIcon: "exclamationmark.triangle", iconColor: .black, badgeValue: 1)
 }

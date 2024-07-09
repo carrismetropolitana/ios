@@ -102,12 +102,28 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
         return pattern!
     }
     
-    func getETAs(_ stopId: String) async throws -> [RealtimeETA] {
+    func getETAs(_ stopId: String) async throws -> [RealtimeETA] { // TODO: stop id should be a named arg when switch to pattern rt
         var etas: [RealtimeETA]?
         do {
             etas = try await NetworkService.makeGETRequest("\(CMAPI.stopsUrl)/\(stopId)/realtime", responseType: [RealtimeETA].self)
         } catch {
             print("Failed to fetch realtime estimates for stop \(stopId)!")
+            print(error)
+        }
+        
+        guard etas != nil else {
+            throw CMAPIError.noRouteFound
+        }
+        
+        return etas!
+    }
+    
+    func getETAs(patternId: String) async throws -> [PatternRealtimeETA] {
+        var etas: [PatternRealtimeETA]?
+        do {
+            etas = try await NetworkService.makeGETRequest("\(CMAPI.patternsUrl)/\(patternId)/realtime", responseType: [PatternRealtimeETA].self)
+        } catch {
+            print("Failed to fetch realtime estimates for pattern \(patternId)!")
             print(error)
         }
         

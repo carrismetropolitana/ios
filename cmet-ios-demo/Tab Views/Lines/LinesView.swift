@@ -9,7 +9,8 @@ import SwiftUI
 import CoreLocation
 
 struct LinesView: View {
-    @State private var lines: [Line] = []
+    @EnvironmentObject var linesManager: LinesManager
+//    @State private var lines: [Line] = []
     @State private var searchTerm = ""
     var body: some View {
         NavigationStack {
@@ -43,7 +44,7 @@ struct LinesView: View {
 //                    .padding()
 //                    .background(.cmYellow)
                     
-                    LinesListView(lines: $lines, searchTerm: $searchTerm)
+                    LinesListView(lines: linesManager.lines, searchTerm: $searchTerm)
                 }
             }
 //            .navigationTitle("Pesquisar Linhas")
@@ -53,14 +54,14 @@ struct LinesView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarColorScheme(.light)
             // .toolbar(.hidden) // for now, default title too big
-            .onAppear {
-                if lines.count == 0 {
-                    Task {
-                        lines = await CMAPI.shared.getLines()
-                        print(lines.count)
-                    }
-                }
-            }
+//            .onAppear {
+//                if lines.count == 0 {
+//                    Task {
+//                        lines = await CMAPI.shared.getLines()
+//                        print(lines.count)
+//                    }
+//                }
+//            }
         }
     }
 }
@@ -71,40 +72,97 @@ struct LinesView: View {
 
 struct LinesListView: View {
     @EnvironmentObject var locationManager: LocationManager
+    @ObservedObject var searchHistoryManager = LinesSearchHistoryManager.shared
+    
     
     @Environment(\.isSearching) var isSearching
-    @Binding var lines: [Line]
+    @State var lines: [Line]
     @Binding var searchTerm: String
     @State private var searchFilteredLines: [Line] = []
+    
+    var onClickOverride: ((_ lineId: String) -> Void)? = nil
     
     var body: some View {
         List {
             if !isSearching {
-                Section(header: Text("Recentes").bold().font(.title2).foregroundStyle(.windowBackground).offset(x:-15).colorInvert()) {
-                }
-                .textCase(nil)
-                
-                if let location = locationManager.location {
-                    Section(header: Text("À Minha Volta").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
+                if searchHistoryManager.searchHistory.count > 0 {
+                    Section(header: HStack {
+                        Text("Recentes").bold().font(.title2).foregroundStyle(.windowBackground).offset(x:-15).colorInvert()
+                        Spacer()
+                        Button() {
+                            withAnimation {
+                                searchHistoryManager.wipeSearchHistory()
+                            }
+                        } label: {
+                            Text("Limpar")
+                                .font(.caption)
+                                .padding(.horizontal, 5.0)
+                                .padding(.vertical, 2.0)
+                                .background {
+                                    Capsule()
+                                        .stroke(.gray, lineWidth: 1)
+                                }
+                        }
+                        .buttonStyle(.plain)
+                    }) {
                         
-//                        ForEach(closestStops(to: location, stops: [Stop]))
-                        Text("Location")
-                            .badge(Text("\(location.latitude), \(location.longitude)"))
+                        ForEach(searchHistoryManager.searchHistory, id: \.self) { lineId in
+                            let line = lines.first { $0.id == lineId }
+                            
+                            if let line = line {
+                                if let onClickOverride = onClickOverride {
+                                    Button {
+                                        onClickOverride(line.id)
+                                    } label: {
+                                        LineEntry(line: line)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                                } else {
+                                    NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
+                                        LineEntry(line: line)
+                                    }
+                                    .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                                }
+                            }
+                        }
                     }
                     .textCase(nil)
                 }
-            }
-            Section(header: isSearching ? nil :  Text("Todas").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
-                ForEach(isSearching ? searchFilteredLines : lines) { line in
-                    NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
-                        LineEntry(line: line)
+                
+                if onClickOverride == nil {
+                    if let location = locationManager.location {
+                        Section(header: Text("À Minha Volta").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
+                            
+                            //                        ForEach(closestStops(to: location, stops: [Stop]))
+                            Text("Location")
+                                .badge(Text("\(location.latitude), \(location.longitude)"))
+                        }
+                        .textCase(nil)
                     }
-                    .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                }
+            }
+            Section(header: isSearching ? nil :  Text("Todas as Linhas").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
+                ForEach(isSearching ? searchFilteredLines : lines) { line in
+                    if let onClickOverride = onClickOverride {
+                        Button {
+                            onClickOverride(line.id)
+                        } label: {
+                            LineEntry(line: line)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                    } else {
+                        NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
+                            LineEntry(line: line)
+                        }
+                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                    }
                 }
             }
             .textCase(nil)
         }
-        .contentMargins(.top, 25, for: .scrollContent)
+        .contentMargins(.top, isSearching ? 25 : 0, for: .scrollContent)
         .onChange(of: isSearching) {
             if searchFilteredLines.count == 0 {
                 searchFilteredLines = lines

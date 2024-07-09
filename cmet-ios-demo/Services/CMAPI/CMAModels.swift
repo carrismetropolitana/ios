@@ -258,7 +258,7 @@ struct PatternRealtimeETA: Codable, Hashable {
     let vehicleId: String?
 }
 
-struct Vehicle: Codable, Identifiable {
+struct Vehicle: Codable, Identifiable, Equatable {
     let id: String
     let timestamp: Int
     let scheduleRelationship: String

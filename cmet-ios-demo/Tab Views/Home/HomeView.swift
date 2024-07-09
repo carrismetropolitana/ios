@@ -23,7 +23,7 @@ struct HomeView: View {
 //                        }
                         .accessibilityLabel(Text("Logótipo da Carris Metropolitana"))
                     Spacer()
-                    WifiConnectButton()
+//                    WifiConnectButton()
                 }
                 .padding()
             }

@@ -9,7 +9,7 @@ enum IMLAPIError: Error {
     case noStopFound
 }
 
-class IMLAPI { // this also does not support Last-Modified-Since so i guess just get the routes and update cache very now and then (every minute?)
+class IMLAPI {
     private static let baseUrl = "https://api.intermodal.pt/v1"
     private static let cmOperatorId = 1
     
