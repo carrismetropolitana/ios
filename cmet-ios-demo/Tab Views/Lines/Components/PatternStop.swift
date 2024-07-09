@@ -546,6 +546,7 @@ struct OtherTestPreview: View {
                                 .frame(width: 15.0)
                                 .padding(.horizontal)
                                 .padding(.top, getActiveLegTopPadding())
+                                .animation(.default, value: getActiveLegTopPadding())
                             
                         }
                         .padding(.horizontal)
@@ -567,28 +568,19 @@ struct OtherTestPreview: View {
                             }
                             .scaleEffect(scale)
                             .animation(vehicleStatus == .incomingAt ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true) : .default, value: scale)
+                            .animation(.default, value: getActiveLegTopPadding())
                             .onAppear {
                                 if vehicleStatus == .incomingAt  {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                                        self.scale = 1.5
-                                    }
+                                    self.scale = 1.5
                                 }
                             }
                             .onChange(of: vehicleStatus) {
                                 if vehicleStatus == .incomingAt  {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                                        self.scale = 1.5
-                                    }
-
+                                    self.scale = 1.5
                                 } else {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                                        self.scale = 1.0
-                                    }
+                                    self.scale = 1.0
                                 }
                             }
-                                        
-                        
-                        
                         Spacer()
                     }
                     .padding(.horizontal)

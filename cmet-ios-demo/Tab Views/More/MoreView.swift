@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MoreView: View {
+    @EnvironmentObject var vehiclesManager: VehiclesManager
     @State private var news: [News] = []
     @State private var carouselItems: [CarouselItem] = []
     let dummyCarouselItems = [
@@ -103,6 +104,7 @@ struct MoreView: View {
                 Task {
                     news = try await CMWordpressAPI.shared.getNews()
                 }
+                vehiclesManager.stopFetching()
             }
             .onChange(of: news) {
                 Task {

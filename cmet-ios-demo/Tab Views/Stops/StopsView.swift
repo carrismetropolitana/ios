@@ -166,6 +166,9 @@ struct StopsView: View {
                 }
             }
             .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
+            .onAppear {
+                vehiclesManager.stopFetching()
+            }
         }
     }
     

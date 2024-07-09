@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    
 //    @State var isEasterEggVisible = false
     @AppStorage("____dev_isLoggedIn") var ____dev_isLoggedIn: Bool = false
     var body: some View {

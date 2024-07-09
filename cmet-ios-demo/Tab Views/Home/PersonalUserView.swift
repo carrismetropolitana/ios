@@ -12,6 +12,7 @@ struct PersonalUserView: View {
     
     @EnvironmentObject var stopsManager: StopsManager
     @EnvironmentObject var linesManager: LinesManager
+    @EnvironmentObject var vehiclesManager: VehiclesManager
     
     @State private var isSheetOpen = false
     @State private var isUserProfileSheetVisible = false
@@ -103,6 +104,15 @@ struct PersonalUserView: View {
             UserProfileSheetView()
                 .presentationDragIndicator(.visible)
         }
+        .onAppear {
+            if favoritesManager.favorites.contains(where: { $0.type == .pattern }) {
+                vehiclesManager.startFetching()
+            }
+        }
+//        .onDisappear {
+//            // it does
+//            vehiclesManager.stopFetching() // TODO: check if not conflicting with the line details onDisappear
+//        }
 
     }
 }

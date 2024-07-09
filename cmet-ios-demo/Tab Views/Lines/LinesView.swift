@@ -10,6 +10,7 @@ import CoreLocation
 
 struct LinesView: View {
     @EnvironmentObject var linesManager: LinesManager
+    @EnvironmentObject var vehiclesManager: VehiclesManager
 //    @State private var lines: [Line] = []
     @State private var searchTerm = ""
     var body: some View {
@@ -53,6 +54,9 @@ struct LinesView: View {
             .toolbarBackground(.cmYellow, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarColorScheme(.light)
+            .onAppear {
+                vehiclesManager.stopFetching()
+            }
             // .toolbar(.hidden) // for now, default title too big
 //            .onAppear {
 //                if lines.count == 0 {

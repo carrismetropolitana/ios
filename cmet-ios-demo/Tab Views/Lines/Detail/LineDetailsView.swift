@@ -239,7 +239,7 @@ struct LineDetailsView: View {
         .onDisappear {
             print("LineDetailsView onDisappear called")
             stopFetchingTimer()
-            vehiclesManager.stopFetching()
+//            vehiclesManager.stopFetching()
         }
         .onChange(of: selectedPattern) { // manual vehicle clear and refetch on pattern change
             vehicles = []

@@ -155,7 +155,7 @@ struct VehicleDetailsView: View {
                 }
             }
             .onDisappear {
-                vehiclesManager.stopFetching()
+                // vehiclesManager.stopFetching()
             }
         }
         else {
