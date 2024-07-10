@@ -12,30 +12,32 @@ struct HomeView: View {
 //    @State var isEasterEggVisible = false
     @AppStorage("____dev_isLoggedIn") var ____dev_isLoggedIn: Bool = false
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
+        NavigationStack {
+            VStack(spacing: 0) {
                 HStack {
-                    Image(.cmLogoWhite)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 50)
-//                        .onLongPressGesture(minimumDuration: 2) {
-//                            isEasterEggVisible.toggle()
-//                        }
-                        .accessibilityLabel(Text("Logótipo da Carris Metropolitana"))
-                    Spacer()
-//                    WifiConnectButton()
+                    HStack {
+                        Image(.cmLogoWhite)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 50)
+    //                        .onLongPressGesture(minimumDuration: 2) {
+    //                            isEasterEggVisible.toggle()
+    //                        }
+                            .accessibilityLabel(Text("Logótipo da Carris Metropolitana"))
+                        Spacer()
+    //                    WifiConnectButton()
+                    }
+                    .padding()
                 }
-                .padding()
+                .background(.cmYellow)
+                
+                if (____dev_isLoggedIn) {
+                    PersonalUserView()
+                } else {
+                    UnregisteredUserView()
+                }
+                
             }
-            .background(.cmYellow)
-            
-            if (____dev_isLoggedIn) {
-                PersonalUserView()
-            } else {
-                UnregisteredUserView()
-            }
-            
         }
 //        .sheet(isPresented: $isEasterEggVisible) {
 //            EasterEggView()

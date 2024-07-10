@@ -79,6 +79,10 @@ struct LinesListView: View {
     @ObservedObject var searchHistoryManager = LinesSearchHistoryManager.shared
     
     
+    @EnvironmentObject var stopsManager: StopsManager
+    @EnvironmentObject var linesManager: LinesManager
+    
+    
     @Environment(\.isSearching) var isSearching
     @State var lines: [Line]
     @Binding var searchTerm: String
@@ -136,13 +140,7 @@ struct LinesListView: View {
                 
                 if onClickOverride == nil {
                     if let location = locationManager.location {
-                        Section(header: Text("À Minha Volta").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
-                            
-                            //                        ForEach(closestStops(to: location, stops: [Stop]))
-                            Text("Location")
-                                .badge(Text("\(location.latitude), \(location.longitude)"))
-                        }
-                        .textCase(nil)
+                        aroundMeLines(location)
                     }
                 }
             }
@@ -184,6 +182,28 @@ struct LinesListView: View {
             }
         }
     }
+    
+    private func aroundMeLines(_ location: CLLocationCoordinate2D) -> some View {
+        let linesAroundUser = closestStops(to: location, stops: stopsManager.stops, maxResults: 3).compactMap { $0.lines![0] }
+        return (
+            Section(header: Text("À Minha Volta").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
+                
+                //                        ForEach(closestStops(to: location, stops: [Stop]))
+                ForEach (linesAroundUser, id: \.self) { lineId in
+                    let line = linesManager.lines.first { $0.id == lineId }!
+                    NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
+                        LineEntry(line: line)
+                    }
+                    .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                }
+//                Text("Location")
+//                    .badge(Text("\(location.latitude), \(location.longitude)"))
+            }
+            .textCase(nil)
+        )
+    }
+    
+    
 }
 
 extension Color {

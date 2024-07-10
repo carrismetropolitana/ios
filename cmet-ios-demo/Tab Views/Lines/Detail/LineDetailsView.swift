@@ -25,7 +25,7 @@ struct LineDetailsView: View {
     @State private var selectedStop: Stop?
     @State private var routes: [Route] = []
     @State private var patterns: [Pattern] = []
-    @State private var currentPatternEtas: [EtaEntryWithStopId] = []
+    @State private var currentPatternEtas: [String: [PatternRealtimeETA]] = [:]
     @State private var unfilteredVehicles: [Vehicle] = []
     @State private var vehicles: [Vehicle] = []
     @State private var shape: CMShape?
@@ -307,23 +307,26 @@ struct LineDetailsView: View {
 //                unfilteredVehicles = try await CMAPI.shared.getVehicles()
                 vehicles = vehiclesManager.vehicles.filter {$0.patternId == pattern.id}
                 
+                let etasForPattern = try await CMAPI.shared.getETAs(patternId: pattern.id)
                 
-                try await withThrowingTaskGroup(of: (stopId: String, etas: [RealtimeETA]).self) { group in
-                    for pathEntry in pattern.path {
-                        group.addTask {
-                            let etas = try await CMAPI.shared.getETAs(pathEntry.stop.id)
-                            return (stopId: pathEntry.stop.id, etas: etas)
-                        }
-                    }
-                    
-                    var etasToSet: [EtaEntryWithStopId] = []
-                    
-                    for try await result in group {
-                        etasToSet.append(.init(stopId: result.stopId, etas: result.etas))
-                    }
-                    
-                    currentPatternEtas = etasToSet
-                }
+                currentPatternEtas = arrangeByStopIds(etasForPattern)
+                
+//                try await withThrowingTaskGroup(of: (stopId: String, etas: [RealtimeETA]).self) { group in
+//                    for pathEntry in pattern.path {
+//                        group.addTask {
+//                            let etas = try await CMAPI.shared.getETAs(pathEntry.stop.id)
+//                            return (stopId: pathEntry.stop.id, etas: etas)
+//                        }
+//                    }
+//                    
+//                    var etasToSet: [EtaEntryWithStopId] = []
+//                    
+//                    for try await result in group {
+//                        etasToSet.append(.init(stopId: result.stopId, etas: result.etas))
+//                    }
+//                    
+//                    currentPatternEtas = etasToSet
+//                }
                 
                 print("Got \(vehicles.count) vehicles and \(currentPatternEtas.count) ETAS for pattern \(selectedPattern!.id)")
             }
@@ -357,7 +360,7 @@ struct PatternLegs: View {
     @State private var selectedSchedulesDate = Date()
     @Binding var selectedStop: Stop? // would be ok to just keep state inside this component but maybe in the future we may need to access from parent so lets keep it this way
     @State private var selectedStopIndex: Int?
-    fileprivate let etasWithStopIds: [EtaEntryWithStopId]
+    fileprivate let etasWithStopIds: [String: [PatternRealtimeETA]]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0)  {
@@ -369,10 +372,10 @@ struct PatternLegs: View {
                 let isSelected = selectedStop?.id == pathStep.stop.id // TODO: deprecate this as somethimes stops repeat in a pattern
                 let isSelectedByIndex = selectedStopIndex == pathStepIdx
                 
-                let etas = etasWithStopIds.first(where: {$0.stopId == pathStep.stop.id})?.etas
-                let etasForSelectedPattern = etas?.filter({$0.patternId == pattern.id})
+//                let etas = etasWithStopIds.first(where: {$0.stopId == pathStep.stop.id})?.etas
+                let etas = etasWithStopIds[pathStep.stop.id]
                 
-                let nextEtas = etasForSelectedPattern != nil ? filterAndSortCurrentAndFutureETAs(etasForSelectedPattern!) : [] // TODO: deoptionalize lol
+                let nextEtas = etas != nil ? filterAndSortCurrentAndFuturePatternETAs(etas!) : []
                 
                 HStack {
                     HStack {
@@ -442,7 +445,7 @@ struct PatternLegs: View {
                                     }
                                     if isSelectedByIndex {
                                         if nextEtas.count > 0 {
-                                            NextEtasView(nextEtas: Array(nextEtas.prefix(3)))
+                                            NextEtasView(nextEtas: Array(nextEtas.dropFirst().prefix(3)))
                                         } else {
                                             Text("Sem próximas passagens.")
                                                 .font(.subheadline)
@@ -548,7 +551,7 @@ struct PatternLegs: View {
 }
 
 struct NextEtasView: View {
-    let nextEtas: [RealtimeETA]
+    let nextEtas: [PatternRealtimeETA]
     var body: some View {
         Image(systemName: "clock")
         ForEach(nextEtas, id: \.self) { eta in
@@ -579,15 +582,15 @@ struct StopOptionsButtonStyle: ButtonStyle {
     }
 }
 
-// logic for this in https://github.com/carrismetropolitana/website/blob/4f9f9495428d5aa9a81f00611ae3bf4f5fddbe14/nextjs/components/FrontendStopsTimetable/FrontendStopsTimetable.js#L39
-func filterAndSortCurrentAndFutureETAs(_ etas: [RealtimeETA]) -> [RealtimeETA] {
+
+func filterAndSortCurrentAndFuturePatternETAs(_ etas: [PatternRealtimeETA]) -> [PatternRealtimeETA] {
     let currentAndFutureFiltering = etas.filter({
         let tripHasObservedArrival = $0.observedArrivalUnix != nil
         let tripScheduledArrivalIsInThePast = $0.scheduledArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
         let tripHasEstimatedArrival = $0.estimatedArrivalUnix != nil
         let tripEstimatedArrivalIsInThePast = $0.estimatedArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
         
-        return !tripHasObservedArrival && (!tripScheduledArrivalIsInThePast || tripHasEstimatedArrival) && !tripEstimatedArrivalIsInThePast
+        return !tripScheduledArrivalIsInThePast && !tripHasObservedArrival
     })
     
     print("Filtered \(currentAndFutureFiltering.count) ETAs as currentAndFuture.")
@@ -606,10 +609,23 @@ func filterAndSortCurrentAndFutureETAs(_ etas: [RealtimeETA]) -> [RealtimeETA] {
             // Both have only scheduled_arrival, compare them
             return a.scheduledArrivalUnix! < b.scheduledArrivalUnix!
         }
-//        $0.scheduledArrivalUnix! < $1.scheduledArrivalUnix!
     }
     
     return sorted
+}
+
+func arrangeByStopIds(_ patternEtas: [PatternRealtimeETA]) -> [String: [PatternRealtimeETA]] {
+    var arrangedDict = [String: [PatternRealtimeETA]]()
+    
+    for eta in patternEtas {
+        if arrangedDict[eta.stopId] != nil {
+            arrangedDict[eta.stopId]?.append(eta)
+        } else {
+            arrangedDict[eta.stopId] = [eta]
+        }
+    }
+    
+    return arrangedDict
 }
 
 func getRoundedMinuteDifferenceFromNow(_ refTimestamp: Int) -> Int {

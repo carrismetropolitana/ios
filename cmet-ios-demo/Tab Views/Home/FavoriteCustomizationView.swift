@@ -137,7 +137,8 @@ struct FavoriteCustomizationView: View {
                             } label: {
                                 SelectablePatternEntry(isSelected: selectedPatternIds.contains(pattern.id), pattern: pattern)
                             }
-                            .buttonStyle(.plain)
+                            .tint(.listPrimary)
+//                            .buttonStyle(.plain)
                         }
                     } else {
                         LoadingBar(size: 10)
@@ -156,7 +157,8 @@ struct FavoriteCustomizationView: View {
                             } label: {
                                 SelectablePatternEntry(isSelected: selectedPatternIds.contains(pattern.id), pattern: pattern)
                             }
-                            .buttonStyle(.plain)
+                            .tint(.listPrimary)
+//                            .buttonStyle(.plain)
                         }
                     } else {
                         LoadingBar(size: 10)
@@ -420,10 +422,10 @@ struct SelectablePatternEntry: View {
                         .bold()
                         .font(.subheadline)
                         .lineLimit(2)
-                    Spacer()
                 }
                 .frame(height: 40)
                 .padding(.vertical, 5)
+            Spacer()
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                 .foregroundStyle(isSelected ? .green : .primary)
                 .padding(.trailing, 3.0)

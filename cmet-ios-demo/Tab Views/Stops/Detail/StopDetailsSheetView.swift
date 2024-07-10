@@ -13,7 +13,7 @@ struct StopDetailsSheetView: View {
     @Binding var shouldPresentStopDetailsView: Bool
     @State private var timer: Timer?
     
-    let onEtaClick: (_ vehicleId: String) -> Void
+    let onEtaClick: (_ eta: RealtimeETA) -> Void
     
     let stop: Stop
     @State private var nextEtas: [RealtimeETA] = []
@@ -47,15 +47,21 @@ struct StopDetailsSheetView: View {
                 .padding(.top)
                 .padding(.horizontal)
             }
-            .buttonStyle(.plain)
+//            .buttonStyle(.plain)
+            .tint(.listPrimary)
             
             
             Divider()
             
-            Text("Próximos veículos nesta paragem".uppercased())
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-                .fontWeight(.heavy)
+            HStack {
+                Text("Próximos veículos nesta paragem".uppercased())
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .fontWeight(.heavy)
+                Spacer()
+            }
+            .padding(.leading)
+            .padding(.top, 10.0)
             
             VStack(spacing: 0) {
                 ForEach(nextEtas.prefix(3).indices, id: \.self) { etaIdx in
@@ -68,24 +74,28 @@ struct StopDetailsSheetView: View {
                     })
                     
                     Button {
-                        if let vehicleId = eta.vehicleId {
-                            
-                            print("VID \(vehicleId)")
-                            onEtaClick(vehicleId) // TODO: this should be realtime or maybe not, decide
-                        }
+                        print("ETA tripid \(eta.tripId)")
+                        onEtaClick(eta) // TODO: this should be realtime or maybe not, decide
                     } label: {
                         HStack {
                             Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor), size: 60) // TODO: match line colors to these
                             Text(eta.headsign)
                                 .bold()
+                                .lineLimit(1)
                             Spacer()
-                            PulseLabel(accent: .green, label: Text("\(getRoundedMinuteDifferenceFromNow(eta.estimatedArrivalUnix!)) min"))
+                            if let estimatedArrival = eta.estimatedArrivalUnix {
+                                PulseLabel(accent: .green, label: Text("\(getRoundedMinuteDifferenceFromNow(eta.estimatedArrivalUnix!)) min"))
+                            } else if let scheduledArrival = eta.scheduledArrival {
+                                let timeComponents = scheduledArrival.components(separatedBy: ":")
+                                Text("\(timeComponents[0]):\(timeComponents[1])")
+                            }
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(.tertiary)
                         }
                         .padding()
                     }
-                    .buttonStyle(.plain)
+//                    .buttonStyle(.plain)
+                    .tint(.listPrimary)
                     
                     
                     if !isLast || nextEtas.count > 3 {
@@ -129,7 +139,7 @@ struct StopDetailsSheetView: View {
             
             print("Got \(etas.count) ETAS for stop \(stop.id)")
             
-            nextEtas = filterAndSortCurrentAndFutureETAs(etas)
+            nextEtas = filterAndSortCurrentAndFutureStopETAs(etas)
         }
     }
     
@@ -150,3 +160,35 @@ struct StopDetailsSheetView: View {
 //#Preview {
 //    StopDetailsSheetView()
 //}
+
+
+func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeETA] {
+    let currentAndFutureFiltering = etas.filter({
+        let tripHasObservedArrival = $0.observedArrivalUnix != nil
+        let tripScheduledArrivalIsInThePast = $0.scheduledArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
+        let tripHasEstimatedArrival = $0.estimatedArrivalUnix != nil
+        let tripEstimatedArrivalIsInThePast = $0.estimatedArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
+        
+        return !tripScheduledArrivalIsInThePast && !tripHasObservedArrival
+    })
+    
+    print("Filtered \(currentAndFutureFiltering.count) ETAs as currentAndFuture.")
+    
+    let sorted = currentAndFutureFiltering.sorted { (a, b) -> Bool in
+        if let estimatedArrivalA = a.estimatedArrivalUnix, let estimatedArrivalB = b.estimatedArrivalUnix {
+            // Both have estimated_arrival, compare them
+            return estimatedArrivalA < estimatedArrivalB
+        } else if a.estimatedArrivalUnix != nil {
+            // Only `a` has estimated_arrival, so it comes before `b`
+            return true
+        } else if b.estimatedArrivalUnix != nil {
+            // Only `b` has estimated_arrival, so it comes before `a`
+            return false
+        } else {
+            // Both have only scheduled_arrival, compare them
+            return a.scheduledArrivalUnix! < b.scheduledArrivalUnix!
+        }
+    }
+    
+    return sorted
+}

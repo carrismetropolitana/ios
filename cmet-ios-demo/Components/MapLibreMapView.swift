@@ -12,6 +12,7 @@ struct MapLibreMapView: UIViewRepresentable {
 //    @Environment(\.colorScheme) var colorScheme
     var stops: [Stop]
     @Binding var selectedStopId: String?
+    @Binding var flyToCoords: CLLocationCoordinate2D?
     
     func makeUIView(context: Context) -> MLNMapView {
         let styleURL = URL(string: "https://maps.carrismetropolitana.pt/styles/default/style.json")
@@ -153,6 +154,21 @@ struct MapLibreMapView: UIViewRepresentable {
             addStops(to: uiView)
         } else {
             updateStops(on: uiView)
+        }
+        
+        if let flyToCoords = flyToCoords {
+            let camera = MLNMapCamera(
+                lookingAtCenter: flyToCoords,
+                altitude: 5500,
+                pitch: 0,
+                heading: 0
+            )
+            
+            uiView.setCamera(
+                camera,
+                withDuration: 1.5,
+                animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut)
+            )
         }
     }
 }

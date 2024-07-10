@@ -75,6 +75,7 @@ struct CustomizeWidgetsSheetView: View {
                                                 .font(.footnote)
                                                 .foregroundStyle(.secondary)
                                             if fav.type == .stop {
+                                                // will crash if stopsManager is empty due to no network for example. add local persistent cache.
                                                 Text(stopsManager.stops.first { $0.id == fav.stopId }!.name)
                                                     .bold()
                                             } else {
@@ -82,6 +83,16 @@ struct CustomizeWidgetsSheetView: View {
                                                     .bold()
                                             }
                                         }
+                                    }
+                                }
+//                                .contentTransition(.opacity)
+                                .swipeActions {
+                                    Button(role: .destructive) {
+                                        withAnimation {
+                                            favoritesManager.removeFavorite(fav)
+                                        }
+                                    } label: {
+                                        Label("Apagar", systemImage: "trash.fill")
                                     }
                                 }
                             }

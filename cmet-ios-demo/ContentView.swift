@@ -8,30 +8,46 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isShowingLaunchAnimation = true
     var body: some View {
-        TabView {
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "person.crop.circle.fill")
+        ZStack {
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Label("Home", systemImage: "person.crop.circle.fill")
+                    }
+                
+                LinesView()
+                    .tabItem {
+                        Label("Linhas", systemImage: "arrow.triangle.swap")
+                    }
+                
+                StopsView()
+                    .tabItem {
+                        Label("Paragens", systemImage: "map")
+                    }
+                
+                MoreView()
+                    .tabItem {
+                        Label("Mais", systemImage: "ellipsis")
+                    }
+            }.overlay {
+                if isShowingLaunchAnimation {
+                    CMLogoAnimation()
+                        .transition(.opacity)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.white)
+                        .ignoresSafeArea()
                 }
-            
-            LinesView()
-                .tabItem {
-                    Label("Linhas", systemImage: "arrow.triangle.swap")
-                }
-            
-            StopsView()
-                .tabItem {
-                    Label("Paragens", systemImage: "map")
-                }
-            
-            MoreView()
-                .tabItem {
-                    Label("Mais", systemImage: "ellipsis")
-                }
-
+            }
         }
         .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                withAnimation {
+                    isShowingLaunchAnimation.toggle()
+                }
+            }
+            
                     let appearance = UITabBarAppearance()
 //                    appearance.configureWithOpaqueBackground()
             appearance.backgroundEffect = UIBlurEffect(style: .systemMaterial)

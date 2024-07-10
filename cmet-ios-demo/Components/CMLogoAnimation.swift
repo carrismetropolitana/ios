@@ -12,8 +12,9 @@ struct CMLogoAnimation: View {
     var body: some View {
         VStack {
             LottieView(animation: .named("CMLogoLoop"))
+                .animationSpeed(1.5)
                 .playing(loopMode: .autoReverse)
-                .frame(width: 300)
+                .frame(width: 250)
         }
     }
 }

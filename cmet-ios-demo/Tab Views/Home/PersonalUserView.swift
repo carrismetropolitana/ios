@@ -16,97 +16,123 @@ struct PersonalUserView: View {
     
     @State private var isSheetOpen = false
     @State private var isUserProfileSheetVisible = false
+    
+    @State private var lineIdToBePresented: String? = nil
+    @State private var patternIdToBePresented: String? = nil
+    @State private var shouldPresentLineDetailsView = false
+    
     var body: some View {
-        ScrollView {
-//            Button {
-//                isUserProfileSheetVisible.toggle()
-//            } label: {
-//                HStack {
-//                    Circle()
-//                        .fill(.gray.secondary)
-//                        .overlay {
-//                            Image(systemName: "person.fill")
-//                        }
-//                        .frame(height: 40)
-//                    Text("Olá André")
-//                        .bold()
-//                    Spacer()
-//                }
-//                .padding()
-//            }
-//            .buttonStyle(.plain)
-            
-            HStack {
-                Text("Favoritos")
-                    .bold()
-                    .font(.title2)
-                Spacer()
+        VStack {
+            if let lineId = lineIdToBePresented, let patternId = patternIdToBePresented {
+                NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == lineId }!, overrideDisplayedPatternId: patternId), isActive: $shouldPresentLineDetailsView) { EmptyView() }
             }
-            .padding()
-            
-            VStack (spacing: 20) {
-                ForEach(favoritesManager.favorites) { fav in
-//                    WidgetPlaceholder(text: fav.type == .pattern ? "WOULD SHOW WIDGET FOR PATTERN \(fav.patternIds[0])" : "WOULD SHOW WIDGET FOR STOP \(fav.stopId ?? "UNKNOWN"); PATTERNS \(fav.patternIds)")
-                    if fav.type == .stop {
-                        FavoriteStopWidgetView(stop: stopsManager.stops.first { $0.id == fav.stopId }, patternIds: fav.patternIds)
-                    } else if fav.type == .pattern {
-//                        let _ = print("Is pat w t: " + String(describing: fav))
-//                        let _ = print("liat: " + String(linesManager.lines.count))
-//                        NavigationLink(destination: LineDetailsView(
-//                            line: linesManager.lines.first { $0.id == fav.lineId! }!,
-//                            overrideDisplayedPatternId: fav.patternIds[0])) {
-                            FavoriteLineWidgetView(patternId: fav.patternIds[0])
-//                        }
+            ScrollView {
+    //            Button {
+    //                isUserProfileSheetVisible.toggle()
+    //            } label: {
+    //                HStack {
+    //                    Circle()
+    //                        .fill(.gray.secondary)
+    //                        .overlay {
+    //                            Image(systemName: "person.fill")
+    //                        }
+    //                        .frame(height: 40)
+    //                    Text("Olá André")
+    //                        .bold()
+    //                    Spacer()
+    //                }
+    //                .padding()
+    //            }
+    //            .buttonStyle(.plain)
+                
+                HStack {
+                    Text("Favoritos")
+                        .bold()
+                        .font(.title2)
+                    Spacer()
+                }
+                .padding()
+                
+                VStack (spacing: 20) {
+                    ForEach(favoritesManager.favorites) { fav in
+    //                    WidgetPlaceholder(text: fav.type == .pattern ? "WOULD SHOW WIDGET FOR PATTERN \(fav.patternIds[0])" : "WOULD SHOW WIDGET FOR STOP \(fav.stopId ?? "UNKNOWN"); PATTERNS \(fav.patternIds)")
+                        if fav.type == .stop {
+                            FavoriteStopWidgetView(stop: stopsManager.stops.first { $0.id == fav.stopId }, patternIds: fav.patternIds)
+                        } else if fav.type == .pattern {
+    //                        let _ = print("Is pat w t: " + String(describing: fav))
+    //                        let _ = print("liat: " + String(linesManager.lines.count))
+    //                        NavigationLink(destination: LineDetailsView(
+    //                            line: linesManager.lines.first { $0.id == fav.lineId! }!,
+    //                            overrideDisplayedPatternId: fav.patternIds[0])) {
+                           
+                            FavoriteLineWidgetView(patternId: fav.patternIds[0], onHeaderTap: { lineId, patternId in
+                                lineIdToBePresented = lineId
+                                patternIdToBePresented = patternId
+                            })
+                            
+    //                        }
+                        }
                     }
                 }
-            }
-            .padding(.horizontal)
-            
-//            Button {
-//                isSheetOpen.toggle()
-//            } label: {
-//                HStack {
-//                    Image(systemName: "square.and.pencil")
-//                        .padding(.horizontal, 5)
-//                    Text("Personalizar")
-//                }
-//                .padding(.vertical, 10)
-//            }
-//            .buttonStyle(StopOptionsButtonStyle())
-//            
-            
-            Button {
-                isSheetOpen.toggle()
-            } label: {
-                HStack {
-                    Image(systemName: "square.and.pencil")
-                    Text("Personalizar")
-                        .font(.title2)
-                        .bold()
+                .padding(.horizontal)
+                
+    //            Button {
+    //                isSheetOpen.toggle()
+    //            } label: {
+    //                HStack {
+    //                    Image(systemName: "square.and.pencil")
+    //                        .padding(.horizontal, 5)
+    //                    Text("Personalizar")
+    //                }
+    //                .padding(.vertical, 10)
+    //            }
+    //            .buttonStyle(StopOptionsButtonStyle())
+    //            
+                
+                Button {
+                    isSheetOpen.toggle()
+                } label: {
+                    HStack {
+                        Image(systemName: "square.and.pencil")
+                        Text("Personalizar")
+                            .font(.title2)
+                            .bold()
+                    }
+                    .foregroundStyle(.gray)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10.0)
                 }
-                .foregroundStyle(.gray)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10.0)
+                .tint(.gray.opacity(0.3))
+                .buttonStyle(.borderedProminent)
+                .padding()
+                
+                
             }
-            .tint(.gray.opacity(0.3))
-            .buttonStyle(.borderedProminent)
-            .padding()
-            
-            
+            .contentMargins(.bottom, 20.0, for: .scrollContent)
+    //        .contentMargins(.top, 20.0, for: .scrollContent)
+            .sheet(isPresented: $isSheetOpen) {
+                CustomizeWidgetsSheetView(isSheetOpen: $isSheetOpen)
+                    .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $isUserProfileSheetVisible) {
+                UserProfileSheetView()
+                    .presentationDragIndicator(.visible)
+            }
+            .onAppear {
+                if favoritesManager.favorites.contains(where: { $0.type == .pattern }) {
+                    vehiclesManager.startFetching()
+                }
+            }
         }
-        .contentMargins(.bottom, 20.0, for: .scrollContent)
-//        .contentMargins(.top, 20.0, for: .scrollContent)
-        .sheet(isPresented: $isSheetOpen) {
-            CustomizeWidgetsSheetView(isSheetOpen: $isSheetOpen)
-                .presentationDragIndicator(.visible)
+        .onChange(of: patternIdToBePresented) {
+            if let _ = lineIdToBePresented, let _ = patternIdToBePresented {
+                shouldPresentLineDetailsView.toggle()
+            }
         }
-        .sheet(isPresented: $isUserProfileSheetVisible) {
-            UserProfileSheetView()
-                .presentationDragIndicator(.visible)
-        }
-        .onAppear {
-            if favoritesManager.favorites.contains(where: { $0.type == .pattern }) {
-                vehiclesManager.startFetching()
+        .onChange(of: shouldPresentLineDetailsView) {
+            if !shouldPresentLineDetailsView {
+                lineIdToBePresented = nil
+                patternIdToBePresented = nil
             }
         }
 //        .onDisappear {

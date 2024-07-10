@@ -17,6 +17,8 @@ struct FavoriteLineWidgetView: View {
     
     @State private var filteredVehicles: [Vehicle] = []
     
+    let onHeaderTap: (_ lineId: String, _ patternId: String) -> Void
+    
     private var filteredVehiclesBinding: Binding<[Vehicle]> {
         Binding<[Vehicle]>(
             get: {
@@ -43,26 +45,33 @@ struct FavoriteLineWidgetView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                HStack(alignment: .center) {
+                Button {
                     if let pattern = pattern {
-                        Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor), size: 60)
-                    } else {
-                        Pill(text: "", color: .gray.opacity(0.4), textColor: .white, size: 60)
-                            .blinking()
+                        onHeaderTap(pattern.lineId, patternId)
                     }
-                    
-                    if let pattern = pattern {
-                        Text(pattern.headsign)
-                            .font(.callout)
-                            .bold()
-                    } else {
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.gray.opacity(0.4))
-                            .frame(width: 120, height: 15)
-                            .blinking()
+                } label: {
+                    HStack(alignment: .center) {
+                        if let pattern = pattern {
+                            Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor), size: 60)
+                        } else {
+                            Pill(text: "", color: .gray.opacity(0.4), textColor: .white, size: 60)
+                                .blinking()
+                        }
+                        
+                        if let pattern = pattern {
+                            Text(pattern.headsign)
+                                .font(.callout)
+                                .bold()
+                        } else {
+                            RoundedRectangle(cornerRadius: 25.0)
+                                .fill(.gray.opacity(0.4))
+                                .frame(width: 120, height: 15)
+                                .blinking()
+                        }
                     }
+                    Spacer()
                 }
-                Spacer()
+                .tint(.listPrimary)
                 Button {
                     _______tempForUiDemoPurposes_isFavorited.toggle()
                 } label: {
@@ -85,17 +94,41 @@ struct FavoriteLineWidgetView: View {
                     shape: $shape,
                     lineColor: Color(hex: pattern.color)
                 )
-                .frame(height: 200)
+                .frame(height: 250)
                 .clipShape(UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(bottomLeading: 15.0, bottomTrailing: 15.0)))
+                .overlay {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            HStack {
+                                Circle()
+                                    .fill(.green.gradient.opacity(0.3))
+                                    .frame(height: 20.0)
+                                Text("\(filteredVehiclesBinding.wrappedValue.count) veículo\(filteredVehiclesBinding.wrappedValue.count == 1 ? "" : "s") em circulação")
+                                    .foregroundStyle(.green)
+                                    .bold()
+                                    .font(.footnote)
+                                    .padding(.horizontal, 5.0)
+                            }
+                            .padding(5.0)
+                            .background {
+                                Capsule()
+                                    .fill(.white.shadow(.drop(color: .black.opacity(0.2), radius: 10)))
+                            }
+                            .padding(10.0)
+                            Spacer()
+                        }
+                    }
+                }
             }
         }
         .background(RoundedRectangle(cornerRadius: 15.0).fill(.white)
-            .shadow(color: .gray.opacity(0.3), radius: 20))
+        .shadow(color: .gray.opacity(0.3), radius: 20))
         .onAppear {
             Task {
                 pattern = try await CMAPI.shared.getPattern(patternId)
                 shape = try await CMAPI.shared.getShape(pattern!.shapeId)
-                filteredVehicles = vehiclesManager.vehicles.filter { $0.patternId == patternId }
+//                filteredVehicles = vehiclesManager.vehicles.filter { $0.patternId == patternId }
             }
         }
     }

@@ -138,7 +138,15 @@ struct VehicleDetailsView: View {
                     OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicle.currentStatus))
                 }
             
-                Spacer()
+                UserFeedbackForm(
+                    title: "Estas informações estão corretas?",
+                    description: "Ajude-nos a melhorar os transportes para todos.",
+                    questions: [
+                        Question(text: "Percursos e Paragens", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Percursos e Paragens")}),
+                        Question(text: "Estimativas de Chegada", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Estimativas de Chegada")}),
+                        Question(text: "Informações no Veículo", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Informações no Veículo")})
+                    ]
+                )
             }
             .navigationTitle("Autocarro")
             .onAppear {

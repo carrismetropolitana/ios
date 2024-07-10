@@ -8,42 +8,59 @@
 import SwiftUI
 
 struct FavoriteStopWidgetView: View {
+    @EnvironmentObject var linesManager: LinesManager
+    
     let stop: Stop?
     let patternIds: [String]
 //    let estimates: [RealtimeETA]
     
     @State private var fullPatterns: [Pattern] = []
-    @State private var stopEtas: [RealtimeETA] = []
+    
+    @State private var timer: Timer?
+    
+//    @State private var stopEtas: [RealtimeETA] = []
+    
+    @State private var etasForPatterns: [String: [RealtimeETA]] = [:]
+    
+    @State private var shouldPresentStopDetailsView = false
     
     @State private var _______tempForUiDemoPurposes_isFavorited = true
     var body: some View {
         VStack(spacing: 0) {
+            if let stop = stop {
+                NavigationLink(destination: StopDetailsView(stop: stop), isActive: $shouldPresentStopDetailsView) { EmptyView() }
+            }
             HStack {
-                VStack(alignment: .leading) {
-                    if let stop = stop {
-                        Text(stop.name)
-                            .font(.callout)
-                            .bold()
-                    } else {
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.gray.opacity(0.4))
-                            .frame(width: 100, height: 15)
-                            .blinking()
+                Button {
+                    shouldPresentStopDetailsView.toggle()
+                } label: {
+                    VStack(alignment: .leading) {
+                        if let stop = stop {
+                            Text(stop.name)
+                                .font(.callout)
+                                .bold()
+                        } else {
+                            RoundedRectangle(cornerRadius: 25.0)
+                                .fill(.gray.opacity(0.4))
+                                .frame(width: 100, height: 15)
+                                .blinking()
+                        }
+                        
+                        if let stop = stop {
+                            Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .fontWeight(.semibold)
+                        } else {
+                            RoundedRectangle(cornerRadius: 25.0)
+                                .fill(.gray.opacity(0.4))
+                                .frame(width: 120, height: 15)
+                                .blinking()
+                        }
                     }
-                    
-                    if let stop = stop {
-                        Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.semibold)
-                    } else {
-                        RoundedRectangle(cornerRadius: 25.0)
-                            .fill(.gray.opacity(0.4))
-                            .frame(width: 120, height: 15)
-                            .blinking()
-                    }
+                    Spacer()
                 }
-                Spacer()
+                .tint(.listPrimary)
                 Button {
                     _______tempForUiDemoPurposes_isFavorited.toggle()
                 } label: {
@@ -63,18 +80,47 @@ struct FavoriteStopWidgetView: View {
                 let patternId = patternIds[patternIdIdx]
                 
                 if let pattern = fullPatterns.first(where: { $0.id == patternId }) {
-                    HStack(alignment: .center) {
-                        Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor), size: 60)
-                        Image(systemName: "arrow.right")
-                            .bold()
-                            .scaleEffect(0.7)
-                            .frame(width: 15)
-                        Text(pattern.headsign)
-                            .font(.headline)
-                            .bold()
-                        Spacer()
+                    NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == pattern.lineId }!, overrideDisplayedPatternId: pattern.id)) {
+                        HStack(alignment: .center) {
+                            Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor), size: 60)
+                            Image(systemName: "arrow.right")
+                                .bold()
+                                .scaleEffect(0.7)
+                                .frame(width: 15)
+                            Text(pattern.headsign)
+                                .font(.headline)
+                                .bold()
+                                .lineLimit(1)
+                            Spacer()
+                            if let etas = etasForPatterns[patternId] {
+                                if etas.count > 0 {
+                                    let eta = etas[0]
+                                    if let estimatedArrival = eta.estimatedArrivalUnix {
+                                        let minutesToArrival = getRoundedMinuteDifferenceFromNow(estimatedArrival)
+                                        Text("\(minutesToArrival > 1 ? "\(minutesToArrival) min" : "A chegar")")
+                                            .foregroundStyle(.green)
+                                            .fontWeight(.semibold)
+                                    } else {
+                                        if let scheduledArrival = eta.scheduledArrival {
+                                            let timeComponents = scheduledArrival.components(separatedBy: ":")
+                                            Text("\(timeComponents[0]):\(timeComponents[1])")
+                                                .fontWeight(.semibold)
+                                        }
+                                    }
+                                }
+                            } else {
+                                RoundedRectangle(cornerRadius: 25.0)
+                                    .fill(.gray.opacity(0.6))
+                                    .frame(width: 40, height: 15)
+                                    .blinking()
+                            }
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(20.0)
                     }
-                    .padding(20.0)
+                    .tint(.listPrimary)
                 } else {
                     HStack(alignment: .center) {
                         Pill(text: "", color: .gray.opacity(0.6), textColor: .white, size: 60)
@@ -123,20 +169,18 @@ struct FavoriteStopWidgetView: View {
         .onAppear {
             Task {
                 try await loadPatterns()
+                try await loadEtas()
+                startFetchingTimer()
             }
         }
         .onChange(of: patternIds) {
             Task {
                 try await loadPatterns()
+                try await loadEtas()
             }
         }
-        .onChange(of: stop) {
-            Task {
-                if let stop = stop {
-                    stopEtas = try await CMAPI.shared.getETAs(stop.id)
-                    print("stop etas count: " + String(stopEtas.count))
-                }
-            }
+        .onDisappear {
+            stopFetchingTimer()
         }
     }
     
@@ -149,6 +193,41 @@ struct FavoriteStopWidgetView: View {
         
         fullPatterns = patterns
     }
+    
+    func loadEtas() async throws {
+        if let stop = stop {
+            let t1 = Date().timeIntervalSince1970
+            let stopEtas = try await CMAPI.shared.getETAs(stop.id)
+            let t2 = Date().timeIntervalSince1970
+            print("letas got \(stopEtas) in time \(t2-t1)s")
+            for patternId in patternIds {
+                let etas = stopEtas.filter {
+                    $0.patternId == patternId
+                }
+                etasForPatterns[patternId] = filterAndSortCurrentAndFutureStopETAs(etas)
+            }
+            print("stop etas count: " + String(stopEtas.count))
+        }
+    }
+    
+    private func startFetchingTimer() {
+        // Create a timer to trigger fetching every 5 seconds
+        print("start feti on stop fav widget")
+        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { timer in
+            print("feti timer iter")
+            Task {
+                try await loadEtas()
+                print(etasForPatterns.count)
+            }
+        }
+    }
+    
+    private func stopFetchingTimer() {
+        // Invalidate the timer to stop fetching
+        timer?.invalidate()
+        timer = nil
+    }
+
 }
 
 //#Preview {

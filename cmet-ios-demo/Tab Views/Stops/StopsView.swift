@@ -12,6 +12,7 @@ struct StopsView: View {
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var vehiclesManager: VehiclesManager
     @EnvironmentObject var stopsManager: StopsManager
+    @EnvironmentObject var linesManager: LinesManager
     
     @State private var isSheetPresented = false
     
@@ -27,9 +28,15 @@ struct StopsView: View {
     //    @State private var stops: [Stop] = []
     @State private var selectedStopId: String?
     
+    @State private var flyToCoords: CLLocationCoordinate2D? = nil
+    
     @State private var isErrorBannerPresented = false
     @State private var errorTitle = ""
     @State private var errorMessage = ""
+    
+    @State private var lineIdToBePresented: String? = nil
+    @State private var patternIdToBePresented: String? = nil
+    @State private var shouldPresentLineDetailsView = false
     
     var body: some View {
         let suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
@@ -45,7 +52,11 @@ struct StopsView: View {
                     //                    }
                 }
                 
-                MapLibreMapView(stops: stopsManager.stops, selectedStopId: $selectedStopId)
+                if let lineId = lineIdToBePresented, let patternId = patternIdToBePresented {
+                    NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == lineId }!, overrideDisplayedPatternId: patternId), isActive: $shouldPresentLineDetailsView) { EmptyView() }
+                }
+                
+                MapLibreMapView(stops: stopsManager.stops, selectedStopId: $selectedStopId, flyToCoords: $flyToCoords)
                     .ignoresSafeArea()
                 
                 HStack {
@@ -137,23 +148,32 @@ struct StopsView: View {
                     isSheetPresented.toggle()
                 }
             }
+            .onChange(of: lineIdToBePresented) {
+                shouldPresentLineDetailsView.toggle()
+            }
             .sheet(isPresented: $isSheetPresented) {
                 VStack {
                     if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
-                        StopDetailsSheetView(shouldPresentStopDetailsView: $shouldPresentStopDetailsView, onEtaClick: { vehicleId in
-                            print("got vehicleid from etas sheet on parent; vid: \(vehicleId)")
-                            if vehiclesManager.vehicles.contains(where: { $0.id  == vehicleId }) { vehicleIdToBePresented = vehicleId
-                            } else {
-                                errorTitle = "O veículo não está disponível."
-                                errorMessage = "Por favor tente mais tarde."
-                                isErrorBannerPresented = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                                    withAnimation {
-                                        isErrorBannerPresented = false
+                        StopDetailsSheetView(shouldPresentStopDetailsView: $shouldPresentStopDetailsView, onEtaClick: { eta in
+                            print("got vehicleid from etas sheet on parent; vid: \(eta.vehicleId)")
+                            if let vehicleId = eta.vehicleId {
+                                if vehiclesManager.vehicles.contains(where: { $0.id == vehicleId }) {
+                                    vehicleIdToBePresented = vehicleId
+                                } else {
+                                    errorTitle = "O veículo não está disponível."
+                                    errorMessage = "Por favor tente mais tarde."
+                                    isErrorBannerPresented = true
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                        withAnimation {
+                                            isErrorBannerPresented = false
+                                        }
                                     }
                                 }
-                                
-                                
+                            } else { // if no realtime available
+                                patternIdToBePresented = eta.patternId
+                                lineIdToBePresented = eta.lineId
+                                isSheetPresented.toggle()
+                                print("\(patternIdToBePresented) :: \(lineIdToBePresented)")
                             }
                         }, stop: stop)
                     }
@@ -235,7 +255,14 @@ struct StopsView: View {
             ScrollView {
                 LazyVStack {
                     ForEach(searchFilteredStops) { stop in
-                        Button {} label: {
+                        Button {
+                            flyToCoords = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
+                            isSearching = false
+                            isSearchFieldFocused = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+                                selectedStopId = stop.id
+                            }
+                        } label: {
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(.white)
                                 .frame(height: 80.0)

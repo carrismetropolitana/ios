@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct ENCMView: View {
+    @EnvironmentObject var locationManager: LocationManager
     @State private var timer: Timer?
     
     @State private var encms: [ENCM] = []
+    
+    @State private var isMapAppSelectionSheetPresented = false
     
     var body: some View {
         ScrollView {
@@ -28,57 +32,101 @@ struct ENCMView: View {
                     
                     ForEach(encms) { encm in
                         VStack(alignment: .leading) {
-                            Group {
-                                Text(encm.name.dropFirst(39))
-                                    .bold()
-                                    .font(.title2)
-                                    .padding(.vertical, 5)
-                                Text("Morada".uppercased())
-                                    .fontWeight(.heavy)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Text(encm.address)
-                                    .padding(.bottom, 5)
-                                Text("Horário".uppercased())
-                                    .fontWeight(.heavy)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Text(encmToHoursOpenString(encm))
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(encm.name.dropFirst(39))
+                                        .bold()
+                                        .font(.title2)
+                                        .padding(.vertical, 5)
+                                    Text("Morada".uppercased())
+                                        .fontWeight(.heavy)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text(encm.address)
+                                        .padding(.bottom, 5)
+                                    Text("Horário".uppercased())
+                                        .fontWeight(.heavy)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text(encmToHoursOpenString(encm))
+                                    
+                                    if !encm.isOpen {
+                                        Pill(text: "Fechado/Completo".uppercased(), color: .red, textColor: .primary, size: 200)
+                                            .padding(.vertical)
+    //                                    Text("Fechado/Completo".uppercased())
+    //                                        .font(.headline)
+    //                                        .foregroundStyle(.red)
+    //                                        .padding(.top, 10.0)
+                                    } else {
+                                        //                                    HStack {
+                                        //                                        VStack {
+                                        //                                            Text("Em espera".uppercased())
+                                        //                                                .fontWeight(.heavy)
+                                        //                                                .font(.caption)
+                                        //                                                .foregroundStyle(.secondary)
+                                        //                                            Text(String(encm.currentlyWaiting))
+                                        //                                        }
+                                        //
+                                        //                                        VStack {
+                                        //                                            Text("Tempo de espera estimado".uppercased())
+                                        //                                                .fontWeight(.heavy)
+                                        //                                                .font(.caption)
+                                        //                                                .foregroundStyle(.secondary)
+                                        //                                            Text("\(String(Int(encm.expectedWaitTime/60))) min")
+                                        //                                        }
+                                        //                                    }
+                                        OpenENCMCapsule(currentlyWaiting: encm.currentlyWaiting, expectedWaitTime: encm.expectedWaitTime)
+                                            .padding(.vertical)
+                                    }
+                                }
+                                .padding(.horizontal)
                                 
-                                if !encm.isOpen {
-                                    Pill(text: "Fechado/Completo".uppercased(), color: .red, textColor: .primary, size: 200)
-                                        .padding(.vertical)
-//                                    Text("Fechado/Completo".uppercased())
-//                                        .font(.headline)
-//                                        .foregroundStyle(.red)
-//                                        .padding(.top, 10.0)
-                                } else {
-                                    //                                    HStack {
-                                    //                                        VStack {
-                                    //                                            Text("Em espera".uppercased())
-                                    //                                                .fontWeight(.heavy)
-                                    //                                                .font(.caption)
-                                    //                                                .foregroundStyle(.secondary)
-                                    //                                            Text(String(encm.currentlyWaiting))
-                                    //                                        }
-                                    //
-                                    //                                        VStack {
-                                    //                                            Text("Tempo de espera estimado".uppercased())
-                                    //                                                .fontWeight(.heavy)
-                                    //                                                .font(.caption)
-                                    //                                                .foregroundStyle(.secondary)
-                                    //                                            Text("\(String(Int(encm.expectedWaitTime/60))) min")
-                                    //                                        }
-                                    //                                    }
-                                    OpenENCMCapsule(currentlyWaiting: encm.currentlyWaiting, expectedWaitTime: encm.expectedWaitTime)
-                                        .padding(.vertical)
+                                Spacer()
+                                
+                                let availableMapApps = getAvailableMapApps()
+                                Button {
+                                    if availableMapApps.count > 1 {
+                                        isMapAppSelectionSheetPresented.toggle()
+                                    } else {
+                                        navigateTo(destination: CLLocationCoordinate2D(
+                                            latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
+                                            longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
+                                        ), preferredApp: availableMapApps[0])
+                                    }
+                                } label: {
+                                    VStack(spacing: 10.0) {
+                                        Image(systemName: "arrow.triangle.turn.up.right.diamond")
+                                            .font(.title2)
+                                        if let location = locationManager.location {
+                                            let _ = print("\(encm.lat), \(encm.lon)")
+                                            Text(
+                                                toDistanceString(location.distance(to:
+                                                    CLLocationCoordinate2D(
+                                                        latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
+                                                        longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
+                                                )))
+                                            )
+                                        } else {
+                                            Text("IR")
+                                        }
+                                    }
+                                    .bold()
+                                }
+                                .padding(.trailing)
+                                .confirmationDialog("Selecione uma app de mapas", isPresented: $isMapAppSelectionSheetPresented) {
+                                    ForEach(availableMapApps, id: \.self) { mapApp in
+                                        Button(mapApp.rawValue) {
+                                            navigateTo(destination: CLLocationCoordinate2D(
+                                                latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
+                                                longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
+                                            ), preferredApp: mapApp)
+                                        }
+                                    }
                                 }
                             }
-                            .padding(.horizontal)
                             Divider()
                         }
                     }
-    
             }
         }
         .navigationTitle("Espaços navegante®")
@@ -110,13 +158,25 @@ struct ENCMView: View {
         timer?.invalidate()
         timer = nil
     }
+    
+    private func toDistanceString(_ distance: Double) -> String {
+        if distance < 1000 {
+            // Less than 1000 meters, show as meters
+            return String(format: "%.0f m", distance)
+        } else {
+            // 1000 meters or more, show as kilometers with up to two decimal places
+            let distanceInKm = distance / 1000
+            return String(format: "%.2f km", distanceInKm)
+        }
+    }
 }
-
 
 struct ENCMTimetableEntry {
     var dayOfTheWeek: Weekday
     let hourIntervals: [String]
 }
+
+
 
 
 func encmToHoursOpenString(_ encm: ENCM) -> String {

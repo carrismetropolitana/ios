@@ -43,21 +43,30 @@ struct StopDetailsView: View {
         ScrollView {
             HStack {
                 VStack(alignment: .leading, spacing: 5.0) {
-                    HStack {
-                        Text(stop.id)
-                            .padding(.horizontal, 10)
-                            .background(Capsule().stroke(.gray, lineWidth: 2.0))
-                        Text(stop.lat)
-                        Text(stop.lon)
-                    }
-                    .font(.custom("Menlo", size: 12.0).monospacedDigit())
-                    .bold()
-                    .foregroundStyle(.secondary)
-                    Text(stop.name)
-                        .font(.title2)
+                    let stopLocationDetails = stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)"
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text(stop.id)
+                                .padding(.horizontal, 10)
+                                .background(Capsule().stroke(.gray, lineWidth: 2.0))
+                            Text(stop.lat)
+                            Text(stop.lon)
+                        }
+                        .font(.custom("Menlo", size: 12.0).monospacedDigit())
                         .bold()
-                    Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
                         .foregroundStyle(.secondary)
+                        Text(stop.name)
+                            .font(.title2)
+                            .bold()
+                        Text(stopLocationDetails)
+                            .foregroundStyle(.secondary)
+                    }
+                    .accessibilityHidden(true)
+                    .background {
+                        Color.clear
+                            .accessibilityLabel("Paragem número \(stop.id), \(stop.ttsName ?? stop.name), localizada em \(stopLocationDetails), latitude \(stop.lat), longitude \(stop.lon)")
+                    }
+                    
                     
                     HStack(spacing: 10.0) {
 //                        RoundedRectangle(cornerRadius: 15.0)
@@ -142,6 +151,7 @@ struct StopDetailsView: View {
                 }
                 .frame(height: 250)
                 .tabViewStyle(.page)
+                .accessibilityLabel("Fotografias da paragem")
             }
             
             WrappingHStack(alignment: .leading) {
@@ -160,6 +170,11 @@ struct StopDetailsView: View {
                         }
                         .padding(5.0)
                         .background(Capsule().fill(.white).shadow(color: .black.opacity(0.1), radius: 10.0))
+                        .accessibilityHidden(true)
+                        .background {
+                            Color.clear
+                                .accessibilityLabel("Esta paragem está próxima de \(facilityName)")
+                        }
                     }
                 }
             }
@@ -177,7 +192,7 @@ struct StopDetailsView: View {
                 }
                 
                 if stopPatterns.count > 0 {
-                    VStack {
+                    VStack(spacing: 0) {
                         
                         ForEach(stopPatterns.indices, id: \.hashValue) { patternIndex in
                             let pattern = stopPatterns[patternIndex]
@@ -188,9 +203,10 @@ struct StopDetailsView: View {
                                     .padding(.horizontal, 10.0)
                                     .padding(.vertical, 5.0)
                                 //                            .padding(.vertical, routeIndex == 0 ? nil : 2.0)
-                                    .padding(.top, patternIndex == 0 ? 8.0 : 0.0)
-                                    .padding(.bottom, patternIndex == stopPatterns.count - 1 && stopPatterns.count <= 3 ? 2.0 : 0.0)
-                            }.buttonStyle(.plain)
+//                                    .padding(.top, patternIndex == 0 ? 8.0 : 0.0)
+//                                    .padding(.bottom, patternIndex == stopPatterns.count - 1 && stopPatterns.count <= 3 ? 2.0 : 0.0)
+                            }
+                            .tint(.listPrimary)
                             if patternIndex != stopPatterns.count - 1 {
                                 Divider()
                             }
@@ -280,6 +296,8 @@ struct StopDetailsView: View {
                         }
                     }
                     .background(RoundedRectangle(cornerRadius: 15.0).fill(.white))
+                } else {
+                    LoadingBar(size: 10)
                 }
             }
             .padding()
@@ -360,7 +378,7 @@ struct StopDetailsView: View {
                 Divider()
                 
                 HStack {
-                    AboutStopItem(title: "Estado da Sinalética H2OA", description: "Descohecido")
+                    AboutStopItem(title: "Estado da Sinalética H20A", description: "Descohecido")
                 }
                 .padding(.horizontal, 20.0)
                 .padding(.vertical, 5.0)

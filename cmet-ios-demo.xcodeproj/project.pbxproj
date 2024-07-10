@@ -22,6 +22,7 @@
 		791A706E2C3D349800E789E5 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 791A706D2C3D349800E789E5 /* Lottie */; };
 		791A70702C3D353B00E789E5 /* CMLogoLoop.json in Resources */ = {isa = PBXBuildFile; fileRef = 791A706F2C3D353B00E789E5 /* CMLogoLoop.json */; };
 		791A70722C3D5FF400E789E5 /* ExpandedMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791A70712C3D5FF400E789E5 /* ExpandedMapView.swift */; };
+		791A70742C3DBA4000E789E5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */; };
 		791E09952BA53D9D002899EC /* SFSafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E09942BA53D9D002899EC /* SFSafariView.swift */; };
 		792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */; };
 		794DF14F2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794DF14E2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift */; };
@@ -45,6 +46,7 @@
 		799C0D442BB8C50C005A7512 /* LoadingBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799C0D432BB8C50C005A7512 /* LoadingBar.swift */; };
 		799E63B62C02C71C00BCBEB8 /* AlertsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E63B52C02C71C00BCBEB8 /* AlertsSheetView.swift */; };
 		799E63B92C02D19E00BCBEB8 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E63B82C02D19E00BCBEB8 /* FavoritesManager.swift */; };
+		79A1904B2C3EC0A400752D80 /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A1904A2C3EC0A400752D80 /* Navigation.swift */; };
 		79A532F12C12365000019D6F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A532F02C12365000019D6F /* OnboardingView.swift */; };
 		79A5AB042C2711490005201E /* ImagePixelColorPredominanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A5AB032C2711490005201E /* ImagePixelColorPredominanceTest.swift */; };
 		79A6AA2B2C2CB15100737380 /* WrappingHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */; };
@@ -117,6 +119,7 @@
 		791A706A2C3D343C00E789E5 /* CMLogoAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMLogoAnimation.swift; sourceTree = "<group>"; };
 		791A706F2C3D353B00E789E5 /* CMLogoLoop.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CMLogoLoop.json; sourceTree = "<group>"; };
 		791A70712C3D5FF400E789E5 /* ExpandedMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedMapView.swift; sourceTree = "<group>"; };
+		791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		791E09942BA53D9D002899EC /* SFSafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSafariView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCNavigationStackBug.swift; sourceTree = "<group>"; };
 		794DF14E2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDemoSwiftUI.swift; sourceTree = "<group>"; };
@@ -139,6 +142,7 @@
 		799C0D432BB8C50C005A7512 /* LoadingBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingBar.swift; sourceTree = "<group>"; };
 		799E63B52C02C71C00BCBEB8 /* AlertsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsSheetView.swift; sourceTree = "<group>"; };
 		799E63B82C02D19E00BCBEB8 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
+		79A1904A2C3EC0A400752D80 /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		79A532F02C12365000019D6F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		79A5AB032C2711490005201E /* ImagePixelColorPredominanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePixelColorPredominanceTest.swift; sourceTree = "<group>"; };
 		79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappingHStack.swift; sourceTree = "<group>"; };
@@ -256,6 +260,14 @@
 			path = "Persistent Data";
 			sourceTree = "<group>";
 		};
+		79A1904C2C3EC0AD00752D80 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				79A1904A2C3EC0A400752D80 /* Navigation.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		79CA0A6F2BA2F4BE000F4900 /* Internal Widgets */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +358,7 @@
 		79DB835D2BA19A5D0023DD93 = {
 			isa = PBXGroup;
 			children = (
+				791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */,
 				79DB83682BA19A5D0023DD93 /* cmet-ios-demo */,
 				79DB83672BA19A5D0023DD93 /* Products */,
 			);
@@ -370,6 +383,7 @@
 				79DB83772BA19B4C0023DD93 /* Tab Views */,
 				79DB83852BA1B5CC0023DD93 /* Services */,
 				79DB836D2BA19A5E0023DD93 /* Assets.xcassets */,
+				79A1904C2C3EC0AD00752D80 /* Utils */,
 				79DB836F2BA19A5E0023DD93 /* Preview Content */,
 			);
 			path = "cmet-ios-demo";
@@ -552,6 +566,7 @@
 			files = (
 				79DB83712BA19A5E0023DD93 /* Preview Assets.xcassets in Resources */,
 				79DB836E2BA19A5E0023DD93 /* Assets.xcassets in Resources */,
+				791A70742C3DBA4000E789E5 /* Launch Screen.storyboard in Resources */,
 				791A70702C3D353B00E789E5 /* CMLogoLoop.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -620,6 +635,7 @@
 				791A70722C3D5FF400E789E5 /* ExpandedMapView.swift in Sources */,
 				79EE5FC52BB7BE980060820F /* GenericMapView.swift in Sources */,
 				7991D6B32BB1CFE7002E6638 /* PulseAnimation.swift in Sources */,
+				79A1904B2C3EC0A400752D80 /* Navigation.swift in Sources */,
 				79DB83842BA1B2710023DD93 /* CarouselView.swift in Sources */,
 				79E9D4F32C2F855500C6D181 /* UserFeedbackForm.swift in Sources */,
 				79F04CD12C31E555003809E3 /* SelectFavoriteStopView.swift in Sources */,
@@ -781,7 +797,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
 				DEVELOPMENT_TEAM = CWY6HA7572;
 				ENABLE_PREVIEWS = YES;
@@ -792,6 +808,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -815,7 +832,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
 				DEVELOPMENT_TEAM = CWY6HA7572;
 				ENABLE_PREVIEWS = YES;
@@ -826,6 +843,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
