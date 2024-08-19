@@ -1,6 +1,6 @@
 //
 //  ENCMView.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 16/03/2024.
 //
@@ -80,7 +80,7 @@ struct ENCMView: View {
                                         if let location = locationManager.location {
                                             let _ = print("\(encm.lat), \(encm.lon)")
                                             Text(
-                                                toDistanceString(location.distance(to:
+                                                toDistanceString(location.coordinate.distance(to:
                                                     CLLocationCoordinate2D(
                                                         latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
                                                         longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!

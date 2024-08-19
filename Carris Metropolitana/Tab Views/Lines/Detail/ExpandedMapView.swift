@@ -1,6 +1,6 @@
 //
 //  ExpandedMapView.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 09/07/2024.
 //

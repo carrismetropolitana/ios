@@ -1,6 +1,6 @@
 //
 //  cmet_ios_demoApp.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 13/03/2024.
 //
@@ -21,6 +21,7 @@ struct cmet_ios_demoApp: App {
     @StateObject private var locationManager = LocationManager()
     
     var body: some Scene {
+        let _ = locationManager.requestAuthorization()
         WindowGroup {
             ContentView()
                 .environmentObject(alertsManager)

@@ -8,8 +8,36 @@
 import SwiftUI
 
 struct StopsFilterTest: View {
+    @EnvironmentObject var stopsManager: StopsManager
+    @State private var searchTerm: String = ""
+    @State private var searchFilteredStops: [Stop] = []
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            TextField("STOP", text: $searchTerm)
+            ScrollView {
+                LazyVStack {
+                    ForEach(searchFilteredStops) { stop in 
+                        StopSearchResultEntry(stop: stop)
+                    }
+                }
+            }
+        }
+        .onChange(of: stopsManager.stops) {
+            searchFilteredStops = Array(stopsManager.stops.prefix(20))
+        }
+        .onChange(of: searchTerm) {
+            let stops = stopsManager.stops
+            let normalizedSearchTerm = searchTerm.lowercased()
+            let filtered = stops.filter({
+                $0.name.lowercased().contains(normalizedSearchTerm)
+                || $0.id.lowercased().contains(normalizedSearchTerm)
+                || ($0.ttsName != nil && $0.ttsName!.lowercased().contains(normalizedSearchTerm))
+            })
+            
+            print("Got \(filtered.count) filtered stops from \(stops.count) stops")
+            
+            searchFilteredStops = filtered
+        }
     }
 }
 

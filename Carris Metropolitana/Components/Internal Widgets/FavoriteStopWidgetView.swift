@@ -1,6 +1,6 @@
 //
 //  FavoriteStopWidgetView.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 14/03/2024.
 //
@@ -176,6 +176,7 @@ struct FavoriteStopWidgetView: View {
         )
         .onAppear {
             Task {
+                print("stop widget appeared")
                 try await loadPatterns()
                 try await loadEtas()
                 startFetchingTimer()
@@ -187,12 +188,18 @@ struct FavoriteStopWidgetView: View {
                 try await loadEtas()
             }
         }
+        .onChange(of: stop) {
+            Task {
+                try await loadPatterns()
+                try await loadEtas()
+            }
+        }
         .onDisappear {
             stopFetchingTimer()
         }
     }
     
-    func loadPatterns () async throws {
+    func loadPatterns() async throws {
         var patterns: [Pattern] = []
         for patternId in patternIds {
             let pattern = try await CMAPI.shared.getPattern(patternId)

@@ -25,7 +25,11 @@
 		791A70742C3DBA4000E789E5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */; };
 		791E09952BA53D9D002899EC /* SFSafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E09942BA53D9D002899EC /* SFSafariView.swift */; };
 		792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */; };
+		79323FAB2C49A14700AE9D50 /* VehicleLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */; };
 		794DF14F2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794DF14E2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift */; };
+		7960AC852C48438300E0B615 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7960AC842C48438300E0B615 /* GoogleService-Info.plist */; };
+		7960AC882C48446B00E0B615 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 7960AC872C48446B00E0B615 /* FirebaseMessaging */; };
+		7960AC8A2C488CC300E0B615 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960AC892C488CC300E0B615 /* AppDelegate.swift */; };
 		7971D1D22BB3668500112BBC /* ShapeAndVehiclesMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */; };
 		7971D1D42BB42D6A00112BBC /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D32BB42D6A00112BBC /* ScheduleView.swift */; };
 		7971D1D62BB4506800112BBC /* AboutStopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D52BB4506800112BBC /* AboutStopView.swift */; };
@@ -52,6 +56,8 @@
 		79A5AB042C2711490005201E /* ImagePixelColorPredominanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A5AB032C2711490005201E /* ImagePixelColorPredominanceTest.swift */; };
 		79A6AA2B2C2CB15100737380 /* WrappingHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */; };
 		79A89F3E2BDBDBD100DB5068 /* LoginSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A89F3D2BDBDBD100DB5068 /* LoginSheetView.swift */; };
+		79AB3C9E2C72CC5900122AA1 /* StopsFilterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3C9D2C72CC5900122AA1 /* StopsFilterTest.swift */; };
+		79B7C5B72C584075007A2D9D /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7C5B62C584075007A2D9D /* NetworkMonitor.swift */; };
 		79BA1A612C2D8D1700B841F5 /* ETATesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BA1A602C2D8D1700B841F5 /* ETATesting.swift */; };
 		79C6C4FD2C1466AA003277A7 /* VehiclesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */; };
 		79C6C4FF2C146B89003277A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C6C4FE2C146B89003277A7 /* LocationManager.swift */; };
@@ -81,6 +87,9 @@
 		79DB83912BA1CD2E0023DD93 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83902BA1CD2E0023DD93 /* Carousel.swift */; };
 		79DC32052C0DD4FA00BC2D97 /* CMUserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */; };
 		79DE7D452C1D009900BE09BB /* LoopingCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */; };
+		79DE904D2C493C5D00D3E859 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE904C2C493C5D00D3E859 /* NotificationService.swift */; };
+		79DE90512C493C5D00D3E859 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		79DE90582C493DFE00D3E859 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 79DE90572C493DFE00D3E859 /* FirebaseMessaging */; };
 		79E22D172C24981E0067F157 /* CMLoopingCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E22D162C24981E0067F157 /* CMLoopingCarousel.swift */; };
 		79E88CB72BAAD538001F3227 /* CustomizeWidgetsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CB62BAAD538001F3227 /* CustomizeWidgetsSheetView.swift */; };
 		79E88CB92BAAE172001F3227 /* PersonalUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CB82BAAE172001F3227 /* PersonalUserView.swift */; };
@@ -104,6 +113,30 @@
 		79FA6A272C1DF79300E043C8 /* VehicleInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FA6A262C1DF79300E043C8 /* VehicleInfoAPI.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		79DE904F2C493C5D00D3E859 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79DB835E2BA19A5D0023DD93 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 79DE90492C493C5D00D3E859;
+			remoteInfo = NotificationServiceExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		79DE90522C493C5D00D3E859 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				79DE90512C493C5D00D3E859 /* NotificationServiceExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		790817D82BEE1EF000EC0C82 /* PersistentDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataController.swift; sourceTree = "<group>"; };
 		790817DA2BEE277C00EC0C82 /* CMLoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMLoadingAnimation.swift; sourceTree = "<group>"; };
@@ -123,7 +156,10 @@
 		791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		791E09942BA53D9D002899EC /* SFSafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSafariView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCNavigationStackBug.swift; sourceTree = "<group>"; };
+		79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLookup.swift; sourceTree = "<group>"; };
 		794DF14E2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDemoSwiftUI.swift; sourceTree = "<group>"; };
+		7960AC842C48438300E0B615 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7960AC892C488CC300E0B615 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeAndVehiclesMapView.swift; sourceTree = "<group>"; };
 		7971D1D32BB42D6A00112BBC /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		7971D1D52BB4506800112BBC /* AboutStopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutStopView.swift; sourceTree = "<group>"; };
@@ -149,6 +185,9 @@
 		79A5AB032C2711490005201E /* ImagePixelColorPredominanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePixelColorPredominanceTest.swift; sourceTree = "<group>"; };
 		79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappingHStack.swift; sourceTree = "<group>"; };
 		79A89F3D2BDBDBD100DB5068 /* LoginSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSheetView.swift; sourceTree = "<group>"; };
+		79AB3C9D2C72CC5900122AA1 /* StopsFilterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsFilterTest.swift; sourceTree = "<group>"; };
+		79B4A53B2C48976000E13D3E /* Carris Metropolitana.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Carris Metropolitana.entitlements"; sourceTree = "<group>"; };
+		79B7C5B62C584075007A2D9D /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		79BA1A602C2D8D1700B841F5 /* ETATesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETATesting.swift; sourceTree = "<group>"; };
 		79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclesManager.swift; sourceTree = "<group>"; };
 		79C6C4FE2C146B89003277A7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -178,6 +217,9 @@
 		79DB83902BA1CD2E0023DD93 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMUserAPI.swift; sourceTree = "<group>"; };
 		79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingCarouselView.swift; sourceTree = "<group>"; };
+		79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		79DE904C2C493C5D00D3E859 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		79DE904E2C493C5D00D3E859 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79E22D162C24981E0067F157 /* CMLoopingCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMLoopingCarousel.swift; sourceTree = "<group>"; };
 		79E88CB62BAAD538001F3227 /* CustomizeWidgetsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeWidgetsSheetView.swift; sourceTree = "<group>"; };
 		79E88CB82BAAE172001F3227 /* PersonalUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalUserView.swift; sourceTree = "<group>"; };
@@ -206,9 +248,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7960AC882C48446B00E0B615 /* FirebaseMessaging in Frameworks */,
 				79CD78AA2BA78233003D30F2 /* MapLibre in Frameworks */,
 				7988613A2BA5AF2B002C1170 /* SwiftSoup in Frameworks */,
 				791A706E2C3D349800E789E5 /* Lottie in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		79DE90472C493C5D00D3E859 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79DE90582C493DFE00D3E859 /* FirebaseMessaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,9 +412,12 @@
 		79DB835D2BA19A5D0023DD93 = {
 			isa = PBXGroup;
 			children = (
+				79B4A53B2C48976000E13D3E /* Carris Metropolitana.entitlements */,
 				791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */,
-				79DB83682BA19A5D0023DD93 /* cmet-ios-demo */,
+				79DB83682BA19A5D0023DD93 /* Carris Metropolitana */,
+				79DE904B2C493C5D00D3E859 /* NotificationServiceExtension */,
 				79DB83672BA19A5D0023DD93 /* Products */,
+				79DE90562C493DFE00D3E859 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -371,15 +425,18 @@
 			isa = PBXGroup;
 			children = (
 				79DB83662BA19A5D0023DD93 /* Carris Metropolitana.app */,
+				79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		79DB83682BA19A5D0023DD93 /* cmet-ios-demo */ = {
+		79DB83682BA19A5D0023DD93 /* Carris Metropolitana */ = {
 			isa = PBXGroup;
 			children = (
 				7913C13F2BB1C2AB000F0DFA /* Info.plist */,
+				7960AC842C48438300E0B615 /* GoogleService-Info.plist */,
 				79DB83692BA19A5D0023DD93 /* cmet_ios_demoApp.swift */,
+				7960AC892C488CC300E0B615 /* AppDelegate.swift */,
 				79DB836B2BA19A5D0023DD93 /* ContentView.swift */,
 				790CB9842BE29E800011B0EA /* Assets */,
 				79DB83822BA1B2600023DD93 /* Components */,
@@ -389,7 +446,7 @@
 				79A1904C2C3EC0AD00752D80 /* Utils */,
 				79DB836F2BA19A5E0023DD93 /* Preview Content */,
 			);
-			path = "cmet-ios-demo";
+			path = "Carris Metropolitana";
 			sourceTree = "<group>";
 		};
 		79DB836F2BA19A5E0023DD93 /* Preview Content */ = {
@@ -417,6 +474,8 @@
 				79CA0A6F2BA2F4BE000F4900 /* Internal Widgets */,
 				79DB83832BA1B2710023DD93 /* CarouselView.swift */,
 				79DB83902BA1CD2E0023DD93 /* Carousel.swift */,
+				79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */,
+				79AB3C9D2C72CC5900122AA1 /* StopsFilterTest.swift */,
 				79BA1A602C2D8D1700B841F5 /* ETATesting.swift */,
 				798B2E7B2BA336A500CBA9DC /* PlayerViewController.swift */,
 				791915792BA3BA07009E5B29 /* MapView.swift */,
@@ -464,6 +523,7 @@
 				79DB838D2BA1B7C20023DD93 /* CMAPI */,
 				79DB838A2BA1B6090023DD93 /* CMWordpress */,
 				798B2E772BA31F8000CBA9DC /* NetworkService.swift */,
+				79B7C5B62C584075007A2D9D /* NetworkMonitor.swift */,
 				79FA6A262C1DF79300E043C8 /* VehicleInfoAPI.swift */,
 				7992BEB62C383E5B00B5138F /* Analytics.swift */,
 				79E88CC12BAB76D3001F3227 /* LiveActivityService.swift */,
@@ -490,6 +550,22 @@
 			path = CMAPI;
 			sourceTree = "<group>";
 		};
+		79DE904B2C493C5D00D3E859 /* NotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				79DE904C2C493C5D00D3E859 /* NotificationService.swift */,
+				79DE904E2C493C5D00D3E859 /* Info.plist */,
+			);
+			path = NotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		79DE90562C493DFE00D3E859 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		79F982412BB72453002B3997 /* IMLAPI */ = {
 			isa = PBXGroup;
 			children = (
@@ -509,20 +585,43 @@
 				79DB83622BA19A5D0023DD93 /* Sources */,
 				79DB83632BA19A5D0023DD93 /* Frameworks */,
 				79DB83642BA19A5D0023DD93 /* Resources */,
+				79DE90522C493C5D00D3E859 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				79DE90502C493C5D00D3E859 /* PBXTargetDependency */,
 			);
 			name = "Carris Metropolitana";
 			packageProductDependencies = (
 				798861392BA5AF2B002C1170 /* SwiftSoup */,
 				79CD78A92BA78233003D30F2 /* MapLibre */,
 				791A706D2C3D349800E789E5 /* Lottie */,
+				7960AC872C48446B00E0B615 /* FirebaseMessaging */,
 			);
-			productName = "cmet-ios-demo";
+			productName = "Carris Metropolitana";
 			productReference = 79DB83662BA19A5D0023DD93 /* Carris Metropolitana.app */;
 			productType = "com.apple.product-type.application";
+		};
+		79DE90492C493C5D00D3E859 /* NotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79DE90552C493C5D00D3E859 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */;
+			buildPhases = (
+				79DE90462C493C5D00D3E859 /* Sources */,
+				79DE90472C493C5D00D3E859 /* Frameworks */,
+				79DE90482C493C5D00D3E859 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotificationServiceExtension;
+			packageProductDependencies = (
+				79DE90572C493DFE00D3E859 /* FirebaseMessaging */,
+			);
+			productName = NotificationServiceExtension;
+			productReference = 79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -535,6 +634,9 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					79DB83652BA19A5D0023DD93 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+					79DE90492C493C5D00D3E859 = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
 				};
@@ -553,12 +655,14 @@
 				798861382BA5AF2B002C1170 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				79CD78A82BA78233003D30F2 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
 				791A706C2C3D349800E789E5 /* XCRemoteSwiftPackageReference "lottie-spm" */,
+				7960AC862C48446B00E0B615 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 79DB83672BA19A5D0023DD93 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				79DB83652BA19A5D0023DD93 /* Carris Metropolitana */,
+				79DE90492C493C5D00D3E859 /* NotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -569,10 +673,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				79DB83712BA19A5E0023DD93 /* Preview Assets.xcassets in Resources */,
+				7960AC852C48438300E0B615 /* GoogleService-Info.plist in Resources */,
 				79DB836E2BA19A5E0023DD93 /* Assets.xcassets in Resources */,
 				79A1904E2C3F32F800752D80 /* CMLogoLoopDark.json in Resources */,
 				791A70742C3DBA4000E789E5 /* Launch Screen.storyboard in Resources */,
 				791A70702C3D353B00E789E5 /* CMLogoLoop.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		79DE90482C493C5D00D3E859 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -583,12 +695,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7960AC8A2C488CC300E0B615 /* AppDelegate.swift in Sources */,
 				7971D1D62BB4506800112BBC /* AboutStopView.swift in Sources */,
 				79F982432BB72461002B3997 /* IMLAPI.swift in Sources */,
 				79E88CB72BAAD538001F3227 /* CustomizeWidgetsSheetView.swift in Sources */,
 				7991D6B62BB1F016002E6638 /* StopDetailsSheetView.swift in Sources */,
 				79EA0B122BECC101006808AA /* VehicleDetailsView.swift in Sources */,
 				79DB837B2BA19B680023DD93 /* LinesView.swift in Sources */,
+				79B7C5B72C584075007A2D9D /* NetworkMonitor.swift in Sources */,
 				79E88CBD2BAAEAB1001F3227 /* FavoriteCustomizationView.swift in Sources */,
 				7977520F2C375D83008CC644 /* ErrorView.swift in Sources */,
 				790817D92BEE1EF000EC0C82 /* PersistentDataController.swift in Sources */,
@@ -619,6 +733,7 @@
 				7919157A2BA3BA07009E5B29 /* MapView.swift in Sources */,
 				792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */,
 				79F982452BB724E7002B3997 /* IMLModel.swift in Sources */,
+				79AB3C9E2C72CC5900122AA1 /* StopsFilterTest.swift in Sources */,
 				7988613C2BA5FAD9002C1170 /* FAQView.swift in Sources */,
 				7912F69E2C09DD73005D31DF /* NewsView.swift in Sources */,
 				798B2E7C2BA336A500CBA9DC /* PlayerViewController.swift in Sources */,
@@ -639,6 +754,7 @@
 				79DB837D2BA19B8C0023DD93 /* HomeView.swift in Sources */,
 				791A70722C3D5FF400E789E5 /* ExpandedMapView.swift in Sources */,
 				79EE5FC52BB7BE980060820F /* GenericMapView.swift in Sources */,
+				79323FAB2C49A14700AE9D50 /* VehicleLookup.swift in Sources */,
 				7991D6B32BB1CFE7002E6638 /* PulseAnimation.swift in Sources */,
 				79A1904B2C3EC0A400752D80 /* Navigation.swift in Sources */,
 				79DB83842BA1B2710023DD93 /* CarouselView.swift in Sources */,
@@ -673,7 +789,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		79DE90462C493C5D00D3E859 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79DE904D2C493C5D00D3E859 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		79DE90502C493C5D00D3E859 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 79DE90492C493C5D00D3E859 /* NotificationServiceExtension */;
+			targetProxy = 79DE904F2C493C5D00D3E859 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		79DB83722BA19A5E0023DD93 /* Debug */ = {
@@ -798,16 +930,18 @@
 		79DB83752BA19A5E0023DD93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "cmet-ios-demo/Info.plist";
+				INFOPLIST_FILE = "Carris Metropolitana/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Carris Metropolitana";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "A sua localização será utilizada para mostrar as paragens e carreiras mais perto de si.";
@@ -816,6 +950,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -838,16 +973,18 @@
 		79DB83762BA19A5E0023DD93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"cmet-ios-demo/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "cmet-ios-demo/Info.plist";
+				INFOPLIST_FILE = "Carris Metropolitana/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Carris Metropolitana";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "A sua localização será utilizada para mostrar as paragens e carreiras mais perto de si.";
@@ -856,6 +993,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -872,6 +1010,56 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		79DE90532C493C5D00D3E859 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QGATT2W97P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app.NotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		79DE90542C493C5D00D3E859 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QGATT2W97P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app.NotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -896,6 +1084,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		79DE90552C493C5D00D3E859 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79DE90532C493C5D00D3E859 /* Debug */,
+				79DE90542C493C5D00D3E859 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -905,6 +1102,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 4.4.3;
+			};
+		};
+		7960AC862C48446B00E0B615 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.29.0;
 			};
 		};
 		798861382BA5AF2B002C1170 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -931,6 +1136,11 @@
 			package = 791A706C2C3D349800E789E5 /* XCRemoteSwiftPackageReference "lottie-spm" */;
 			productName = Lottie;
 		};
+		7960AC872C48446B00E0B615 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7960AC862C48446B00E0B615 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		798861392BA5AF2B002C1170 /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 798861382BA5AF2B002C1170 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
@@ -940,6 +1150,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 79CD78A82BA78233003D30F2 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
 			productName = MapLibre;
+		};
+		79DE90572C493DFE00D3E859 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7960AC862C48446B00E0B615 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

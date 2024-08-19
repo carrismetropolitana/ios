@@ -1,6 +1,6 @@
 //
 //  ImagePixelColorPredominanceTest.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 22/06/2024.
 //

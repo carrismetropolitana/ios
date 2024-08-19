@@ -1,6 +1,6 @@
 //
 //  LinesView.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 13/03/2024.
 //
@@ -140,7 +140,7 @@ struct LinesListView: View {
                 
                 if onClickOverride == nil {
                     if let location = locationManager.location {
-                        aroundMeLines(location)
+                        aroundMeLines(location.coordinate)
                     }
                 }
             }
@@ -325,3 +325,4 @@ func closestStops(to location: CLLocationCoordinate2D, stops: [Stop], maxResults
     
     return Array(sortedStops.prefix(maxResults))
 }
+

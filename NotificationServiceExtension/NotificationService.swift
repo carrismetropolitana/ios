@@ -6,6 +6,7 @@
 //
 
 import UserNotifications
+import FirebaseMessaging
 
 class NotificationService: UNNotificationServiceExtension {
 
@@ -17,10 +18,7 @@ class NotificationService: UNNotificationServiceExtension {
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
         
         if let bestAttemptContent = bestAttemptContent {
-            // Modify the notification content here...
-            bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
-            
-            contentHandler(bestAttemptContent)
+            Messaging.serviceExtension().populateNotificationContent(bestAttemptContent, withContentHandler: contentHandler)
         }
     }
     

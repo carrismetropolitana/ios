@@ -1,6 +1,6 @@
 //
 //  MapLibreMapView.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 17/03/2024.
 //
@@ -13,8 +13,10 @@ struct MapLibreMapView: UIViewRepresentable {
     var stops: [Stop]
     @Binding var selectedStopId: String?
     @Binding var flyToCoords: CLLocationCoordinate2D?
+    @Binding var shouldFlyToUserCoords: Bool
     
     func makeUIView(context: Context) -> MLNMapView {
+        print("MapLibreMapView makeUIView called")
         let styleURL = URL(string: "https://maps.carrismetropolitana.pt/styles/default/style.json")
 //        let styleURL = URL(string: colorScheme == .light ? "https://maps.carrismetropolitana.pt/styles/default/style.json" : "https://api.maptiler.com/maps/e9d3c77d-4552-4ed6-83dd-1075b67bd977/style.json?key=NvTfdJJxC0xa6dknGF48")
 
@@ -151,6 +153,7 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: MLNMapView, context: Context) {
+        print("MapLibreMapView updateUIView called")
         print("updateUIView called with \(stops.count) stops")
         guard let style = uiView.style else {
             print("Style not loaded yet")
@@ -178,6 +181,22 @@ struct MapLibreMapView: UIViewRepresentable {
                 withDuration: 1.5,
                 animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut)
             )
+        }
+        
+        if shouldFlyToUserCoords {
+            if let userLocation = uiView.userLocation {
+                let camera = MLNMapCamera(
+                    lookingAtCenter: userLocation.coordinate,
+                    altitude: 5500,
+                    pitch: 0,
+                    heading: 0)
+                
+                uiView.setCamera(
+                    camera,
+                    withDuration: 3,
+                    animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut))
+            }
+            shouldFlyToUserCoords = false
         }
     }
 }

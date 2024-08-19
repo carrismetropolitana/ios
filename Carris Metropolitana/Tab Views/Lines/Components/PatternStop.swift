@@ -1,6 +1,6 @@
 //
 //  PatternStop.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 28/05/2024.
 //

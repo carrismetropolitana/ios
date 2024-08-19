@@ -1,6 +1,6 @@
 //
 //  LocationManager.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 08/06/2024.
 //
@@ -11,30 +11,28 @@ import CoreLocation
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
     
-    @Published var location: CLLocationCoordinate2D?
-    @Published var authorizationStatus: CLAuthorizationStatus
+    @Published var authorizationStatus: CLAuthorizationStatus?
+    @Published var location: CLLocation?
     
     override init() {
-        self.authorizationStatus = locationManager.authorizationStatus
         super.init()
-        self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        self.locationManager.requestWhenInUseAuthorization()
-        self.locationManager.startUpdatingLocation()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
     }
     
+    func requestAuthorization() {
+        locationManager.requestWhenInUseAuthorization()
+    }
+    
+    // MARK: - CLLocationManagerDelegate
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        self.authorizationStatus = status
-        if status == .authorizedWhenInUse || status == .authorizedAlways {
-            locationManager.startUpdatingLocation()
-        } else {
-            locationManager.stopUpdatingLocation()
-        }
+        authorizationStatus = status
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            self.location = location.coordinate
-        }
+        guard let location = locations.last else { return }
+        self.location = location
     }
 }

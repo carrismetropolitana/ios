@@ -1,6 +1,6 @@
 //
 //  StopsView.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 13/03/2024.
 //
@@ -20,6 +20,7 @@ struct StopsView: View {
     @FocusState private var isSearchFieldFocused: Bool
     @State private var isSearching = false
     @State private var searchFilteredStops: [Stop] = []
+    @State private var suggestedStops: [Stop] = []
     
     @State var shouldPresentStopDetailsView = false
     @State var shouldPresentVehicleDetailsView = false
@@ -29,6 +30,7 @@ struct StopsView: View {
     @State private var selectedStopId: String?
     
     @State private var flyToCoords: CLLocationCoordinate2D? = nil
+    @State private var mapFlyToUserCoords = false
     
     @State private var isErrorBannerPresented = false
     @State private var errorTitle = ""
@@ -38,8 +40,9 @@ struct StopsView: View {
     @State private var patternIdToBePresented: String? = nil
     @State private var shouldPresentLineDetailsView = false
     
+    
     var body: some View {
-        let suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
+        var suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!.coordinate, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
         NavigationStack {
             ZStack {
                 if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
@@ -56,23 +59,29 @@ struct StopsView: View {
                     NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == lineId }!, overrideDisplayedPatternId: patternId), isActive: $shouldPresentLineDetailsView) { EmptyView() }
                 }
                 
-                MapLibreMapView(stops: stopsManager.stops, selectedStopId: $selectedStopId, flyToCoords: $flyToCoords)
+                MapLibreMapView(stops: stopsManager.stops, selectedStopId: $selectedStopId, flyToCoords: $flyToCoords, shouldFlyToUserCoords: $mapFlyToUserCoords)
                     .ignoresSafeArea()
                 
                 HStack {
                     Spacer()
                     VStack(alignment: .trailing) {
                         Spacer()
-                        MapFloatingButton(systemImage: "line.3.horizontal.decrease.circle")
+                        
+//                        MapFloatingButton(systemImage: "line.3.horizontal.decrease.circle")
+                        
                         Button {
-                            errorTitle = "O veículo não está disponível."
-                            errorMessage = "Por favor tente mais tarde."
-                            isErrorBannerPresented = true
+//                            errorTitle = "O veículo não está disponível."
+//                            errorMessage = "Por favor tente mais tarde."
+//                            isErrorBannerPresented = true
+                            
+                            if let location = locationManager.location {
+                                mapFlyToUserCoords = true
+                            }
                         } label: {
                             MapFloatingButton(systemImage: "location.fill")
                         }.buttonStyle(.plain)
                         
-                        MapFloatingButton(systemImage: "map")
+//                        MapFloatingButton(systemImage: "map")
                     }
                 }
                 .padding()
@@ -95,15 +104,34 @@ struct StopsView: View {
             ////                    shouldPresentStopDetailsView = false
             ////                }
             //            }
+//            .onChange(of: locationManager.location) {
+//                if stopsManager.stops.count > 0 {
+//                    if let location = locationManager.location {
+//                        closestStopsToUser = closestStops(to: locationManager.location!, stops: stopsManager.stops, maxResults: 10)
+//                    }
+//                }
+//            }
+            .onChange(of: mapFlyToUserCoords) {
+                print("map flying to user coords")
+            }
             .onChange(of: stopsManager.stops) {
                 if stopsManager.stops.count > 0 {
+                    if let location = locationManager.location {
+                        suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
+                    } else {
+                        suggestedStops = Array(stopsManager.stops.prefix(10))
+//                        print("suggested: \(suggestedStops.count)")
+//                        print("initfilteredshouldbeequaltosuggested: \(searchFilteredStops.count)")
+                    }
+                    
                     searchFilteredStops = suggestedStops
-                    print("suggested: \(suggestedStops.count)")
-                    print("initfilteredshouldbeequaltosuggested: \(searchFilteredStops.count)")
                 }
             }
+            
+            
             .onChange(of: isSearchFieldFocused) {
-                withAnimation {
+                print("Search field focused, suggested stops count is \(suggestedStops.count)")
+                withAnimation(.smooth(duration: 0.3)) {
                     isSearching = isSearchFieldFocused
                 }
                 
@@ -111,14 +139,18 @@ struct StopsView: View {
                     searchTerm = ""
                 }
             }
-            .onChange(of: searchTerm) {                    
+            
+            
+            .onChange(of: searchTerm) {
                 print(searchTerm)
                 let t1 = Date().timeIntervalSince1970
-                //                let filtered = stopsManager.stops.chunkedFilter({
-                //                    $0.name.localizedCaseInsensitiveContains(searchTerm) || $0.id.localizedCaseInsensitiveContains(searchTerm)
-                //                }, maxResults: 10)
-                let filtered = stopsManager.stops.filter({
-                    $0.name.localizedCaseInsensitiveContains(searchTerm) || $0.id.localizedCaseInsensitiveContains(searchTerm)
+                
+                let stops = stopsManager.stops
+                let normalizedSearchTerm = searchTerm.lowercased()
+                let filtered = stops.filter({
+                    $0.name.lowercased().contains(normalizedSearchTerm)
+                    || $0.id.lowercased().contains(normalizedSearchTerm)
+                    || ($0.ttsName != nil && $0.ttsName!.lowercased().contains(normalizedSearchTerm))
                 })
                 
                 let t2 = Date().timeIntervalSince1970
@@ -131,6 +163,10 @@ struct StopsView: View {
                     searchFilteredStops = suggestedStops
                 }
             }
+            
+            
+            
+            
             .onChange(of: selectedStopId) {
                 if selectedStopId != "" { // avoid trigger on sheet dismiss; TODO: @see line #67
                     isSheetPresented.toggle()
@@ -236,11 +272,18 @@ struct StopsView: View {
                 //                                }
                 //                        }
                 RoundedRectangle(cornerRadius: 15.0)
-                    .fill(.white)
+                    .fill(.cmListItemBackground)
             }
             Spacer()
         }
         .padding(.horizontal)
+        .overlay {
+            if (!isSearching) {
+                Color.clear.onTapGesture {
+                    isSearchFieldFocused = true
+                }
+            }
+        }
     }
     
     
@@ -263,41 +306,7 @@ struct StopsView: View {
                                 selectedStopId = stop.id
                             }
                         } label: {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(.white)
-                                .frame(height: 80.0)
-                                .overlay {
-                                    HStack {
-                                        Circle()
-                                            .fill(.black)
-                                            .frame(height: 20)
-                                            .overlay {
-                                                Circle()
-                                                    .fill(.cmYellow)
-                                                    .frame(height: 15)
-                                            }
-                                            .padding()
-                                        VStack(alignment:. leading) {
-                                            Text(stop.name)
-                                                .font(.subheadline)
-                                                .fontWeight(.semibold)
-                                            Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
-                                                .font(.footnote)
-                                                .foregroundStyle(.secondary)
-                                            Text(stop.id)
-                                                .font(.custom("Menlo", size: 12.0).monospacedDigit())
-                                                .bold()
-                                                .foregroundStyle(.gray)
-                                                .padding(.horizontal, 10)
-                                                .background(Capsule().stroke(.gray, lineWidth: 2.0))
-                                                .padding(.vertical, 2.0)
-                                        }
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .foregroundStyle(.tertiary)
-                                            .padding(.trailing)
-                                    }
-                                }
+                            StopSearchResultEntry(stop: stop)
                                 .padding(.horizontal)
                         }
                         .buttonStyle(.plain)
@@ -314,6 +323,48 @@ struct StopsView: View {
     
 }
 
+struct StopSearchResultEntry: View {
+    let stop: Stop
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 15)
+            .fill(.cmListItemBackground)
+            .frame(height: 80.0)
+            .overlay {
+                HStack {
+                    Circle()
+                        .fill(.black)
+                        .frame(height: 20)
+                        .overlay {
+                            Circle()
+                                .fill(.cmYellow)
+                                .frame(height: 15)
+                        }
+                        .padding()
+                    VStack(alignment:. leading) {
+                        Text(stop.name)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                        Text(stop.id)
+                            .font(.custom("Menlo", size: 12.0).monospacedDigit())
+                            .bold()
+                            .foregroundStyle(.gray)
+                            .padding(.horizontal, 10)
+                            .background(Capsule().stroke(.gray, lineWidth: 2.0))
+                            .padding(.vertical, 2.0)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.tertiary)
+                        .padding(.trailing)
+                }
+            }
+    }
+}
+
 #Preview {
     StopsView()
 }
@@ -323,7 +374,7 @@ struct MapFloatingButton: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15.0)
-                .fill(Color.white)
+                .fill(.cmListItemBackground)
                 .frame(width: 60, height: 60)
                 .shadow(color: .black.opacity(0.2), radius: 10)
             Image(systemName: systemImage)

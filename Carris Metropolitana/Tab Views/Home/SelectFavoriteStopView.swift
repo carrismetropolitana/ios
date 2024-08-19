@@ -1,6 +1,6 @@
 //
 //  FavoriteStopCustomizationView.swift
-//  cmet-ios-demo
+//  Carris Metropolitana
 //
 //  Created by João Pereira on 30/06/2024.
 //
@@ -23,7 +23,7 @@ struct SelectFavoriteStopView: View {
     
     var body: some View {
         VStack {
-            MapLibreMapView(stops: stopsManager.stops, selectedStopId: .constant(nil), flyToCoords: .constant(nil))
+            MapLibreMapView(stops: stopsManager.stops, selectedStopId: .constant(nil), flyToCoords: .constant(nil), shouldFlyToUserCoords: .constant(false))
                 .frame(height: 300)
             
             List {
@@ -55,7 +55,7 @@ struct SelectFavoriteStopView: View {
         .navigationTitle("Selecionar paragem")
         .onAppear {
             if let location = locationManager.location {
-                suggestedStops = closestStops(to: location, stops: stopsManager.stops, maxResults: 10) // this is being done multiple times in the app, meybe consider globalizing it??
+                suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10) // this is being done multiple times in the app, meybe consider globalizing it??
             } else {
                 suggestedStops = Array(stopsManager.stops.prefix(10))
             }
@@ -69,7 +69,7 @@ struct SelectFavoriteStopView: View {
                 suggestedStops = filtered
             } else {
                 if let location = locationManager.location {
-                    suggestedStops = closestStops(to: location, stops: stopsManager.stops, maxResults: 10)
+                    suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
                 } else {
                     suggestedStops = Array(stopsManager.stops.prefix(10))
 
