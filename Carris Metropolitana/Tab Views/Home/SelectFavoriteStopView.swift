@@ -23,7 +23,7 @@ struct SelectFavoriteStopView: View {
     
     var body: some View {
         VStack {
-            MapLibreMapView(stops: stopsManager.stops, selectedStopId: .constant(nil), flyToCoords: nil, shouldFlyToUserCoords: .constant(false))
+            MapLibreMapView(stops: stopsManager.stops, selectedStopId: .constant(nil), onStopSelect: { stopId in }, flyToCoords: nil, shouldFlyToUserCoords: .constant(false))
                 .frame(height: 300)
             
             List {

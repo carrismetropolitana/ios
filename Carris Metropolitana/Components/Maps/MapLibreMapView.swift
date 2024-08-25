@@ -28,6 +28,9 @@ struct MapLibreMapView: UIViewRepresentable {
     
     var stops: [Stop]
     @Binding var selectedStopId: String?
+    
+    let onStopSelect: (_ stopId: String) -> Void
+    
     var flyToCoords: CLLocationCoordinate2D?
     @Binding var shouldFlyToUserCoords: Bool
     
@@ -189,7 +192,11 @@ struct MapLibreMapView: UIViewRepresentable {
             
             if let feature = features.last { // if there are multiple overlapping select the last
                 if let stopId = feature.attribute(forKey: "id") as? String {
-                    control.selectedStopId = stopId
+//                    control.selectedStopId = ""
+//                    DispatchQueue.main.async {
+//                        self.control.selectedStopId = stopId
+//                    }
+                    control.onStopSelect(stopId)
                 }
             }
         }

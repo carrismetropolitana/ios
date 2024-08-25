@@ -26,6 +26,9 @@ struct StopDetailsView: View {
     let stop: Stop
     
    @State private var images: [IMLPicture] = []
+    @State private var intermodalAttributionExpanded = true
+    @State private var visibleImageId = 0
+    
     var body: some View {
         let stopAlerts = alertsManager.alerts.filter {
             var isStopAffected = false
@@ -133,7 +136,7 @@ struct StopDetailsView: View {
             }
             
             if !images.isEmpty {
-                TabView {
+                TabView(selection: $visibleImageId) {
                     ForEach(images) { image in
                         AsyncImage(url: URL(string: image.urlFull)) { image in
                             image
@@ -147,11 +150,59 @@ struct StopDetailsView: View {
                                 LoadingBar(size: 10)
                             }
                         }
+                        .tag(image.id)
                     }
                 }
                 .frame(height: 250)
                 .tabViewStyle(.page)
                 .accessibilityLabel("Fotografias da paragem")
+                .overlay {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            HStack {
+                                if intermodalAttributionExpanded {
+                                    HStack {
+                                        Text("Powered by".uppercased())
+                                            .font(.callout)
+                                            .fontWeight(.heavy)
+                                            .foregroundStyle(.secondary)
+                                        Image(.intermodalLogo)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 15.0)
+                                    }
+                                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                                } else {
+                                    Image(.intermodalMinimalLogo)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 20.0)
+                                        .transition(.move(edge: .trailing).combined(with: .opacity))
+                                }
+                            }
+                            .padding(10.0)
+                            .background(
+                                UnevenRoundedRectangle(
+                                    cornerRadii: RectangleCornerRadii(
+                                        topLeading: 0.0, bottomLeading: 10.0, bottomTrailing: 0.0, topTrailing: 0.0
+                                    )
+                                ).fill(.cmSystemBackground100)
+                            )
+                            .onTapGesture {
+                                withAnimation(.snappy(duration: 0.3)) {
+                                    intermodalAttributionExpanded.toggle()
+                                }
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+                .onChange(of: visibleImageId) {
+                    withAnimation(.snappy(duration: 0.3)) {
+                        intermodalAttributionExpanded = false
+                    }
+                }
             }
             
             WrappingHStack(alignment: .leading) {
@@ -435,6 +486,8 @@ struct StopDetailsView: View {
                 images = await IMLAPI.shared.getStopPictures(imlStop.id)
                 
                 print("Got \(images.count) IML images for stop.")
+                
+                visibleImageId = images.first?.id ?? 0
                 
                 var patterns: [Pattern] = []
                 

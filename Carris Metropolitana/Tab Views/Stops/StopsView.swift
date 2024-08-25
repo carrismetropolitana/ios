@@ -44,32 +44,63 @@ struct StopsView: View {
     
     @State private var mapVisualStyle: MapVisualStyle = .standard
     
+    @State private var mapVisible: Bool = true
+    
     
     var body: some View {
         var suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!.coordinate, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
         NavigationStack {
             ZStack {
                 if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
-                    NavigationLink(destination: StopDetailsView(stop: stop), isActive: $shouldPresentStopDetailsView) { EmptyView() }
+                    NavigationLink(
+                        destination: 
+                            StopDetailsView(stop: stop)
+                                .onDisappear { if mapVisible { isSheetPresented = true } }
+                                .onAppear { if mapVisible { isSheetPresented = false} },
+                        isActive: $shouldPresentStopDetailsView
+                    ) { EmptyView() }
                 }
                 
                 if let vehicleId = vehicleIdToBePresented {
                     //                    if vehiclesManager.vehicles.contains({$0.id == vehicleId}) {
-                    NavigationLink(destination: VehicleDetailsView(vehicleId: vehicleId), isActive: $shouldPresentVehicleDetailsView) { EmptyView() }
+                    NavigationLink(
+                        destination: 
+                            VehicleDetailsView(vehicleId: vehicleId)
+                                .onDisappear { if mapVisible { isSheetPresented = true } }
+                                .onAppear { if mapVisible { isSheetPresented = false} },
+                        isActive: $shouldPresentVehicleDetailsView
+                    ) { EmptyView() }
                     //                    }
                 }
                 
                 if let lineId = lineIdToBePresented, let patternId = patternIdToBePresented {
-                    NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == lineId }!, overrideDisplayedPatternId: patternId), isActive: $shouldPresentLineDetailsView) { EmptyView() }
+                    NavigationLink(
+                        destination: 
+                            LineDetailsView(
+                                line: linesManager.lines.first { $0.id == lineId }!,
+                                overrideDisplayedPatternId: patternId)
+                                    .onDisappear { if mapVisible { isSheetPresented = true; lineIdToBePresented = nil } }
+                                    .onAppear { if mapVisible { isSheetPresented = false} },
+                        isActive: $shouldPresentLineDetailsView
+                    ) { EmptyView() }
                 }
                 
                 MapLibreMapView(
                     stops: stopsManager.stops,
                     selectedStopId: $selectedStopId,
+                    onStopSelect: { stopId in
+                        selectedStopId = stopId
+                        isSheetPresented = true
+                        print("Changed stopId to \(String(describing: selectedStopId))")
+                    },
                     flyToCoords: flyToCoords,
                     shouldFlyToUserCoords: $mapFlyToUserCoords,
                     mapVisualStyle: mapVisualStyle
-                ).ignoresSafeArea()
+                ).ignoresSafeArea().onDisappear {
+                    mapVisible = false
+                }.onAppear {
+                    mapVisible = true
+                }
                 
                 HStack {
                     Spacer()
@@ -171,27 +202,29 @@ struct StopsView: View {
             
             
             
-            
-            .onChange(of: selectedStopId) {
-                print("changed stopid \(selectedStopId)")
-                if selectedStopId != "" { // avoid trigger on sheet dismiss; TODO: @see line #67
-                    isSheetPresented.toggle()
-                    print("Changed stopId to \(String(describing: selectedStopId))")
-                }
-            }
-            .onChange(of: shouldPresentStopDetailsView) {
-//                if shouldPresentStopDetailsView { // do not open sheet on return from stopdetails view
-                    isSheetPresented.toggle()
+            // cant do this like this because when people click the same stop it doesnt change lol and we need to keep that state for when user returns from submenus
+//            .onChange(of: selectedStopId) {
+//                print("changed stopid \(selectedStopId)")
+//                if selectedStopId != "" { // avoid trigger on sheet dismiss; TODO: @see line #67
+//                    isSheetPresented.toggle()
+//                    print("Changed stopId to \(String(describing: selectedStopId))")
 //                }
-            }
+//            }
+//            .onChange(of: shouldPresentStopDetailsView) {
+////                if shouldPresentStopDetailsView { // do not open sheet on return from stopdetails view
+//                    isSheetPresented.toggle()
+////                }
+//            }
             .onChange(of: vehicleIdToBePresented) {
                 if let _ = vehicleIdToBePresented {
                     shouldPresentVehicleDetailsView.toggle()
-                    isSheetPresented.toggle()
+                    isSheetPresented = true
                 }
             }
             .onChange(of: lineIdToBePresented) {
-                shouldPresentLineDetailsView.toggle()
+                if let _ = lineIdToBePresented {
+                    shouldPresentLineDetailsView.toggle()
+                }
             }
             .sheet(isPresented: $isSheetPresented) {
                 VStack {
@@ -214,7 +247,7 @@ struct StopsView: View {
                             } else { // if no realtime available
                                 patternIdToBePresented = eta.patternId
                                 lineIdToBePresented = eta.lineId
-                                isSheetPresented.toggle()
+                                isSheetPresented = true
                                 print("\(patternIdToBePresented) :: \(lineIdToBePresented)")
                             }
                         }, stop: stop)

@@ -26,6 +26,7 @@ struct StopDetailsSheetView: View {
                     VStack(alignment: .leading) {
                         Text(stop.name)
                             .bold()
+                            .multilineTextAlignment(.leading)
                         //                                Text(pattern.municipalities.joined(separator: ", "))
                         //                                    .foregroundStyle(.secondary)
                         HStack(spacing: 20.0) {
