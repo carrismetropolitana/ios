@@ -455,7 +455,7 @@ struct SelectablePatternEntry: View {
     var body: some View {
         HStack {
                 HStack {
-                    Pill(text: pattern.shortName, color: .init(hex: pattern.color), textColor: .init(hex: pattern.textColor), size: 60)
+                    Pill(text: pattern.shortName, color: .init(hex: pattern.color), textColor: .init(hex: pattern.textColor))
                         .padding(.horizontal, 5.0)
                     Text(pattern.headsign)
                         .bold()

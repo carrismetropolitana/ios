@@ -24,7 +24,7 @@ struct SquaredButton: View {
             Button {
                 action()
             } label: {
-                RoundedRectangle(cornerRadius: 15.0)
+                RoundedRectangle(cornerRadius: 10.0)
                     .fill(.windowBackground)
                     .overlay {
                         if let systemIcon = systemIcon {
@@ -40,7 +40,7 @@ struct SquaredButton: View {
                         }
                     }
                     .frame(width: size, height: size)
-                    .shadow(color: .black.opacity(0.1), radius: 10)
+//                    .shadow(color: .black.opacity(0.05), radius: 5)
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)

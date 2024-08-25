@@ -12,7 +12,7 @@
 		790817DD2BEE2F7700EC0C82 /* UserProfileSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790817DC2BEE2F7700EC0C82 /* UserProfileSheetView.swift */; };
 		790CB9832BE29E0D0011B0EA /* EasterEggView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790CB9822BE29E0D0011B0EA /* EasterEggView.swift */; };
 		7912F69E2C09DD73005D31DF /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7912F69D2C09DD73005D31DF /* NewsView.swift */; };
-		7912F6A02C09DF70005D31DF /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7912F69F2C09DF70005D31DF /* WebView.swift */; };
+		7912F6A02C09DF70005D31DF /* NewsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7912F69F2C09DF70005D31DF /* NewsWebView.swift */; };
 		7913C13E2BB1B7EF000F0DFA /* AnimatedLiveCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7913C13D2BB1B7EF000F0DFA /* AnimatedLiveCircle.swift */; };
 		7916BD7F2C1E138000C049B7 /* VehicleIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7916BD7E2C1E138000C049B7 /* VehicleIdentifier.swift */; };
 		791915782BA38D25009E5B29 /* LineDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791915772BA38D25009E5B29 /* LineDetailsView.swift */; };
@@ -26,7 +26,7 @@
 		791E09952BA53D9D002899EC /* SFSafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E09942BA53D9D002899EC /* SFSafariView.swift */; };
 		792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */; };
 		79323FAB2C49A14700AE9D50 /* VehicleLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */; };
-		794DF14F2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794DF14E2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift */; };
+		794588B32C77882B000AE50A /* ViewHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794588B22C77882B000AE50A /* ViewHeight.swift */; };
 		7960AC852C48438300E0B615 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7960AC842C48438300E0B615 /* GoogleService-Info.plist */; };
 		7960AC882C48446B00E0B615 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 7960AC872C48446B00E0B615 /* FirebaseMessaging */; };
 		7960AC8A2C488CC300E0B615 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960AC892C488CC300E0B615 /* AppDelegate.swift */; };
@@ -58,7 +58,6 @@
 		79A89F3E2BDBDBD100DB5068 /* LoginSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A89F3D2BDBDBD100DB5068 /* LoginSheetView.swift */; };
 		79AB3C9E2C72CC5900122AA1 /* StopsFilterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3C9D2C72CC5900122AA1 /* StopsFilterTest.swift */; };
 		79B7C5B72C584075007A2D9D /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7C5B62C584075007A2D9D /* NetworkMonitor.swift */; };
-		79BA1A612C2D8D1700B841F5 /* ETATesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BA1A602C2D8D1700B841F5 /* ETATesting.swift */; };
 		79C6C4FD2C1466AA003277A7 /* VehiclesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */; };
 		79C6C4FF2C146B89003277A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C6C4FE2C146B89003277A7 /* LocationManager.swift */; };
 		79CA0A6C2BA2EC2F000F4900 /* CMAModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CA0A6B2BA2EC2F000F4900 /* CMAModels.swift */; };
@@ -72,6 +71,14 @@
 		79CD78AC2BA78256003D30F2 /* MapLibreMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */; };
 		79CDD65C2C0643920078EC5E /* PatternStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CDD65B2C0643920078EC5E /* PatternStop.swift */; };
 		79D227D62BA532F70068B5B4 /* ENCMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D227D52BA532F70068B5B4 /* ENCMView.swift */; };
+		79D3B1622C77E56300E0AE52 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79D3B1612C77E56300E0AE52 /* WidgetKit.framework */; };
+		79D3B1642C77E56300E0AE52 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79D3B1632C77E56300E0AE52 /* SwiftUI.framework */; };
+		79D3B1672C77E56300E0AE52 /* VehicleLivePatternBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D3B1662C77E56300E0AE52 /* VehicleLivePatternBundle.swift */; };
+		79D3B1692C77E56300E0AE52 /* VehicleLivePatternLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D3B1682C77E56300E0AE52 /* VehicleLivePatternLiveActivity.swift */; };
+		79D3B16B2C77E56300E0AE52 /* VehicleLivePattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D3B16A2C77E56300E0AE52 /* VehicleLivePattern.swift */; };
+		79D3B16D2C77E56300E0AE52 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D3B16C2C77E56300E0AE52 /* AppIntent.swift */; };
+		79D3B16F2C77E56400E0AE52 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79D3B16E2C77E56400E0AE52 /* Assets.xcassets */; };
+		79D3B1732C77E56400E0AE52 /* VehicleLivePatternExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79D3B1602C77E56300E0AE52 /* VehicleLivePatternExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		79DB836A2BA19A5D0023DD93 /* cmet_ios_demoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83692BA19A5D0023DD93 /* cmet_ios_demoApp.swift */; };
 		79DB836C2BA19A5D0023DD93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB836B2BA19A5D0023DD93 /* ContentView.swift */; };
 		79DB836E2BA19A5E0023DD93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79DB836D2BA19A5E0023DD93 /* Assets.xcassets */; };
@@ -83,7 +90,7 @@
 		79DB83842BA1B2710023DD93 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83832BA1B2710023DD93 /* CarouselView.swift */; };
 		79DB83892BA1B5ED0023DD93 /* HTTPAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83882BA1B5ED0023DD93 /* HTTPAPI.swift */; };
 		79DB838C2BA1B6320023DD93 /* CMWModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB838B2BA1B6320023DD93 /* CMWModels.swift */; };
-		79DB838F2BA1BA340023DD93 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB838E2BA1BA340023DD93 /* Helpers.swift */; };
+		79DB838F2BA1BA340023DD93 /* CMWHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB838E2BA1BA340023DD93 /* CMWHelpers.swift */; };
 		79DB83912BA1CD2E0023DD93 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83902BA1CD2E0023DD93 /* Carousel.swift */; };
 		79DC32052C0DD4FA00BC2D97 /* CMUserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */; };
 		79DE7D452C1D009900BE09BB /* LoopingCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */; };
@@ -105,6 +112,9 @@
 		79F04CD32C32415C003809E3 /* SelectFavoriteLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F04CD22C32415C003809E3 /* SelectFavoriteLineView.swift */; };
 		79F04CD52C32440C003809E3 /* LinesSearchHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F04CD42C32440C003809E3 /* LinesSearchHistoryManager.swift */; };
 		79F0ABD92C02B2F1008FA0D9 /* VehicleIdentifier1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F0ABD82C02B2F1008FA0D9 /* VehicleIdentifier1.swift */; };
+		79F1D88A2C7AA286005CB830 /* MapFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1D8892C7AA286005CB830 /* MapFloatingButton.swift */; };
+		79F1D88C2C7AA2AE005CB830 /* MapFloatingPickerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1D88B2C7AA2AE005CB830 /* MapFloatingPickerMenu.swift */; };
+		79F1D88E2C7AA886005CB830 /* CMAHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1D88D2C7AA886005CB830 /* CMAHelpers.swift */; };
 		79F2CA232C3C5F750067E938 /* HomeScreenBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F2CA222C3C5F750067E938 /* HomeScreenBanner.swift */; };
 		79F982402BB7202A002B3997 /* StopDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F9823F2BB7202A002B3997 /* StopDetailsView.swift */; };
 		79F982432BB72461002B3997 /* IMLAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F982422BB72461002B3997 /* IMLAPI.swift */; };
@@ -114,6 +124,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		79D3B1712C77E56400E0AE52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79DB835E2BA19A5D0023DD93 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 79D3B15F2C77E56300E0AE52;
+			remoteInfo = VehicleLivePatternExtension;
+		};
 		79DE904F2C493C5D00D3E859 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 79DB835E2BA19A5D0023DD93 /* Project object */;
@@ -130,6 +147,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				79D3B1732C77E56400E0AE52 /* VehicleLivePatternExtension.appex in Embed Foundation Extensions */,
 				79DE90512C493C5D00D3E859 /* NotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -143,7 +161,7 @@
 		790817DC2BEE2F7700EC0C82 /* UserProfileSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileSheetView.swift; sourceTree = "<group>"; };
 		790CB9822BE29E0D0011B0EA /* EasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasterEggView.swift; sourceTree = "<group>"; };
 		7912F69D2C09DD73005D31DF /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
-		7912F69F2C09DF70005D31DF /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		7912F69F2C09DF70005D31DF /* NewsWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsWebView.swift; sourceTree = "<group>"; };
 		7913C13D2BB1B7EF000F0DFA /* AnimatedLiveCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedLiveCircle.swift; sourceTree = "<group>"; };
 		7913C13F2BB1C2AB000F0DFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7916BD7E2C1E138000C049B7 /* VehicleIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleIdentifier.swift; sourceTree = "<group>"; };
@@ -157,7 +175,7 @@
 		791E09942BA53D9D002899EC /* SFSafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSafariView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCNavigationStackBug.swift; sourceTree = "<group>"; };
 		79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLookup.swift; sourceTree = "<group>"; };
-		794DF14E2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDemoSwiftUI.swift; sourceTree = "<group>"; };
+		794588B22C77882B000AE50A /* ViewHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHeight.swift; sourceTree = "<group>"; };
 		7960AC842C48438300E0B615 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7960AC892C488CC300E0B615 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeAndVehiclesMapView.swift; sourceTree = "<group>"; };
@@ -188,7 +206,6 @@
 		79AB3C9D2C72CC5900122AA1 /* StopsFilterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsFilterTest.swift; sourceTree = "<group>"; };
 		79B4A53B2C48976000E13D3E /* Carris Metropolitana.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Carris Metropolitana.entitlements"; sourceTree = "<group>"; };
 		79B7C5B62C584075007A2D9D /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
-		79BA1A602C2D8D1700B841F5 /* ETATesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETATesting.swift; sourceTree = "<group>"; };
 		79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclesManager.swift; sourceTree = "<group>"; };
 		79C6C4FE2C146B89003277A7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		79CA0A6B2BA2EC2F000F4900 /* CMAModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMAModels.swift; sourceTree = "<group>"; };
@@ -201,6 +218,15 @@
 		79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreMapView.swift; sourceTree = "<group>"; };
 		79CDD65B2C0643920078EC5E /* PatternStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternStop.swift; sourceTree = "<group>"; };
 		79D227D52BA532F70068B5B4 /* ENCMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENCMView.swift; sourceTree = "<group>"; };
+		79D3B1602C77E56300E0AE52 /* VehicleLivePatternExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = VehicleLivePatternExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		79D3B1612C77E56300E0AE52 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		79D3B1632C77E56300E0AE52 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		79D3B1662C77E56300E0AE52 /* VehicleLivePatternBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLivePatternBundle.swift; sourceTree = "<group>"; };
+		79D3B1682C77E56300E0AE52 /* VehicleLivePatternLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLivePatternLiveActivity.swift; sourceTree = "<group>"; };
+		79D3B16A2C77E56300E0AE52 /* VehicleLivePattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLivePattern.swift; sourceTree = "<group>"; };
+		79D3B16C2C77E56300E0AE52 /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
+		79D3B16E2C77E56400E0AE52 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		79D3B1702C77E56400E0AE52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79DB83662BA19A5D0023DD93 /* Carris Metropolitana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Carris Metropolitana.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		79DB83692BA19A5D0023DD93 /* cmet_ios_demoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cmet_ios_demoApp.swift; sourceTree = "<group>"; };
 		79DB836B2BA19A5D0023DD93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -213,7 +239,7 @@
 		79DB83832BA1B2710023DD93 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		79DB83882BA1B5ED0023DD93 /* HTTPAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPAPI.swift; sourceTree = "<group>"; };
 		79DB838B2BA1B6320023DD93 /* CMWModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWModels.swift; sourceTree = "<group>"; };
-		79DB838E2BA1BA340023DD93 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		79DB838E2BA1BA340023DD93 /* CMWHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWHelpers.swift; sourceTree = "<group>"; };
 		79DB83902BA1CD2E0023DD93 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMUserAPI.swift; sourceTree = "<group>"; };
 		79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingCarouselView.swift; sourceTree = "<group>"; };
@@ -235,6 +261,9 @@
 		79F04CD22C32415C003809E3 /* SelectFavoriteLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavoriteLineView.swift; sourceTree = "<group>"; };
 		79F04CD42C32440C003809E3 /* LinesSearchHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinesSearchHistoryManager.swift; sourceTree = "<group>"; };
 		79F0ABD82C02B2F1008FA0D9 /* VehicleIdentifier1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleIdentifier1.swift; sourceTree = "<group>"; };
+		79F1D8892C7AA286005CB830 /* MapFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFloatingButton.swift; sourceTree = "<group>"; };
+		79F1D88B2C7AA2AE005CB830 /* MapFloatingPickerMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFloatingPickerMenu.swift; sourceTree = "<group>"; };
+		79F1D88D2C7AA886005CB830 /* CMAHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMAHelpers.swift; sourceTree = "<group>"; };
 		79F2CA222C3C5F750067E938 /* HomeScreenBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenBanner.swift; sourceTree = "<group>"; };
 		79F9823F2BB7202A002B3997 /* StopDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopDetailsView.swift; sourceTree = "<group>"; };
 		79F982422BB72461002B3997 /* IMLAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMLAPI.swift; sourceTree = "<group>"; };
@@ -244,6 +273,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		79D3B15D2C77E56300E0AE52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79D3B1642C77E56300E0AE52 /* SwiftUI.framework in Frameworks */,
+				79D3B1622C77E56300E0AE52 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		79DB83632BA19A5D0023DD93 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -290,6 +328,41 @@
 			path = CMUserAPI;
 			sourceTree = "<group>";
 		};
+		798D7CAE2C79121900F7B1D1 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		798D7CAF2C79122600F7B1D1 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				79F1D8882C7AA27B005CB830 /* Map Overlays */,
+				79EE5FC42BB7BE970060820F /* GenericMapView.swift */,
+				79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */,
+				7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */,
+			);
+			path = Maps;
+			sourceTree = "<group>";
+		};
+		798D7CB02C79125700F7B1D1 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		798D7CB12C79127A00F7B1D1 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				7977520E2C375D83008CC644 /* ErrorView.swift */,
+				79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		7991D6B42BB1F006002E6638 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +391,7 @@
 			isa = PBXGroup;
 			children = (
 				79A1904A2C3EC0A400752D80 /* Navigation.swift */,
+				794588B22C77882B000AE50A /* ViewHeight.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -409,6 +483,19 @@
 			path = "Detail Views";
 			sourceTree = "<group>";
 		};
+		79D3B1652C77E56300E0AE52 /* VehicleLivePattern */ = {
+			isa = PBXGroup;
+			children = (
+				79D3B1662C77E56300E0AE52 /* VehicleLivePatternBundle.swift */,
+				79D3B1682C77E56300E0AE52 /* VehicleLivePatternLiveActivity.swift */,
+				79D3B16A2C77E56300E0AE52 /* VehicleLivePattern.swift */,
+				79D3B16C2C77E56300E0AE52 /* AppIntent.swift */,
+				79D3B16E2C77E56400E0AE52 /* Assets.xcassets */,
+				79D3B1702C77E56400E0AE52 /* Info.plist */,
+			);
+			path = VehicleLivePattern;
+			sourceTree = "<group>";
+		};
 		79DB835D2BA19A5D0023DD93 = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +503,7 @@
 				791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */,
 				79DB83682BA19A5D0023DD93 /* Carris Metropolitana */,
 				79DE904B2C493C5D00D3E859 /* NotificationServiceExtension */,
+				79D3B1652C77E56300E0AE52 /* VehicleLivePattern */,
 				79DB83672BA19A5D0023DD93 /* Products */,
 				79DE90562C493DFE00D3E859 /* Frameworks */,
 			);
@@ -426,6 +514,7 @@
 			children = (
 				79DB83662BA19A5D0023DD93 /* Carris Metropolitana.app */,
 				79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */,
+				79D3B1602C77E56300E0AE52 /* VehicleLivePatternExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -471,39 +560,35 @@
 		79DB83822BA1B2600023DD93 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				798D7CB12C79127A00F7B1D1 /* Common */,
+				798D7CAE2C79121900F7B1D1 /* Authentication */,
 				79CA0A6F2BA2F4BE000F4900 /* Internal Widgets */,
+				798D7CAF2C79122600F7B1D1 /* Maps */,
+				798D7CB02C79125700F7B1D1 /* Debug */,
 				79DB83832BA1B2710023DD93 /* CarouselView.swift */,
 				79DB83902BA1CD2E0023DD93 /* Carousel.swift */,
-				79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */,
 				79AB3C9D2C72CC5900122AA1 /* StopsFilterTest.swift */,
-				79BA1A602C2D8D1700B841F5 /* ETATesting.swift */,
 				798B2E7B2BA336A500CBA9DC /* PlayerViewController.swift */,
 				791915792BA3BA07009E5B29 /* MapView.swift */,
 				790817D82BEE1EF000EC0C82 /* PersistentDataController.swift */,
 				791E09942BA53D9D002899EC /* SFSafariView.swift */,
-				79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */,
-				7977520E2C375D83008CC644 /* ErrorView.swift */,
+				7916BD7E2C1E138000C049B7 /* VehicleIdentifier.swift */,
 				79CD78A02BA73767003D30F2 /* FacilityIconsPreviewView.swift */,
 				7991D6B22BB1CFE7002E6638 /* PulseAnimation.swift */,
-				7912F69F2C09DF70005D31DF /* WebView.swift */,
+				7912F69F2C09DF70005D31DF /* NewsWebView.swift */,
 				79E22D162C24981E0067F157 /* CMLoopingCarousel.swift */,
 				79F0ABD82C02B2F1008FA0D9 /* VehicleIdentifier1.swift */,
 				79CD78A62BA78001003D30F2 /* AnotherMapView.swift */,
 				79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */,
-				79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */,
 				79F2CA222C3C5F750067E938 /* HomeScreenBanner.swift */,
-				7916BD7E2C1E138000C049B7 /* VehicleIdentifier.swift */,
 				79A532F02C12365000019D6F /* OnboardingView.swift */,
 				790CB9822BE29E0D0011B0EA /* EasterEggView.swift */,
 				79E9D4F22C2F855500C6D181 /* UserFeedbackForm.swift */,
 				790817DA2BEE277C00EC0C82 /* CMLoadingAnimation.swift */,
 				791A70682C3C682E00E789E5 /* ETAPlayground.swift */,
-				79EE5FC42BB7BE970060820F /* GenericMapView.swift */,
 				791A706A2C3D343C00E789E5 /* CMLogoAnimation.swift */,
-				794DF14E2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift */,
 				797C32E62C2A308900E5860D /* ImageViewer.swift */,
 				792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */,
-				7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */,
 				797D32192C1384290063F57C /* SquaredButton.swift */,
 				79E88CBE2BAAEC3A001F3227 /* SearchInput.swift */,
 				799C0D432BB8C50C005A7512 /* LoadingBar.swift */,
@@ -536,7 +621,7 @@
 			children = (
 				79DB83882BA1B5ED0023DD93 /* HTTPAPI.swift */,
 				79DB838B2BA1B6320023DD93 /* CMWModels.swift */,
-				79DB838E2BA1BA340023DD93 /* Helpers.swift */,
+				79DB838E2BA1BA340023DD93 /* CMWHelpers.swift */,
 			);
 			path = CMWordpress;
 			sourceTree = "<group>";
@@ -546,6 +631,7 @@
 			children = (
 				79CA0A6D2BA2F3AE000F4900 /* CMAPI.swift */,
 				79CA0A6B2BA2EC2F000F4900 /* CMAModels.swift */,
+				79F1D88D2C7AA886005CB830 /* CMAHelpers.swift */,
 			);
 			path = CMAPI;
 			sourceTree = "<group>";
@@ -562,8 +648,19 @@
 		79DE90562C493DFE00D3E859 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				79D3B1612C77E56300E0AE52 /* WidgetKit.framework */,
+				79D3B1632C77E56300E0AE52 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		79F1D8882C7AA27B005CB830 /* Map Overlays */ = {
+			isa = PBXGroup;
+			children = (
+				79F1D8892C7AA286005CB830 /* MapFloatingButton.swift */,
+				79F1D88B2C7AA2AE005CB830 /* MapFloatingPickerMenu.swift */,
+			);
+			path = "Map Overlays";
 			sourceTree = "<group>";
 		};
 		79F982412BB72453002B3997 /* IMLAPI */ = {
@@ -578,6 +675,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		79D3B15F2C77E56300E0AE52 /* VehicleLivePatternExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79D3B1762C77E56400E0AE52 /* Build configuration list for PBXNativeTarget "VehicleLivePatternExtension" */;
+			buildPhases = (
+				79D3B15C2C77E56300E0AE52 /* Sources */,
+				79D3B15D2C77E56300E0AE52 /* Frameworks */,
+				79D3B15E2C77E56300E0AE52 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VehicleLivePatternExtension;
+			productName = VehicleLivePatternExtension;
+			productReference = 79D3B1602C77E56300E0AE52 /* VehicleLivePatternExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		79DB83652BA19A5D0023DD93 /* Carris Metropolitana */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 79DB83742BA19A5E0023DD93 /* Build configuration list for PBXNativeTarget "Carris Metropolitana" */;
@@ -591,6 +705,7 @@
 			);
 			dependencies = (
 				79DE90502C493C5D00D3E859 /* PBXTargetDependency */,
+				79D3B1722C77E56400E0AE52 /* PBXTargetDependency */,
 			);
 			name = "Carris Metropolitana";
 			packageProductDependencies = (
@@ -633,6 +748,9 @@
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					79D3B15F2C77E56300E0AE52 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
 					79DB83652BA19A5D0023DD93 = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
@@ -663,11 +781,20 @@
 			targets = (
 				79DB83652BA19A5D0023DD93 /* Carris Metropolitana */,
 				79DE90492C493C5D00D3E859 /* NotificationServiceExtension */,
+				79D3B15F2C77E56300E0AE52 /* VehicleLivePatternExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		79D3B15E2C77E56300E0AE52 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79D3B16F2C77E56400E0AE52 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		79DB83642BA19A5D0023DD93 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -691,6 +818,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		79D3B15C2C77E56300E0AE52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79D3B16B2C77E56300E0AE52 /* VehicleLivePattern.swift in Sources */,
+				79D3B16D2C77E56300E0AE52 /* AppIntent.swift in Sources */,
+				79D3B1692C77E56300E0AE52 /* VehicleLivePatternLiveActivity.swift in Sources */,
+				79D3B1672C77E56300E0AE52 /* VehicleLivePatternBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		79DB83622BA19A5D0023DD93 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -721,7 +859,7 @@
 				798B2E7A2BA3317D00CBA9DC /* UnregisteredUserView.swift in Sources */,
 				79CD78AC2BA78256003D30F2 /* MapLibreMapView.swift in Sources */,
 				79F0ABD92C02B2F1008FA0D9 /* VehicleIdentifier1.swift in Sources */,
-				7912F6A02C09DF70005D31DF /* WebView.swift in Sources */,
+				7912F6A02C09DF70005D31DF /* NewsWebView.swift in Sources */,
 				79DB83892BA1B5ED0023DD93 /* HTTPAPI.swift in Sources */,
 				79FA6A272C1DF79300E043C8 /* VehicleInfoAPI.swift in Sources */,
 				7913C13E2BB1B7EF000F0DFA /* AnimatedLiveCircle.swift in Sources */,
@@ -744,11 +882,13 @@
 				79C6C4FF2C146B89003277A7 /* LocationManager.swift in Sources */,
 				7992BEB72C383E5B00B5138F /* Analytics.swift in Sources */,
 				79C6C4FD2C1466AA003277A7 /* VehiclesManager.swift in Sources */,
-				79DB838F2BA1BA340023DD93 /* Helpers.swift in Sources */,
+				79DB838F2BA1BA340023DD93 /* CMWHelpers.swift in Sources */,
 				798B2E782BA31F8000CBA9DC /* NetworkService.swift in Sources */,
+				79F1D88A2C7AA286005CB830 /* MapFloatingButton.swift in Sources */,
 				79E88CBF2BAAEC3A001F3227 /* SearchInput.swift in Sources */,
 				79F982402BB7202A002B3997 /* StopDetailsView.swift in Sources */,
 				79A5AB042C2711490005201E /* ImagePixelColorPredominanceTest.swift in Sources */,
+				79F1D88C2C7AA2AE005CB830 /* MapFloatingPickerMenu.swift in Sources */,
 				7971D1D22BB3668500112BBC /* ShapeAndVehiclesMapView.swift in Sources */,
 				79DB837F2BA19B9B0023DD93 /* StopsView.swift in Sources */,
 				79DB837D2BA19B8C0023DD93 /* HomeView.swift in Sources */,
@@ -762,18 +902,17 @@
 				79F04CD12C31E555003809E3 /* SelectFavoriteStopView.swift in Sources */,
 				79DE7D452C1D009900BE09BB /* LoopingCarouselView.swift in Sources */,
 				79CDD65C2C0643920078EC5E /* PatternStop.swift in Sources */,
+				794588B32C77882B000AE50A /* ViewHeight.swift in Sources */,
 				79DB83912BA1CD2E0023DD93 /* Carousel.swift in Sources */,
 				791E09952BA53D9D002899EC /* SFSafariView.swift in Sources */,
 				799E63B62C02C71C00BCBEB8 /* AlertsSheetView.swift in Sources */,
 				79CA0A752BA2F4FD000F4900 /* SmartNotificationWidgetView.swift in Sources */,
-				794DF14F2BEEA7A1003B5E28 /* MapDemoSwiftUI.swift in Sources */,
 				79DB838C2BA1B6320023DD93 /* CMWModels.swift in Sources */,
 				79DB836C2BA19A5D0023DD93 /* ContentView.swift in Sources */,
 				797C32E52C2A25B500E5860D /* CustomerSupportView.swift in Sources */,
 				799C0D442BB8C50C005A7512 /* LoadingBar.swift in Sources */,
 				79E9D4F72C2F9CF700C6D181 /* StopsManager.swift in Sources */,
 				79E88CBB2BAAEAA5001F3227 /* SmartNotificationCustomizationView.swift in Sources */,
-				79BA1A612C2D8D1700B841F5 /* ETATesting.swift in Sources */,
 				79F2CA232C3C5F750067E938 /* HomeScreenBanner.swift in Sources */,
 				797C32E72C2A308900E5860D /* ImageViewer.swift in Sources */,
 				79FA6A252C1DF5B600E043C8 /* LinesManager.swift in Sources */,
@@ -782,6 +921,7 @@
 				79CA0A712BA2F4E4000F4900 /* FavoriteStopWidgetView.swift in Sources */,
 				79DB836A2BA19A5D0023DD93 /* cmet_ios_demoApp.swift in Sources */,
 				79A6AA2B2C2CB15100737380 /* WrappingHStack.swift in Sources */,
+				79F1D88E2C7AA886005CB830 /* CMAHelpers.swift in Sources */,
 				7971D1D82BB4514300112BBC /* Alert.swift in Sources */,
 				7971D1D42BB42D6A00112BBC /* ScheduleView.swift in Sources */,
 				79F04CD52C32440C003809E3 /* LinesSearchHistoryManager.swift in Sources */,
@@ -800,6 +940,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		79D3B1722C77E56400E0AE52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 79D3B15F2C77E56300E0AE52 /* VehicleLivePatternExtension */;
+			targetProxy = 79D3B1712C77E56400E0AE52 /* PBXContainerItemProxy */;
+		};
 		79DE90502C493C5D00D3E859 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 79DE90492C493C5D00D3E859 /* NotificationServiceExtension */;
@@ -808,6 +953,60 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		79D3B1742C77E56400E0AE52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QGATT2W97P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VehicleLivePattern/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VehicleLivePattern;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app.VehicleLivePattern;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		79D3B1752C77E56400E0AE52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QGATT2W97P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VehicleLivePattern/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VehicleLivePattern;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app.VehicleLivePattern;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		79DB83722BA19A5E0023DD93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -936,13 +1135,13 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Carris Metropolitana/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Carris Metropolitana";
+				INFOPLIST_KEY_CFBundleDisplayName = CMetropolitana;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "A sua localização será utilizada para mostrar as paragens e carreiras mais perto de si.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "A sua localização será utilizada para mostrar as paragens e carreiras mais perto de si.";
@@ -979,13 +1178,13 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Carris Metropolitana/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Carris Metropolitana";
+				INFOPLIST_KEY_CFBundleDisplayName = CMetropolitana;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "A sua localização será utilizada para mostrar as paragens e carreiras mais perto de si.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "A sua localização será utilizada para mostrar as paragens e carreiras mais perto de si.";
@@ -1066,6 +1265,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		79D3B1762C77E56400E0AE52 /* Build configuration list for PBXNativeTarget "VehicleLivePatternExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79D3B1742C77E56400E0AE52 /* Debug */,
+				79D3B1752C77E56400E0AE52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		79DB83612BA19A5D0023DD93 /* Build configuration list for PBXProject "Carris Metropolitana" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

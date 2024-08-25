@@ -33,6 +33,7 @@ struct LoopingCarousel: UIViewRepresentable {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
         collectionView.dataSource = context.coordinator
         collectionView.delegate = context.coordinator
         collectionView.register(CarouselCell.self, forCellWithReuseIdentifier: "Cell")

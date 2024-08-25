@@ -21,19 +21,32 @@ struct HomeScreenBanner: View {
     
     
     var body: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .firstTextBaseline) {
             Image(systemName: systemIcon ?? getBannerIconForType(for: type))
             
             VStack(alignment: .leading) {
-                Text(title)
-                    .font(.headline)
-                Text(content)
-                    .font(.subheadline)
+                VStack(alignment: .leading) {
+                    Text(title)
+                        .font(.headline)
+                    Text(content)
+                        .font(.subheadline)
+                }
+                .padding(.trailing)
+                
+                Divider()
+                
+                Button {
+                    
+                } label: {
+                    Text("Saber mais")
+                }
             }
             
             
+            
         }
-        .padding()
+        .padding(.vertical)
+        .padding(.leading)
         .background(
             RoundedRectangle(cornerRadius: 15.0)
                 .fill(color ?? getBannerColorForType(for: type))

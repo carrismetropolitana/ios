@@ -27,7 +27,7 @@ struct MoreView: View {
              VStack {
                  NavigationLink(destination: selectedNews != nil ? AnyView(NewsView(news: selectedNews!, newsImageURL: selectedNewsImageURL!)) : AnyView(EmptyView()), isActive: $isCarouselDetailPresented) {
                      EmptyView()
-                 }
+                }
                 ScrollView {
                     VStack(spacing: 20.0) {
                         if (carouselItems.count > 0) {
@@ -99,6 +99,7 @@ struct MoreView: View {
                     }
                 }
                 .navigationTitle("Novidades")
+                .background(.cmSystemBackground200)
             }
             .onAppear {
                 Task {
@@ -153,12 +154,12 @@ struct EntryRectangleWithIcon: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20.0)
-                .fill(.windowBackground)
+                .fill(.cmSystemBackground100)
                 .frame(height: 80)
                 .shadow(color: .black.opacity(0.1), radius: 10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)
+                        .stroke(.cmSystemBorder100, lineWidth: 1)
                 )
 //            Button {
 //                

@@ -7,149 +7,158 @@
 
 import SwiftUI
 import CoreLocation
+import WebKit
 
 struct ENCMView: View {
-    @EnvironmentObject var locationManager: LocationManager
-    @State private var timer: Timer?
+    @Environment(\.openURL) private var openURL
     
-    @State private var encms: [ENCM] = []
-    
-    @State private var isMapAppSelectionSheetPresented = false
+//    @EnvironmentObject var locationManager: LocationManager
+//    @State private var timer: Timer?
+//    
+//    @State private var encms: [ENCM] = []
+//    
+//    @State private var isMapAppSelectionSheetPresented = false
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                AsyncImage(url: URL(string: "https://www.navegante.pt/assets/94954915-432c-4a56-8157-c8b2c94e793d?access_token=utilizador.rest")){ image in
-                    image.resizable()
-                } placeholder: { Color.gray }
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 200)
-                    .clipped()
-                
-                    Text("Dedicados ao passageiro, os chamados Espaços navegante® Carris Metropolitana, concentram todos os serviços relacionados com a Carris Metropolitana, possibilitando esclarecer dúvidas, solicitar a emissão de cartões navegante® ou mesmo aderir ao passe navegante família e antigo combatente.")
-                        .font(.subheadline)
-                        .padding()
-                    
-                    ForEach(encms) { encm in
-                        VStack(alignment: .leading) {
-                            HStack(spacing: 0) {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(encm.name.dropFirst(39))
-                                            .bold()
-                                            .font(.title2)
-                                            .padding(.vertical, 5)
-                                        Text("Morada".uppercased())
-                                            .fontWeight(.heavy)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                        Text(encm.address)
-                                            .padding(.bottom, 5)
-                                        Text("Horário".uppercased())
-                                            .fontWeight(.heavy)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                        Text(encmToHoursOpenString(encm))
-                                        
-                                        if !encm.isOpen {
-                                            Pill(text: "Fechado/Completo".uppercased(), color: .red, textColor: .primary, size: 200)
-                                                .padding(.vertical)
-                                        } else {
-                                            OpenENCMCapsule(currentlyWaiting: encm.currentlyWaiting, expectedWaitTime: encm.expectedWaitTime)
-                                                .padding(.vertical)
-                                        }
-                                    }
-                                    Spacer()
-                                }
-//                                .background(.red)
-                                
-                                let availableMapApps = getAvailableMapApps()
-                                Button {
-                                    if availableMapApps.count > 1 {
-                                        isMapAppSelectionSheetPresented.toggle()
-                                    } else {
-                                        navigateTo(destination: CLLocationCoordinate2D(
-                                            latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
-                                            longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
-                                        ), preferredApp: availableMapApps[0])
-                                    }
-                                } label: {
-                                    VStack(spacing: 10.0) {
-                                        Image(systemName: "arrow.triangle.turn.up.right.diamond")
-                                            .font(.title2)
-                                        if let location = locationManager.location {
-                                            let _ = print("\(encm.lat), \(encm.lon)")
-                                            Text(
-                                                toDistanceString(location.coordinate.distance(to:
-                                                    CLLocationCoordinate2D(
-                                                        latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
-                                                        longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
-                                                )))
-                                            )
-                                        } else {
-                                            Text("IR")
-                                        }
-                                    }
-                                    .bold()
-                                }
-                                
-                                .confirmationDialog("Selecione uma app de mapas", isPresented: $isMapAppSelectionSheetPresented) {
-                                    ForEach(availableMapApps, id: \.self) { mapApp in
-                                        Button(mapApp.rawValue) {
-                                            navigateTo(destination: CLLocationCoordinate2D(
-                                                latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
-                                                longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
-                                            ), preferredApp: mapApp)
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.horizontal)
-                            Divider()
-                        }
-                    }
-            }
-        }
-        .navigationTitle("Espaços navegante®")
-        .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            fetchENCM()
-            
-            startFetchingTimer()
-        }
-        .onDisappear {
-            stopFetchingTimer()
-        }
+        ENCMWebView(onExternalURLOpen: { url in
+            openURL(url)
+        })
+            .background(.cmSystemBackground200)
+            .navigationTitle("Espaços navegante®")
+            .navigationBarTitleDisplayMode(.inline)
+//        ScrollView {
+//            VStack(alignment: .leading) {
+//                AsyncImage(url: URL(string: "https://www.navegante.pt/assets/94954915-432c-4a56-8157-c8b2c94e793d?access_token=utilizador.rest")) { image in
+//                    image.resizable()
+//                } placeholder: { Color.gray }
+//                    .aspectRatio(contentMode: .fill)
+//                    .frame(height: 200)
+//                    .clipped()
+//                
+//                    Text("Dedicados ao passageiro, os chamados Espaços navegante® Carris Metropolitana, concentram todos os serviços relacionados com a Carris Metropolitana, possibilitando esclarecer dúvidas, solicitar a emissão de cartões navegante® ou mesmo aderir ao passe navegante família e antigo combatente.")
+//                        .font(.subheadline)
+//                        .padding()
+//                    
+//                    ForEach(encms) { encm in
+//                        VStack(alignment: .leading) {
+//                            HStack(spacing: 0) {
+//                                HStack {
+//                                    VStack(alignment: .leading) {
+//                                        Text(encm.name.dropFirst(39))
+//                                            .bold()
+//                                            .font(.title2)
+//                                            .padding(.vertical, 5)
+//                                        Text("Morada".uppercased())
+//                                            .fontWeight(.heavy)
+//                                            .font(.caption)
+//                                            .foregroundStyle(.secondary)
+//                                        Text(encm.address)
+//                                            .padding(.bottom, 5)
+//                                        Text("Horário".uppercased())
+//                                            .fontWeight(.heavy)
+//                                            .font(.caption)
+//                                            .foregroundStyle(.secondary)
+//                                        Text(encmToHoursOpenString(encm))
+//                                        
+//                                        if !encm.isOpen {
+////                                            Pill(text: "Fechado/Completo".uppercased(), color: .red, textColor: .primary, size: 200)
+////                                                .padding(.vertical)
+//                                        } else {
+//                                            OpenENCMCapsule(currentlyWaiting: encm.currentlyWaiting, expectedWaitTime: encm.expectedWaitTime)
+//                                                .padding(.vertical)
+//                                        }
+//                                    }
+//                                    Spacer()
+//                                }
+////                                .background(.red)
+//                                
+//                                let availableMapApps = getAvailableMapApps()
+//                                Button {
+//                                    if availableMapApps.count > 1 {
+//                                        isMapAppSelectionSheetPresented.toggle()
+//                                    } else {
+//                                        navigateTo(destination: CLLocationCoordinate2D(
+//                                            latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
+//                                            longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
+//                                        ), preferredApp: availableMapApps[0])
+//                                    }
+//                                } label: {
+//                                    VStack(spacing: 10.0) {
+//                                        Image(systemName: "arrow.triangle.turn.up.right.diamond")
+//                                            .font(.title2)
+//                                        if let location = locationManager.location {
+//                                            let _ = print("\(encm.lat), \(encm.lon)")
+//                                            Text(
+//                                                toDistanceString(location.coordinate.distance(to:
+//                                                    CLLocationCoordinate2D(
+//                                                        latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
+//                                                        longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
+//                                                )))
+//                                            )
+//                                        } else {
+//                                            Text("IR")
+//                                        }
+//                                    }
+//                                    .bold()
+//                                }
+//                                
+//                                .confirmationDialog("Selecione uma app de mapas", isPresented: $isMapAppSelectionSheetPresented) {
+//                                    ForEach(availableMapApps, id: \.self) { mapApp in
+//                                        Button(mapApp.rawValue) {
+//                                            navigateTo(destination: CLLocationCoordinate2D(
+//                                                latitude: Double(encm.lat.trimmingCharacters(in: .whitespacesAndNewlines))!,
+//                                                longitude: Double(encm.lon.trimmingCharacters(in: .whitespacesAndNewlines))!
+//                                            ), preferredApp: mapApp)
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            .padding(.horizontal)
+//                            Divider()
+//                        }
+//                    }
+//            }
+//        }
+//        .navigationTitle("Espaços navegante®")
+//        .navigationBarTitleDisplayMode(.inline)
+//        .onAppear {
+//            fetchENCM()
+//            
+//            startFetchingTimer()
+//        }
+//        .onDisappear {
+//            stopFetchingTimer()
+//        }
     }
     
-    func fetchENCM() {
-        Task {
-            encms = try await CMAPI.shared.getENCM()
-        }
-    }
-    
-    private func startFetchingTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
-            fetchENCM()
-        }
-    }
-    
-    private func stopFetchingTimer() {
-        // Invalidate the timer to stop fetching
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    private func toDistanceString(_ distance: Double) -> String {
-        if distance < 1000 {
-            // Less than 1000 meters, show as meters
-            return String(format: "%.0f m", distance)
-        } else {
-            // 1000 meters or more, show as kilometers with up to two decimal places
-            let distanceInKm = distance / 1000
-            return String(format: "%.2f km", distanceInKm)
-        }
-    }
+//    func fetchENCM() {
+//        Task {
+//            encms = try await CMAPI.shared.getENCM()
+//        }
+//    }
+//    
+//    private func startFetchingTimer() {
+//        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
+//            fetchENCM()
+//        }
+//    }
+//    
+//    private func stopFetchingTimer() {
+//        // Invalidate the timer to stop fetching
+//        timer?.invalidate()
+//        timer = nil
+//    }
+//    
+//    private func toDistanceString(_ distance: Double) -> String {
+//        if distance < 1000 {
+//            // Less than 1000 meters, show as meters
+//            return String(format: "%.0f m", distance)
+//        } else {
+//            // 1000 meters or more, show as kilometers with up to two decimal places
+//            let distanceInKm = distance / 1000
+//            return String(format: "%.2f km", distanceInKm)
+//        }
+//    }
 }
 
 struct ENCMTimetableEntry {
@@ -212,4 +221,43 @@ struct OpenENCMCapsule: View {
 
 #Preview {
     ENCMView()
+}
+
+
+struct ENCMWebView: UIViewRepresentable {
+    let url: URL = URL(string: "https://alpha.carrismetropolitana.pt/stores?origin=app")!
+    let onExternalURLOpen: (_ externalURL : URL) -> Void
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.navigationDelegate = context.coordinator
+        webView.underPageBackgroundColor = .clear
+        return webView
+    }
+    
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        let request = URLRequest(url: url)
+        webView.load(request)
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, WKNavigationDelegate {
+        var parent: ENCMWebView
+        
+        init(_ parent: ENCMWebView) {
+            self.parent = parent
+        }
+        
+        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            if let url = navigationAction.request.url, url != parent.url {
+                self.parent.onExternalURLOpen(url)
+                decisionHandler(.cancel)
+            } else {
+                decisionHandler(.allow)
+            }
+        }
+    }
 }

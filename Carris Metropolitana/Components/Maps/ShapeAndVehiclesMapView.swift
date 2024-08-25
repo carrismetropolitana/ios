@@ -10,9 +10,12 @@ import MapLibre
 
 struct ShapeAndVehiclesMapView: UIViewRepresentable {
 //    @Environment(\.colorScheme) var colorScheme
+    
+    // TODO: These no longer need to be bindings
     @Binding var stops: [Stop]
     @Binding var vehicles: [Vehicle]
     @Binding var shape: CMShape?
+    var isUserInteractionEnabled: Bool = true
     let lineColor: Color
     
     func makeUIView(context: Context) -> MLNMapView {
@@ -30,13 +33,15 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             zoomLevel: 8.9,
             animated: false)
         
-        // Add a single tap gesture recognizer. This gesture requires the built-in MGLMapView tap gestures (such as those for zoom and annotation selection) to fail. Apparently... Test if true or not
-        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handleTap(_:)))
-        for recognizer in mapView.gestureRecognizers! where recognizer is UITapGestureRecognizer {
-             tap.require(toFail: recognizer)
-         }
-        mapView.addGestureRecognizer(tap)
+        mapView.isUserInteractionEnabled = isUserInteractionEnabled
         
+        // Add a single tap gesture recognizer. This gesture requires the built-in MGLMapView tap gestures (such as those for zoom and annotation selection) to fail. Apparently... Test if true or not
+//        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handleTap(_:)))
+//        for recognizer in mapView.gestureRecognizers! where recognizer is UITapGestureRecognizer {
+//             tap.require(toFail: recognizer)
+//         }
+//        mapView.addGestureRecognizer(tap)
+//        
 
         // needed to respond to map events
         mapView.delegate = context.coordinator

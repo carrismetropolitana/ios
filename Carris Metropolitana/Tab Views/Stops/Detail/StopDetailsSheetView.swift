@@ -78,7 +78,7 @@ struct StopDetailsSheetView: View {
                         onEtaClick(eta) // TODO: this should be realtime or maybe not, decide
                     } label: {
                         HStack {
-                            Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor), size: 60) // TODO: match line colors to these
+                            Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor)) // TODO: match line colors to these
                             Text(eta.headsign)
                                 .bold()
                                 .lineLimit(1)
@@ -87,7 +87,9 @@ struct StopDetailsSheetView: View {
                                 PulseLabel(accent: .green, label: Text("\(getRoundedMinuteDifferenceFromNow(eta.estimatedArrivalUnix!)) min"))
                             } else if let scheduledArrival = eta.scheduledArrival {
                                 let timeComponents = scheduledArrival.components(separatedBy: ":")
-                                Text("\(timeComponents[0]):\(timeComponents[1])")
+                                let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
+                                let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
+                                Text(adjustedArrival ?? arrivalWithoutSeconds)
                             }
                             Image(systemName: "chevron.right")
                                 .foregroundStyle(.tertiary)

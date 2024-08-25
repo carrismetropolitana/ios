@@ -160,30 +160,6 @@ struct Pattern: Codable, Identifiable, Hashable {
     let shapeId: String
     let path: [PathEntry]
     let trips: [Trip]
-
-//    enum CodingKeys: String, CodingKey {
-//        case id
-//        case lineId = "line_id"
-//        case routeId = "route_id"
-//        case shortName = "short_name"
-//        case direction, headsign, color
-//        case textColor = "text_color"
-//        case validOn = "valid_on"
-//        case municipalities, localities, facilities
-//        case shapeId = "shape_id"
-//        case path, trips
-//    }
-}
-
-// TODO: ideally this would not be in this file
-extension Pattern {
-    func isValidOnDate(date: Date) -> Bool {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        let stringifiedDate = dateFormatter.string(from: date)
-        
-        return self.validOn.contains(stringifiedDate)
-    }
 }
 
 
@@ -234,22 +210,6 @@ struct RealtimeETA: Codable, Hashable {
     let observedArrival: String?
     let observedArrivalUnix: Int?
     let vehicleId: String?
-
-//    enum CodingKeys: String, CodingKey {
-//        case lineId = "line_id"
-//        case patternId = "pattern_id"
-//        case routeId = "route_id"
-//        case tripId = "trip_id"
-//        case headsign
-//        case stopSequence = "stop_sequence"
-//        case scheduledArrival = "scheduled_arrival"
-//        case scheduledArrivalUnix = "scheduled_arrival_unix"
-//        case estimatedArrival = "estimated_arrival"
-//        case estimatedArrivalUnix = "estimated_arrival_unix"
-//        case observedArrival = "observed_arrival"
-//        case observedArrivalUnix = "observed_arrival_unix"
-//        case vehicleId = "vehicle_id"
-//    }
 }
 
 struct PatternRealtimeETA: Codable, Hashable {

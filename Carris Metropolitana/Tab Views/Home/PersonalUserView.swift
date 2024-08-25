@@ -50,6 +50,25 @@ struct PersonalUserView: View {
                         .bold()
                         .font(.title2)
                     Spacer()
+                    
+                    Button {
+                        isSheetOpen.toggle()
+                    } label: {
+                        HStack {
+                            Image(systemName: "square.and.pencil")
+                            Text("Personalizar")
+                                .font(.callout)
+                                .bold()
+                        }
+                        .foregroundStyle(.cmSystemText200)
+                    }
+                    .tint(.cmSystemBackground100)
+                    .buttonStyle(.borderedProminent)
+                    .cornerRadius(8.0)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8.0)
+                            .stroke(.cmSystemBorder100, lineWidth: 1)
+                    )
                 }
                 .padding()
                 
@@ -89,22 +108,22 @@ struct PersonalUserView: View {
     //            .buttonStyle(StopOptionsButtonStyle())
     //            
                 
-                Button {
-                    isSheetOpen.toggle()
-                } label: {
-                    HStack {
-                        Image(systemName: "square.and.pencil")
-                        Text("Personalizar")
-                            .font(.title2)
-                            .bold()
-                    }
-                    .foregroundStyle(.gray)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10.0)
-                }
-                .tint(.gray.opacity(0.3))
-                .buttonStyle(.borderedProminent)
-                .padding()
+//                Button {
+//                    isSheetOpen.toggle()
+//                } label: {
+//                    HStack {
+//                        Image(systemName: "square.and.pencil")
+//                        Text("Personalizar")
+//                            .font(.title2)
+//                            .bold()
+//                    }
+//                    .foregroundStyle(.gray)
+//                    .frame(maxWidth: .infinity)
+//                    .padding(.vertical, 10.0)
+//                }
+//                .tint(.gray.opacity(0.3))
+//                .buttonStyle(.borderedProminent)
+//                .padding()
                 
                 
             }
@@ -124,6 +143,7 @@ struct PersonalUserView: View {
                 }
             }
         }
+        .background(.cmSystemBackground200)
         .onChange(of: patternIdToBePresented) {
             if let _ = lineIdToBePresented, let _ = patternIdToBePresented {
                 shouldPresentLineDetailsView.toggle()

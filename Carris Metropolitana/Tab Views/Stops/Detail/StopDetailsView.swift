@@ -92,14 +92,14 @@ struct StopDetailsView: View {
                             badgeValue: 0
                         )
                         
-                        RoundedRectangle(cornerRadius: 15.0)
+                        RoundedRectangle(cornerRadius: 10.0)
                             .fill(.windowBackground)
                             .overlay {
                                 Image(systemName: "map")
                                     .font(.title)
                             }
                             .frame(width: 60, height: 60)
-                            .shadow(color: .black.opacity(0.1), radius: 10)
+//                            .shadow(color: .black.opacity(0.1), radius: 10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 15)
                                     .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)
@@ -477,7 +477,7 @@ struct StopPatternEntry: View {
     var body: some View {
         HStack {
                 HStack {
-                    Pill(text: pattern.shortName, color: .init(hex: pattern.color), textColor: .init(hex: pattern.textColor), size: 60)
+                    Pill(text: pattern.shortName, color: .init(hex: pattern.color), textColor: .init(hex: pattern.textColor))
                         .padding(.horizontal, 5.0)
                     Text(pattern.headsign)
                         .bold()

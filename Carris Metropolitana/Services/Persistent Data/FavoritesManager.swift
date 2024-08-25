@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseMessaging
 
 enum FavoriteType: Codable {
     case pattern, stop
@@ -104,5 +105,15 @@ class FavoritesManager: ObservableObject {
                 favorites = loadedFavorites
             }
         }
+    }
+    
+    
+    func subscribeToFavorites() {
+        // TODO: add sendNotifications property to favorites
+//        for favorite in favorites {
+//            if favorite.type == .pattern {
+//                Messaging.messaging().subscribe(toTopic: "cm.realtime.alerts.route.\(favorite.)") { error in }
+//            }
+//        }
     }
 }

@@ -81,7 +81,7 @@ struct VehicleDetailsView: View {
             
             ScrollView {
                 VStack(spacing: 10.0) {
-                    Pill(text: vehicle.lineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor), size: 60)
+                    Pill(text: vehicle.lineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor))
                     Text("para")
                         .foregroundStyle(.secondary)
                         .font(.callout)

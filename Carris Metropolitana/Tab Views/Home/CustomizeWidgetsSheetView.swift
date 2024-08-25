@@ -128,7 +128,12 @@ struct CustomizeWidgetsSheetView: View {
                                     .foregroundStyle(widget.type == .smartNotification ? .secondary : .primary)
                                 Spacer()
                                 if widget.type == .smartNotification {
-                                    Pill(text: "EM BREVE", color: .gray, textColor: .white, size: 100)
+                                    Text("EM BREVE")
+                                        .foregroundStyle(.white)
+                                        .font(.callout)
+                                        .fontWeight(.heavy)
+                                        .padding(.horizontal, 10.0)
+                                        .background(Capsule().fill(.gray))
                                 } else {
                                     Image(systemName: "plus.circle.fill")
                                         .font(.title2)

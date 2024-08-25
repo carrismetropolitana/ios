@@ -61,45 +61,42 @@ struct LineDetailsView: View {
                 VStack(alignment: .leading) {
                     if let selectedPattern = selectedPattern {
                         VStack(alignment: .leading) {
-                            HStack {
-                                Pill(text: line.shortName, color: Color(hex: line.color), textColor: Color(hex: line.textColor), size: 60)
-                                    .padding(.vertical, 10)
+                            
+                            VStack(alignment: .leading, spacing: 10) {
+                                Pill(text: line.shortName, color: Color(hex: line.color), textColor: Color(hex: line.textColor), size: .large)
+                                    .padding(.top, 10)
                                     .padding(.horizontal)
-                                if (isMapExpanded) {
-                                    Text(line.longName)
-                                        .bold()
-                                        .lineLimit(1)
-                                }
-                            }
-                            if (!isMapExpanded) {
+                                
+                                
                                 Text(line.longName)
+                                    .font(.system(size: 22.0))
                                     .bold()
                                     .padding(.horizontal)
-                                HStack(spacing: 10.0) {
-                                    SquaredButton(
-                                        action: {
-                                            // FavoritesService.addLineToFavorites(lineId: line.id)
-                                            isFavoriteCustomizationSheetPresented.toggle()
-                                        },
-                                        systemIcon: favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? "star.fill" : "star",
-                                        //imageResourceIcon: nil, // FavoritesService.isFavorite(lineId: line.id) ? "star.fill" : "star"
-                                        iconColor: .yellow,
-                                        badgeValue: 0
-                                    )
-                                    SquaredButton(
-                                        action: {
-                                            isAlertsSheetPresented.toggle()
-                                        },
-                                        systemIcon: "exclamationmark.triangle",
-                                        //                                    systemIcon: nil,
-                                        //                                    imageResourceIcon: .exclamationMarkTriangleFilled,
-                                        iconColor: .primary,
-                                        badgeValue: lineAlerts.count
-                                    )
-                                }
-                                .padding(.horizontal)
-                                .padding(.vertical, 10.0)
                             }
+                            HStack(spacing: 10.0) {
+                                SquaredButton(
+                                    action: {
+                                        // FavoritesService.addLineToFavorites(lineId: line.id)
+                                        isFavoriteCustomizationSheetPresented.toggle()
+                                    },
+                                    systemIcon: favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? "star.fill" : "star",
+                                    //imageResourceIcon: nil, // FavoritesService.isFavorite(lineId: line.id) ? "star.fill" : "star"
+                                    iconColor: .yellow,
+                                    badgeValue: 0
+                                )
+                                SquaredButton(
+                                    action: {
+                                        isAlertsSheetPresented.toggle()
+                                    },
+                                    systemIcon: "exclamationmark.triangle",
+                                    //                                    systemIcon: nil,
+                                    //                                    imageResourceIcon: .exclamationMarkTriangleFilled,
+                                    iconColor: .primary,
+                                    badgeValue: lineAlerts.count
+                                )
+                            }
+                            .padding(.horizontal)
+                            .padding(.vertical, 10.0)
                             
                             
                             Divider()
@@ -181,6 +178,7 @@ struct LineDetailsView: View {
                     }
                 }
             }
+                .background(.cmSystemBackground200)
         }
         .navigationTitle("Linha")
         .navigationBarTitleDisplayMode(.inline)
@@ -359,7 +357,7 @@ struct PatternLegs: View {
     @State private var isSheetPresented = false
     @State private var selectedSchedulesDate = Date()
     @Binding var selectedStop: Stop? // would be ok to just keep state inside this component but maybe in the future we may need to access from parent so lets keep it this way
-    @State private var selectedStopIndex: Int?
+    @State private var selectedStopIndex: Int = 0
     fileprivate let etasWithStopIds: [String: [PatternRealtimeETA]]
     
     var body: some View {
@@ -503,7 +501,7 @@ struct PatternLegs: View {
                 .background(.windowBackground)
                 .clipped()
                 .shadow(color: .black.opacity(0.1), radius: isSelectedByIndex ? 20 : 0)
-                .zIndex(isSelected ? 1 : 0)
+                .zIndex((isSelected || isSelectedByIndex) ? 1 : 0)
                 .onTapGesture {
                     selectedStop = pathStep.stop
                     selectedStopIndex = pathStepIdx
@@ -512,8 +510,8 @@ struct PatternLegs: View {
             }
         }
         .onChange(of: pattern) {
-            selectedStop = nil
-            selectedStopIndex = nil
+            selectedStop = pattern.path.first?.stop // sunset this param;; selction is handled by index in pattern and NOT stop id as they might repeat
+            selectedStopIndex = 0
         }
         .sheet(isPresented: $isSheetPresented) {
             VStack {

@@ -54,16 +54,23 @@ struct FavoriteLineWidgetView: View {
                 } label: {
                     HStack(alignment: .center) {
                         if let pattern = pattern {
-                            Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor), size: 60)
+                            Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor))
                         } else {
-                            Pill(text: "", color: .gray.opacity(0.4), textColor: .white, size: 60)
+                            Pill(text: "", color: .gray.opacity(0.4), textColor: .white)
                                 .blinking()
                         }
+                        
+                        Image(systemName: "arrow.right")
+                            .bold()
+                            .scaleEffect(0.7)
+                            .frame(width: 15)
                         
                         if let pattern = pattern {
                             Text(pattern.headsign)
                                 .font(.callout)
                                 .bold()
+                                .multilineTextAlignment(.leading)
+                                .lineLimit(1)
                         } else {
                             RoundedRectangle(cornerRadius: 25.0)
                                 .fill(.gray.opacity(0.4))
@@ -74,13 +81,13 @@ struct FavoriteLineWidgetView: View {
                     Spacer()
                 }
                 .tint(.listPrimary)
-                Button {
-                    _______tempForUiDemoPurposes_isFavorited.toggle()
-                } label: {
-                    Image(systemName: _______tempForUiDemoPurposes_isFavorited ? "star.fill" : "star")
-                        .font(.title2)
-                    .foregroundStyle(.yellow)
-                }
+//                Button {
+//                    _______tempForUiDemoPurposes_isFavorited.toggle()
+//                } label: {
+//                    Image(systemName: _______tempForUiDemoPurposes_isFavorited ? "star.fill" : "star")
+//                        .font(.title2)
+//                    .foregroundStyle(.yellow)
+//                }
             }
             .padding(.vertical, 18.0)
             .padding(.horizontal, 15.0)
@@ -89,36 +96,43 @@ struct FavoriteLineWidgetView: View {
                 .fill(.gray.opacity(0.1))
                 .frame(height: 3.0)
             
-            if let pattern = pattern, let shape = shape {
-                ShapeAndVehiclesMapView(
-                    stops: patternStopsBinding,
-                    vehicles: filteredVehiclesBinding,
-                    shape: $shape,
-                    lineColor: Color(hex: pattern.color)
-                )
-                .frame(height: 250)
-                .clipShape(UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(bottomLeading: 15.0, bottomTrailing: 15.0)))
-                .overlay {
-                    VStack {
-                        Spacer()
-                        HStack {
-                            HStack {
-                                Circle()
-                                    .fill(.green.gradient.opacity(0.3))
-                                    .frame(height: 20.0)
-                                Text("\(filteredVehiclesBinding.wrappedValue.count) veículo\(filteredVehiclesBinding.wrappedValue.count == 1 ? "" : "s") em circulação")
-                                    .foregroundStyle(.green)
-                                    .bold()
-                                    .font(.footnote)
-                                    .padding(.horizontal, 5.0)
-                            }
-                            .padding(5.0)
-                            .background {
-                                Capsule()
-                                    .fill(.white.shadow(.drop(color: .black.opacity(0.2), radius: 10)))
-                            }
-                            .padding(10.0)
+            Button {
+                if let pattern = pattern {
+                    onHeaderTap(pattern.lineId, patternId)
+                }
+            } label : {
+                if let pattern = pattern, let shape = shape {
+                    ShapeAndVehiclesMapView(
+                        stops: patternStopsBinding,
+                        vehicles: filteredVehiclesBinding,
+                        shape: $shape,
+                        isUserInteractionEnabled: false,
+                        lineColor: Color(hex: pattern.color)
+                    )
+                    .frame(height: 250)
+                    .clipShape(UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(bottomLeading: 15.0, bottomTrailing: 15.0)))
+                    .overlay {
+                        VStack {
                             Spacer()
+                            HStack {
+                                HStack {
+                                    Circle()
+                                        .fill(.green.gradient.opacity(0.3))
+                                        .frame(height: 20.0)
+                                    Text("\(filteredVehiclesBinding.wrappedValue.count) veículo\(filteredVehiclesBinding.wrappedValue.count == 1 ? "" : "s") em circulação")
+                                        .foregroundStyle(.green)
+                                        .bold()
+                                        .font(.footnote)
+                                        .padding(.horizontal, 5.0)
+                                }
+                                .padding(5.0)
+                                .background {
+                                    Capsule()
+                                        .fill(.white.shadow(.drop(color: .black.opacity(0.2), radius: 10)))
+                                }
+                                .padding(10.0)
+                                Spacer()
+                            }
                         }
                     }
                 }
@@ -126,8 +140,8 @@ struct FavoriteLineWidgetView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 15.0)
-                .fill(.cmLaunchBackground)
-                .shadow(color: colorScheme == .light ? .gray.opacity(0.3) : .clear, radius: 20)
+                .fill(.cmSystemBackground100)
+                .shadow(color: colorScheme == .light ? .black.opacity(0.05) : .clear, radius: 5)
         )
         .onAppear {
             Task {

@@ -113,7 +113,6 @@ struct LinesListView: View {
                         }
                         .buttonStyle(.plain)
                     }) {
-                        
                         ForEach(searchHistoryManager.searchHistory, id: \.self) { lineId in
                             let line = lines.first { $0.id == lineId }
                             
@@ -136,6 +135,8 @@ struct LinesListView: View {
                         }
                     }
                     .textCase(nil)
+                    .listRowBackground(Color.cmSystemBackground100)
+                    .listRowSeparatorTint(Color.cmSystemBorder100)
                 }
                 
                 if onClickOverride == nil {
@@ -163,7 +164,11 @@ struct LinesListView: View {
                 }
             }
             .textCase(nil)
+            .listRowBackground(Color.cmSystemBackground100)
+            .listRowSeparatorTint(Color.cmSystemBorder100)
         }
+        .background(.cmSystemBackground200)
+        .scrollContentBackground(.hidden)
         .contentMargins(.top, isSearching ? 25 : 0, for: .scrollContent)
         .onChange(of: isSearching) {
             if searchFilteredLines.count == 0 {
@@ -200,6 +205,9 @@ struct LinesListView: View {
 //                    .badge(Text("\(location.latitude), \(location.longitude)"))
             }
             .textCase(nil)
+            .listRowBackground(Color.cmSystemBackground100)
+            .listRowSeparatorTint(Color.cmSystemBorder100)
+
         )
     }
     
@@ -222,22 +230,33 @@ extension Color {
     }
 }
 
+#Preview {
+    VStack {
+        Pill(text: "1523", color: .red, textColor: .white, size: .large)
+    }
+}
+
+enum PillSize {
+    case normal, large
+}
+
 struct Pill: View {
     let text: String
     let color: Color
     let textColor: Color
-    let size: CGFloat
+    var size: PillSize = .normal
     
     var body: some View {
         Text(text)
-            .font(.callout)
+            .font(.system(size: size == .normal ? 18.0 : 24.0))
             .foregroundStyle(textColor)
             .fontWeight(.heavy)
-            .padding(.horizontal, 5.0)
-            .frame(width: size)
+            .frame(
+                width: size == .normal ? 65.0 : 85.0
+            )
             .background {
                 RoundedRectangle(cornerRadius: 20.0)
-                    .frame(height: 25)
+                    .frame(height: size == .normal ? 26.0 : 34.0)
                     .foregroundStyle(color)
             }
     }
@@ -267,7 +286,7 @@ struct LineEntry: View {
     let line: Line
     var body: some View {
         HStack {
-            Pill(text: line.shortName, color: .init(hex: line.color), textColor: .init(hex: line.textColor), size: 60)
+            Pill(text: line.shortName, color: .init(hex: line.color), textColor: .init(hex: line.textColor))
                 .padding(.horizontal, 5.0)
             Text(line.longName)
                 .bold()
@@ -278,7 +297,7 @@ struct LineEntry: View {
 //                .foregroundStyle(.gray.secondary)
         }
         .frame(height: 40)
-        .padding(.vertical, 5)
+//        .padding(.vertical, 5)
     }
 }
 
@@ -323,6 +342,6 @@ func closestStops(to location: CLLocationCoordinate2D, stops: [Stop], maxResults
         }
     }
     
-    return Array(sortedStops.prefix(maxResults))
+    return Array(Set(sortedStops.prefix(maxResults)))
 }
 

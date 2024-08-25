@@ -64,22 +64,24 @@ struct FavoriteStopWidgetView: View {
                         }
                     }
                     Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.secondary)
                 }
                 .tint(.listPrimary)
-                Button {
-                    _______tempForUiDemoPurposes_isFavorited.toggle()
-                } label: {
-                    Image(systemName: _______tempForUiDemoPurposes_isFavorited ? "star.fill" : "star")
-                        .font(.title2)
-                    .foregroundStyle(.yellow)
-                }
+//                Button {
+//                    _______tempForUiDemoPurposes_isFavorited.toggle()
+//                } label: {
+//                    Image(systemName: _______tempForUiDemoPurposes_isFavorited ? "star.fill" : "star")
+//                        .font(.title2)
+//                    .foregroundStyle(.yellow)
+//                }
             }
             .padding(.vertical, 15.0)
             .padding(.horizontal, 15.0)
             
             Rectangle()
                 .fill(.gray.opacity(0.1))
-                .frame(height: 3.0)
+                .frame(height: 2.0)
             
             ForEach(patternIds.indices, id: \.self) { patternIdIdx in
                 let patternId = patternIds[patternIdIdx]
@@ -87,7 +89,7 @@ struct FavoriteStopWidgetView: View {
                 if let pattern = fullPatterns.first(where: { $0.id == patternId }) {
                     NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == pattern.lineId }!, overrideDisplayedPatternId: pattern.id)) {
                         HStack(alignment: .center) {
-                            Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor), size: 60)
+                            Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor))
                             Image(systemName: "arrow.right")
                                 .bold()
                                 .scaleEffect(0.7)
@@ -128,7 +130,7 @@ struct FavoriteStopWidgetView: View {
                     .tint(.listPrimary)
                 } else {
                     HStack(alignment: .center) {
-                        Pill(text: "", color: .gray.opacity(0.6), textColor: .white, size: 60)
+                        Pill(text: "", color: .gray.opacity(0.6), textColor: .white)
                             .blinking()
                         Image(systemName: "arrow.right")
                             .bold()
@@ -145,7 +147,7 @@ struct FavoriteStopWidgetView: View {
                 if patternIdIdx != patternIds.count - 1 {
                     Rectangle()
                         .fill(.gray.opacity(0.1))
-                        .frame(height: 3.0)
+                        .frame(height: 2.0)
                 }
             }
             
@@ -171,8 +173,8 @@ struct FavoriteStopWidgetView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 15.0)
-                .fill(.cmLaunchBackground)
-                .shadow(color: colorScheme == .light ? .gray.opacity(0.3) : .clear, radius: 20)
+                .fill(.cmSystemBackground100)
+                .shadow(color: colorScheme == .light ? .black.opacity(0.05) : .clear, radius: 5)
         )
         .onAppear {
             Task {

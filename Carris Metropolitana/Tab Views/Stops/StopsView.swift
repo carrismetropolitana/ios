@@ -40,6 +40,10 @@ struct StopsView: View {
     @State private var patternIdToBePresented: String? = nil
     @State private var shouldPresentLineDetailsView = false
     
+    @State private var sheetHeight: CGFloat = .zero
+    
+    @State private var mapVisualStyle: MapVisualStyle = .standard
+    
     
     var body: some View {
         var suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!.coordinate, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
@@ -59,8 +63,13 @@ struct StopsView: View {
                     NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == lineId }!, overrideDisplayedPatternId: patternId), isActive: $shouldPresentLineDetailsView) { EmptyView() }
                 }
                 
-                MapLibreMapView(stops: stopsManager.stops, selectedStopId: $selectedStopId, flyToCoords: $flyToCoords, shouldFlyToUserCoords: $mapFlyToUserCoords)
-                    .ignoresSafeArea()
+                MapLibreMapView(
+                    stops: stopsManager.stops,
+                    selectedStopId: $selectedStopId,
+                    flyToCoords: flyToCoords,
+                    shouldFlyToUserCoords: $mapFlyToUserCoords,
+                    mapVisualStyle: mapVisualStyle
+                ).ignoresSafeArea()
                 
                 HStack {
                     Spacer()
@@ -69,19 +78,15 @@ struct StopsView: View {
                         
 //                        MapFloatingButton(systemImage: "line.3.horizontal.decrease.circle")
                         
-                        Button {
-//                            errorTitle = "O veículo não está disponível."
-//                            errorMessage = "Por favor tente mais tarde."
-//                            isErrorBannerPresented = true
-                            
-                            if let location = locationManager.location {
+                        MapFloatingButton(systemImage: "location.fill")  {
+                            if let _ = locationManager.location {
                                 mapFlyToUserCoords = true
                             }
-                        } label: {
-                            MapFloatingButton(systemImage: "location.fill")
-                        }.buttonStyle(.plain)
+                        }
                         
-//                        MapFloatingButton(systemImage: "map")
+                        MapFloatingPickerMenu(systemImage: "map", selection: $mapVisualStyle, options: MapVisualStyle.allCases.reversed() /* ? */) { style in
+                            getMapVisualStyleString(for: style)
+                        }
                     }
                 }
                 .padding()
@@ -168,15 +173,16 @@ struct StopsView: View {
             
             
             .onChange(of: selectedStopId) {
+                print("changed stopid \(selectedStopId)")
                 if selectedStopId != "" { // avoid trigger on sheet dismiss; TODO: @see line #67
                     isSheetPresented.toggle()
                     print("Changed stopId to \(String(describing: selectedStopId))")
                 }
             }
             .onChange(of: shouldPresentStopDetailsView) {
-                if shouldPresentStopDetailsView { // do not open sheet on return from stopdetails view
+//                if shouldPresentStopDetailsView { // do not open sheet on return from stopdetails view
                     isSheetPresented.toggle()
-                }
+//                }
             }
             .onChange(of: vehicleIdToBePresented) {
                 if let _ = vehicleIdToBePresented {
@@ -214,12 +220,15 @@ struct StopsView: View {
                         }, stop: stop)
                     }
                 }
+//                .fixedSize(horizontal: false, vertical: true)
+//                .modifier(GetHeightModifier(height: $sheetHeight))
                 .presentationDragIndicator(.visible)
                 .presentationBackground(.regularMaterial)
                 .presentationDetents([.fraction(0.5)])
-                .onDisappear {
-                    selectedStopId = "" // TODO: (fixme) empty string because mapView checks for nil
-                }
+//                .presentationDetents([.height(sheetHeight)])
+//                .onDisappear {
+                    // selectedStopId = "" // TODO: (fixme) empty string because mapView checks for nil
+//                }
             }
             .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
             .onAppear {
@@ -368,23 +377,6 @@ struct StopSearchResultEntry: View {
 #Preview {
     StopsView()
 }
-
-struct MapFloatingButton: View {
-    let systemImage: String
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 15.0)
-                .fill(.cmListItemBackground)
-                .frame(width: 60, height: 60)
-                .shadow(color: .black.opacity(0.2), radius: 10)
-            Image(systemName: systemImage)
-                .resizable()
-                .foregroundColor(.blue)
-                .frame(width: 30, height: 30)
-        }
-    }
-}
-
 
 extension Array {
     func chunkedFilter(_ isIncluded: @escaping (Element) -> Bool, chunkSize: Int = 1000, maxResults: Int) -> [Element] {
