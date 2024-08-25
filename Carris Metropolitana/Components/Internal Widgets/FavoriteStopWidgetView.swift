@@ -110,7 +110,9 @@ struct FavoriteStopWidgetView: View {
                                     } else {
                                         if let scheduledArrival = eta.scheduledArrival {
                                             let timeComponents = scheduledArrival.components(separatedBy: ":")
-                                            Text("\(timeComponents[0]):\(timeComponents[1])")
+                                            let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
+                                            let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
+                                            Text(adjustedArrival ?? arrivalWithoutSeconds)
                                                 .fontWeight(.semibold)
                                         }
                                     }
