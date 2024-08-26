@@ -537,6 +537,7 @@ struct PatternLegs: View {
                     let scheduleColumns = schedulizeTripsForDateAndStop(stopId: selectedStop!.id, trips: pattern.trips, date: selectedSchedulesDate)
                     if scheduleColumns.count > 0 {
                         ScheduleView(scheduleColumns: scheduleColumns)
+                            .padding()
                     } else {
                         ContentUnavailableView("Sem horários para a data selecionada", systemImage: "calendar.badge.exclamationmark", description: Text("Experimente selecionar uma data mais próxima da atual.")) // TODO: need to make this manually for older OSes (only available on iOS 17)
                     }

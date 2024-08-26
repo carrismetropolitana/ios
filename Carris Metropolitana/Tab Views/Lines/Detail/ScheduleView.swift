@@ -12,90 +12,41 @@ struct ScheduleColumn {
     var minutes: [Int]
 }
 
-//struct ScheduleView: View {
-//    let scheduleColumns: [ScheduleColumn]
-//    var body: some View {
-//        HStack(alignment: .top,spacing: 1) {
-//            VStack {
-//                ColumnHeading(text: Text("Hora")
-//                    .foregroundStyle(.white), cornerRadii: .init(topLeading: 25.0, bottomLeading: 25.0), width: 50.0)
-//                Text("Min")
-//            }
-//            ForEach(scheduleColumns.indices, id: \.self) { colIdx in
-//                let isLast = colIdx == scheduleColumns.count - 1
-//                let col = scheduleColumns[colIdx]
-//                VStack {
-//                    ColumnHeading(
-//                        text: Text(
-//                            String(col.hour)
-//                                .paddedWithLeadingZeros(minLength: 2)
-//                            )
-//                            .foregroundStyle(.white),
-//                        cornerRadii: .init(bottomTrailing: isLast ? 25.0 : 0, topTrailing: isLast ? 25.0 : 0),
-//                        width: 30.0
-//                    )
-//                    ForEach(col.minutes, id: \.self) { minute in
-//                        Text(String(minute))
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 struct ScheduleView: View {
     let scheduleColumns: [ScheduleColumn]
-    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 12) // Adjust the count based on your needs
-    private let adaptiveColumn = [
-        GridItem(.adaptive(minimum: 30.0), spacing: -1, alignment: .top)
-    ]
     
-
     var body: some View {
-//        var scheduleColumns = [ScheduleColumn(hour: 0, minutes: [0])]
-//        scheduleColumns.append(contentsOf: scheduleColumnsOriginal)
-        let dummiedScheduleColumns = prependDummyScheduleColumn(scheduleColumns)
-        LazyVGrid(columns: adaptiveColumn, alignment: .leading, spacing: 50) {
+        WrappingHStack(alignment: .topLeading, horizontalSpacing: 0.0) {
             VStack {
                 ColumnHeading(text: Text("Hora")
                     .foregroundStyle(.white), cornerRadii: .init(topLeading: 25.0, bottomLeading: 25.0), width: 50.0)
                 Text("Min")
             }
-            ForEach(dummiedScheduleColumns.indices, id: \.self) { colIdx in
+            ForEach(scheduleColumns.indices, id: \.self) { colIdx in
                 let isFirst = colIdx == 0
-                let isLast = colIdx == dummiedScheduleColumns.count - 1
-                let col = dummiedScheduleColumns[colIdx]
-                if !isFirst {
-                    VStack {
-                        ColumnHeading(
-                            text: Text(
-                                String(col.hour)
-                                    .paddedWithLeadingZeros(minLength: 2)
-                            )
-                            .foregroundStyle(.white),
-                            cornerRadii: .init(bottomTrailing: isLast ? 25.0 : 0, topTrailing: isLast ? 25.0 : 0),
-                            width: 30.0
+                let isLast = colIdx == scheduleColumns.count - 1
+                let col = scheduleColumns[colIdx]
+                let nextColumnIsConsecutiveHour = !isLast /* last column has no next one */ && (col.hour == scheduleColumns[colIdx + 1].hour - 1)
+                VStack {
+                    ColumnHeading(
+                        text: Text(
+                            String(col.hour)
+                                .paddedWithLeadingZeros(minLength: 2)
                         )
-                        ForEach(col.minutes, id: \.self) { minute in
-                            Text(String(minute).paddedWithLeadingZeros(minLength: 2))
-                        }
+                        .foregroundStyle(.white),
+                        cornerRadii: .init(bottomTrailing: isLast ? 25.0 : 0, topTrailing: isLast ? 25.0 : 0),
+                        width: 30.0
+                    )
+                    ForEach(col.minutes, id: \.self) { minute in
+                        Text(String(minute).paddedWithLeadingZeros(minLength: 2))
                     }
-                } else {
-                    Rectangle()
-                        .fill(.black)
-                        .frame(height: 20.0)
-                        .padding(.leading, 5)
                 }
-//                .padding(.leading, isFirst ? 20.0 : 0.0)
+                if !nextColumnIsConsecutiveHour {
+                    Spacer()
+                        .frame(width: 3.0)
+                }
             }
         }
-        .padding()
-    }
-    
-    func prependDummyScheduleColumn(_ scheduleColumns: [ScheduleColumn]) -> [ScheduleColumn] {
-        var dummiedScheduleColumns = [ScheduleColumn(hour: 0, minutes: [0])]
-        dummiedScheduleColumns.append(contentsOf: scheduleColumns)
-        return dummiedScheduleColumns
     }
 }
 
