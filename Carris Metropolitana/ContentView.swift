@@ -6,31 +6,54 @@
 //
 
 import SwiftUI
+import MapKit
+
+enum Tab {
+    case home, lines, stops, more
+}
+
+class TabCoordinator: ObservableObject {
+    @Published var selectedTab: Tab = .home
+    
+    // Properties to persist between tab changes
+    @Published var mapFlyToCoords: CLLocationCoordinate2D?
+    @Published var flownToStopId: String?
+}
 
 struct ContentView: View {
     @State private var isShowingLaunchAnimation = true
+    
+    @StateObject private var tabCoordinator = TabCoordinator()
+    
     var body: some View {
         ZStack {
-            TabView {
+            TabView(selection: $tabCoordinator.selectedTab) {
                 HomeView()
                     .tabItem {
                         Label("Home", systemImage: "person.crop.circle.fill")
                     }
+                    .tag(Tab.home)
                 
                 LinesView()
                     .tabItem {
                         Label("Linhas", systemImage: "arrow.triangle.swap")
                     }
+                    .tag(Tab.lines)
                 
                 StopsView()
                     .tabItem {
                         Label("Paragens", systemImage: "map")
                     }
+                    .tag(Tab.stops)
                 
                 MoreView()
                     .tabItem {
                         Label("Mais", systemImage: "ellipsis")
                     }
+                    .tag(Tab.more)
+                
+                
+                
             }.overlay {
                 if isShowingLaunchAnimation {
                     CMLogoAnimation()
@@ -40,6 +63,7 @@ struct ContentView: View {
                         .ignoresSafeArea()
                 }
             }
+            .environmentObject(tabCoordinator)
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { // this is getting toggled by the video ending; replaced toggle with hardcoded bool

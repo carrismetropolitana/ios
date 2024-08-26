@@ -178,10 +178,12 @@ struct MapLibreMapView: UIViewRepresentable {
     class Coordinator: NSObject, MLNMapViewDelegate {
         var control: MapLibreMapView
         var mapVisualStyle: MapVisualStyle // is this really how this is supposed to be done??
+        var flyToCoords: CLLocationCoordinate2D?
         
         init(_ control: MapLibreMapView) {
             self.control = control
             self.mapVisualStyle = control.mapVisualStyle
+            self.flyToCoords = control.flyToCoords
         }
         
         @objc func handleTap(_ sender: UITapGestureRecognizer) {
@@ -209,12 +211,26 @@ struct MapLibreMapView: UIViewRepresentable {
             control.updateTiles(on: mapView, to: mapVisualStyle)
             print("added stops, \(style.source(withIdentifier: "stops-layer")), \(style.layer(withIdentifier: "stops"))")
             
+            print("from delegate map, flytoCoords is \(control.flyToCoords)")
             
         }
         
         func mapViewDidFinishLoadingMap(_ mapView: MLNMapView) {
             print("mapviewdidfinishloadingmap")
         }
+    }
+    
+    func flyToCoordinate(on mapView: MLNMapView, to coordinate: CLLocationCoordinate2D) {
+        let camera = MLNMapCamera(
+            lookingAtCenter: coordinate,
+            altitude: 5500,
+            pitch: 0,
+            heading: 0)
+        
+        mapView.setCamera(
+            camera,
+            withDuration: 3,
+            animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut))
     }
     
     func flyToUserCoords(on mapView: MLNMapView) {
@@ -257,20 +273,9 @@ struct MapLibreMapView: UIViewRepresentable {
             updateStops(on: uiView)
         }
         
+        print("flytocoords out nilguard is \(flyToCoords)")
         if let flyToCoords = flyToCoords {
-            print("flyToCoords is \(flyToCoords)")
-            let camera = MLNMapCamera(
-                lookingAtCenter: flyToCoords,
-                altitude: 5500,
-                pitch: 0,
-                heading: 0
-            )
-            
-            uiView.setCamera(
-                camera,
-                withDuration: 1.5,
-                animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut)
-            )
+            flyToCoordinate(on: uiView, to: flyToCoords)
         }
         
         if shouldFlyToUserCoords {

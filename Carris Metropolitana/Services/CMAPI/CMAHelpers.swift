@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 extension Pattern {
     func isValidOnDate(date: Date) -> Bool {
@@ -14,6 +15,12 @@ extension Pattern {
         let stringifiedDate = dateFormatter.string(from: date)
         
         return self.validOn.contains(stringifiedDate)
+    }
+}
+
+extension Stop {
+    var coordinate: CLLocationCoordinate2D { // assuming stop has always valid lat and lon
+        return CLLocationCoordinate2D(latitude: Double(self.lat)!, longitude: Double(self.lon)!)
     }
 }
 

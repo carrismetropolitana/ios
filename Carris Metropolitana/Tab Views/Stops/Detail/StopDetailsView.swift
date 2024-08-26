@@ -6,13 +6,17 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct StopDetailsView: View {
+    @EnvironmentObject var tabCoordinator: TabCoordinator
+    
     @EnvironmentObject var alertsManager: AlertsManager
     @EnvironmentObject var linesManager: LinesManager
     @EnvironmentObject var favoritesManager: FavoritesManager
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.presentationMode) var presentationMode
     
     @State private var isAlertsSheetPresented = false
     @State private var isFavoriteCustomizationSheetPresented = false
@@ -24,6 +28,8 @@ struct StopDetailsView: View {
 
     
     let stop: Stop
+    
+    @Binding var mapFlyToCoords: CLLocationCoordinate2D?
     
    @State private var images: [IMLPicture] = []
     @State private var intermodalAttributionExpanded = true
@@ -95,18 +101,29 @@ struct StopDetailsView: View {
                             badgeValue: 0
                         )
                         
-                        RoundedRectangle(cornerRadius: 10.0)
-                            .fill(.windowBackground)
-                            .overlay {
-                                Image(systemName: "map")
-                                    .font(.title)
+                        SquaredButton(action: {
+                            if tabCoordinator.selectedTab == .stops {
+                                mapFlyToCoords = stop.coordinate
+                                presentationMode.wrappedValue.dismiss()
+                            } else {
+                                tabCoordinator.selectedTab = .stops
+                                tabCoordinator.mapFlyToCoords = stop.coordinate
+                                tabCoordinator.flownToStopId = stop.id
                             }
-                            .frame(width: 60, height: 60)
-//                            .shadow(color: .black.opacity(0.1), radius: 10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)
-                            )
+                        }, systemIcon: "map", iconColor: .primary, badgeValue: 0)
+                        
+//                        RoundedRectangle(cornerRadius: 10.0)
+//                            .fill(.windowBackground)
+//                            .overlay {
+//                                Image(systemName: "map")
+//                                    .font(.title)
+//                            }
+//                            .frame(width: 60, height: 60)
+////                            .shadow(color: .black.opacity(0.1), radius: 10)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 15)
+//                                    .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)
+//                            )
                         
 //                        RoundedRectangle(cornerRadius: 15.0)
 //                            .fill(.windowBackground)

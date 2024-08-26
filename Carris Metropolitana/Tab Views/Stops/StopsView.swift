@@ -9,6 +9,8 @@ import SwiftUI
 import MapKit
 
 struct StopsView: View {
+    @EnvironmentObject var tabCoordinator: TabCoordinator
+    
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var vehiclesManager: VehiclesManager
     @EnvironmentObject var stopsManager: StopsManager
@@ -54,7 +56,7 @@ struct StopsView: View {
                 if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
                     NavigationLink(
                         destination: 
-                            StopDetailsView(stop: stop)
+                            StopDetailsView(stop: stop, mapFlyToCoords: $flyToCoords)
                                 .onDisappear { if mapVisible { isSheetPresented = true } }
                                 .onAppear { if mapVisible { isSheetPresented = false} },
                         isActive: $shouldPresentStopDetailsView
@@ -66,7 +68,7 @@ struct StopsView: View {
                     NavigationLink(
                         destination: 
                             VehicleDetailsView(vehicleId: vehicleId)
-                                .onDisappear { if mapVisible { isSheetPresented = true } }
+                            .onDisappear { if mapVisible { isSheetPresented = true; vehicleIdToBePresented = nil } }
                                 .onAppear { if mapVisible { isSheetPresented = false} },
                         isActive: $shouldPresentVehicleDetailsView
                     ) { EmptyView() }
@@ -218,7 +220,6 @@ struct StopsView: View {
             .onChange(of: vehicleIdToBePresented) {
                 if let _ = vehicleIdToBePresented {
                     shouldPresentVehicleDetailsView.toggle()
-                    isSheetPresented = true
                 }
             }
             .onChange(of: lineIdToBePresented) {
@@ -230,7 +231,7 @@ struct StopsView: View {
                 VStack {
                     if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
                         StopDetailsSheetView(shouldPresentStopDetailsView: $shouldPresentStopDetailsView, onEtaClick: { eta in
-                            print("got vehicleid from etas sheet on parent; vid: \(eta.vehicleId)")
+                            print("ETA Clicked, VID is \(eta.vehicleId)")
                             if let vehicleId = eta.vehicleId {
                                 if vehiclesManager.vehicles.contains(where: { $0.id == vehicleId }) {
                                     vehicleIdToBePresented = vehicleId
@@ -266,6 +267,15 @@ struct StopsView: View {
             .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
             .onAppear {
                 vehiclesManager.stopFetching()
+                print("From stops view, external tab send mapflytocoords: \(tabCoordinator.mapFlyToCoords)")
+                if let flyToCoordsFromExternalTab = tabCoordinator.mapFlyToCoords,
+                   let flownToStopIdFromExternalTab = tabCoordinator.flownToStopId {
+                    DispatchQueue.main.async {
+                        flyToCoords = flyToCoordsFromExternalTab
+                        selectedStopId = flownToStopIdFromExternalTab
+                        isSheetPresented = true
+                    }
+                }
             }
         }
     }

@@ -104,6 +104,7 @@
 		79E88CBD2BAAEAB1001F3227 /* FavoriteCustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CBC2BAAEAB1001F3227 /* FavoriteCustomizationView.swift */; };
 		79E88CBF2BAAEC3A001F3227 /* SearchInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CBE2BAAEC3A001F3227 /* SearchInput.swift */; };
 		79E88CC22BAB76D3001F3227 /* LiveActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CC12BAB76D3001F3227 /* LiveActivityService.swift */; };
+		79E920AB2C7BF89100BD2440 /* ArrivalsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E920AA2C7BF89100BD2440 /* ArrivalsHelpers.swift */; };
 		79E9D4F32C2F855500C6D181 /* UserFeedbackForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E9D4F22C2F855500C6D181 /* UserFeedbackForm.swift */; };
 		79E9D4F72C2F9CF700C6D181 /* StopsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E9D4F62C2F9CF700C6D181 /* StopsManager.swift */; };
 		79EA0B122BECC101006808AA /* VehicleDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EA0B112BECC101006808AA /* VehicleDetailsView.swift */; };
@@ -253,6 +254,7 @@
 		79E88CBC2BAAEAB1001F3227 /* FavoriteCustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCustomizationView.swift; sourceTree = "<group>"; };
 		79E88CBE2BAAEC3A001F3227 /* SearchInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInput.swift; sourceTree = "<group>"; };
 		79E88CC12BAB76D3001F3227 /* LiveActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityService.swift; sourceTree = "<group>"; };
+		79E920AA2C7BF89100BD2440 /* ArrivalsHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrivalsHelpers.swift; sourceTree = "<group>"; };
 		79E9D4F22C2F855500C6D181 /* UserFeedbackForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedbackForm.swift; sourceTree = "<group>"; };
 		79E9D4F62C2F9CF700C6D181 /* StopsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsManager.swift; sourceTree = "<group>"; };
 		79EA0B112BECC101006808AA /* VehicleDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDetailsView.swift; sourceTree = "<group>"; };
@@ -532,6 +534,7 @@
 				79DB83822BA1B2600023DD93 /* Components */,
 				79DB83772BA19B4C0023DD93 /* Tab Views */,
 				79DB83852BA1B5CC0023DD93 /* Services */,
+				79E920A92C7BF87100BD2440 /* Helpers */,
 				79A1904C2C3EC0AD00752D80 /* Utils */,
 				79DB836F2BA19A5E0023DD93 /* Preview Content */,
 			);
@@ -652,6 +655,14 @@
 				79D3B1632C77E56300E0AE52 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		79E920A92C7BF87100BD2440 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				79E920AA2C7BF89100BD2440 /* ArrivalsHelpers.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		79F1D8882C7AA27B005CB830 /* Map Overlays */ = {
@@ -870,6 +881,7 @@
 				7916BD7F2C1E138000C049B7 /* VehicleIdentifier.swift in Sources */,
 				7919157A2BA3BA07009E5B29 /* MapView.swift in Sources */,
 				792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */,
+				79E920AB2C7BF89100BD2440 /* ArrivalsHelpers.swift in Sources */,
 				79F982452BB724E7002B3997 /* IMLModel.swift in Sources */,
 				79AB3C9E2C72CC5900122AA1 /* StopsFilterTest.swift in Sources */,
 				7988613C2BA5FAD9002C1170 /* FAQView.swift in Sources */,
@@ -959,7 +971,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VehicleLivePattern/Info.plist;
@@ -986,7 +998,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VehicleLivePattern/Info.plist;
@@ -1135,7 +1147,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
@@ -1178,7 +1190,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
@@ -1216,7 +1228,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
@@ -1241,7 +1253,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;

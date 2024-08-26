@@ -78,22 +78,27 @@ struct StopDetailsSheetView: View {
                         print("ETA tripid \(eta.tripId)")
                         onEtaClick(eta) // TODO: this should be realtime or maybe not, decide
                     } label: {
-                        HStack {
-                            Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor)) // TODO: match line colors to these
-                            Text(eta.headsign)
-                                .bold()
-                                .lineLimit(1)
-                            Spacer()
-                            if let estimatedArrival = eta.estimatedArrivalUnix {
-                                PulseLabel(accent: .green, label: Text("\(getRoundedMinuteDifferenceFromNow(eta.estimatedArrivalUnix!)) min"))
-                            } else if let scheduledArrival = eta.scheduledArrival {
-                                let timeComponents = scheduledArrival.components(separatedBy: ":")
-                                let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
-                                let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
-                                Text(adjustedArrival ?? arrivalWithoutSeconds)
+                        VStack {
+                            HStack {
+                                Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor)) // TODO: match line colors to these
+                                Text(eta.headsign)
+                                    .bold()
+                                    .lineLimit(1)
+                                Spacer()
+                                if let estimatedArrival = eta.estimatedArrivalUnix {
+                                    PulseLabel(accent: .green, label: Text("\(getRoundedMinuteDifferenceFromNow(estimatedArrival)) min"))
+                                } else if let scheduledArrival = eta.scheduledArrival {
+                                    let timeComponents = scheduledArrival.components(separatedBy: ":")
+                                    let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
+                                    let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
+                                    Text(adjustedArrival ?? arrivalWithoutSeconds)
+                                }
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(.tertiary)
                             }
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.tertiary)
+                            #if DEBUG
+                                Text(eta.tripId)
+                            #endif
                         }
                         .padding()
                     }
@@ -163,35 +168,3 @@ struct StopDetailsSheetView: View {
 //#Preview {
 //    StopDetailsSheetView()
 //}
-
-
-func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeETA] {
-    let currentAndFutureFiltering = etas.filter({
-        let tripHasObservedArrival = $0.observedArrivalUnix != nil
-        let tripScheduledArrivalIsInThePast = $0.scheduledArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
-        let tripHasEstimatedArrival = $0.estimatedArrivalUnix != nil
-        let tripEstimatedArrivalIsInThePast = $0.estimatedArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
-        
-        return !tripScheduledArrivalIsInThePast && !tripHasObservedArrival
-    })
-    
-    print("Filtered \(currentAndFutureFiltering.count) ETAs as currentAndFuture.")
-    
-    let sorted = currentAndFutureFiltering.sorted { (a, b) -> Bool in
-        if let estimatedArrivalA = a.estimatedArrivalUnix, let estimatedArrivalB = b.estimatedArrivalUnix {
-            // Both have estimated_arrival, compare them
-            return estimatedArrivalA < estimatedArrivalB
-        } else if a.estimatedArrivalUnix != nil {
-            // Only `a` has estimated_arrival, so it comes before `b`
-            return true
-        } else if b.estimatedArrivalUnix != nil {
-            // Only `b` has estimated_arrival, so it comes before `a`
-            return false
-        } else {
-            // Both have only scheduled_arrival, compare them
-            return a.scheduledArrivalUnix! < b.scheduledArrivalUnix!
-        }
-    }
-    
-    return sorted
-}

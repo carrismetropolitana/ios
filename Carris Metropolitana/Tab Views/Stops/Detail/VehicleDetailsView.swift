@@ -105,7 +105,7 @@ struct VehicleDetailsView: View {
                     VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicleStaticInfo?.licensePlate)
                     Image(systemName: "circle")
                     Image(systemName: "figure.roll")
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(vehicleStaticInfo?.wheelchair == 1 ? .blue : .secondary)
                     OccupationIndicator(occupied: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
 //                        .popoverTip(vehicleOccupationTip)
                         .onTapGesture {

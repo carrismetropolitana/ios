@@ -30,7 +30,7 @@ struct FavoriteStopWidgetView: View {
     var body: some View {
         VStack(spacing: 0) {
             if let stop = stop {
-                NavigationLink(destination: StopDetailsView(stop: stop), isActive: $shouldPresentStopDetailsView) { EmptyView() }
+                NavigationLink(destination: StopDetailsView(stop: stop, mapFlyToCoords: .constant(nil)), isActive: $shouldPresentStopDetailsView) { EmptyView() }
             }
             HStack {
                 Button {
