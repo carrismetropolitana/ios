@@ -24,8 +24,8 @@ struct SquaredButton: View {
             Button {
                 action()
             } label: {
-                RoundedRectangle(cornerRadius: 10.0)
-                    .fill(.windowBackground)
+                RoundedRectangle(cornerRadius: 12.0)
+                    .fill(.cmSystemBackground100)
                     .overlay {
                         if let systemIcon = systemIcon {
                             Image(systemName: systemIcon)
@@ -42,8 +42,8 @@ struct SquaredButton: View {
                     .frame(width: size, height: size)
 //                    .shadow(color: .black.opacity(0.05), radius: 5)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(colorScheme == .dark ? .gray.opacity(0.3) : .white, lineWidth: 2)
+                        RoundedRectangle(cornerRadius: 13.0)
+                            .stroke(.cmSystemBorder100, lineWidth: 2)
                     )
             }.buttonStyle(.plain)
             if badgeValue > 0 {
