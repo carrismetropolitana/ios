@@ -389,6 +389,7 @@ struct PatternLegs: View {
                                 UnevenRoundedRectangle(cornerRadii: .init(topLeading: isFirst ? 10 : 0, bottomLeading: isLast ? 10 : 0, bottomTrailing: isLast ? 10 : 0, topTrailing: isFirst ? 10 : 0))
                                     .fill(Color(hex: pattern.color))
                                     .frame(width: 15, height: isLast && isSelectedByIndex ? 30 : isLast ? 20 : nil)
+                                    .padding(.top, (isFirst && isSelectedByIndex) ? 10 : 0)
                                     .overlay {
                                         VStack {
                                             if isLast {Spacer()}
@@ -442,7 +443,7 @@ struct PatternLegs: View {
                                         }
                                     }
                                     if isSelectedByIndex {
-                                        if nextEtas.count > 0 {
+                                        if nextEtas.count > 1 {
                                             NextEtasView(nextEtas: Array(nextEtas.dropFirst().prefix(3)))
                                         } else {
                                             Text("Sem próximas passagens.")
@@ -457,7 +458,7 @@ struct PatternLegs: View {
                                 
                                 
                                 if isSelectedByIndex {
-                                    HStack {
+                                    WrappingHStack(alignment: .leading) {
                                         Button {
                                             isSheetPresented.toggle()
                                         } label: {
@@ -486,7 +487,6 @@ struct PatternLegs: View {
 //                                        }
 //                                        .buttonStyle(StopOptionsButtonStyle())
                                     }
-                                    .padding(.horizontal, 10)
                                 }
                             }
                             .padding(.bottom, 10)
@@ -498,7 +498,7 @@ struct PatternLegs: View {
                     }
                     .padding(.horizontal)
                 }
-                .background(.windowBackground)
+                .background(.cmSystemBackground200)
                 .clipped()
                 .shadow(color: .black.opacity(0.1), radius: isSelectedByIndex ? 20 : 0)
                 .zIndex((isSelected || isSelectedByIndex) ? 1 : 0)
