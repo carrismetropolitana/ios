@@ -8,11 +8,34 @@
 import Foundation
 
 func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeETA] {
+    var fixedEtas: [RealtimeETA] = []
+    
     let currentAndFutureFiltering = etas.filter({
         let tripHasObservedArrival = $0.observedArrivalUnix != nil
         let tripScheduledArrivalIsInThePast = $0.scheduledArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
         let tripHasEstimatedArrival = $0.estimatedArrivalUnix != nil
         let tripEstimatedArrivalIsInThePast = $0.estimatedArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
+        
+        // Fix for past midnight estimatedArrivals represented as being in the day before
+        if tripHasEstimatedArrival && tripEstimatedArrivalIsInThePast && !tripScheduledArrivalIsInThePast {
+            let fixedEta = RealtimeETA(
+                lineId: $0.lineId,
+                patternId: $0.patternId,
+                routeId: $0.routeId,
+                tripId: $0.tripId,
+                headsign: $0.headsign,
+                stopSequence: $0.stopSequence,
+                scheduledArrival: $0.scheduledArrival,
+                scheduledArrivalUnix: $0.scheduledArrivalUnix,
+                estimatedArrival: $0.estimatedArrival, // not fixed currently, but atm not being used for anything
+                estimatedArrivalUnix: $0.estimatedArrivalUnix! + 86400,
+                observedArrival: $0.observedArrival,
+                observedArrivalUnix: $0.observedArrivalUnix,
+                vehicleId: $0.vehicleId
+            )
+            fixedEtas.append(fixedEta)
+            return false
+        }
         
         if tripScheduledArrivalIsInThePast {
             return false
@@ -31,7 +54,9 @@ func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeET
     
     print("Filtered \(currentAndFutureFiltering.count) ETAs as currentAndFuture.")
     
-    let sorted = currentAndFutureFiltering.sorted { (a, b) -> Bool in
+    let etasToSort = currentAndFutureFiltering + fixedEtas
+    
+    let sorted = etasToSort.sorted { (a, b) -> Bool in
         if let estimatedArrivalA = a.estimatedArrivalUnix, let estimatedArrivalB = b.estimatedArrivalUnix {
             // Both have estimated_arrival, compare them
             return estimatedArrivalA < estimatedArrivalB
@@ -51,12 +76,35 @@ func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeET
 }
 
 func filterAndSortCurrentAndFuturePatternETAs(_ etas: [PatternRealtimeETA]) -> [PatternRealtimeETA] {
+    var fixedEtas: [PatternRealtimeETA] = []
+    
     let currentAndFutureFiltering = etas.filter({
         let tripHasObservedArrival = $0.observedArrivalUnix != nil
         let tripScheduledArrivalIsInThePast = $0.scheduledArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
         let tripHasEstimatedArrival = $0.estimatedArrivalUnix != nil
         let tripEstimatedArrivalIsInThePast = $0.estimatedArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
         
+        // Fix for past midnight estimatedArrivals represented as being in the day before
+        if tripHasEstimatedArrival && tripEstimatedArrivalIsInThePast && !tripScheduledArrivalIsInThePast {
+            let fixedEta = PatternRealtimeETA(
+                stopId: $0.stopId,
+                lineId: $0.lineId,
+                patternId: $0.patternId,
+                routeId: $0.routeId,
+                tripId: $0.tripId,
+                headsign: $0.headsign,
+                stopSequence: $0.stopSequence,
+                scheduledArrival: $0.scheduledArrival,
+                scheduledArrivalUnix: $0.scheduledArrivalUnix,
+                estimatedArrival: $0.estimatedArrival, // not fixed currently, but atm not being used for anything
+                estimatedArrivalUnix: $0.estimatedArrivalUnix! + 86400,
+                observedArrival: $0.observedArrival,
+                observedArrivalUnix: $0.observedArrivalUnix,
+                vehicleId: $0.vehicleId
+            )
+            fixedEtas.append(fixedEta)
+            return false
+        }
         
         if tripScheduledArrivalIsInThePast {
             return false
@@ -75,7 +123,9 @@ func filterAndSortCurrentAndFuturePatternETAs(_ etas: [PatternRealtimeETA]) -> [
     
     print("Filtered \(currentAndFutureFiltering.count) ETAs as currentAndFuture.")
     
-    let sorted = currentAndFutureFiltering.sorted { (a, b) -> Bool in
+    let etasToSort = currentAndFutureFiltering + fixedEtas
+    
+    let sorted = etasToSort.sorted { (a, b) -> Bool in
         if let estimatedArrivalA = a.estimatedArrivalUnix, let estimatedArrivalB = b.estimatedArrivalUnix {
             // Both have estimated_arrival, compare them
             return estimatedArrivalA < estimatedArrivalB
@@ -91,8 +141,7 @@ func filterAndSortCurrentAndFuturePatternETAs(_ etas: [PatternRealtimeETA]) -> [
         }
     }
     
-    return sorted
-}
+    return sorted}
 
 func arrangeByStopIds(_ patternEtas: [PatternRealtimeETA]) -> [String: [PatternRealtimeETA]] {
     var arrangedDict = [String: [PatternRealtimeETA]]()
