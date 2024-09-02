@@ -54,13 +54,28 @@ struct MoreView: View {
                             VStack(alignment: .leading, spacing: 15.0) {
                                 Section(header: Text("Informar").bold().font(.title2).foregroundStyle(.windowBackground).colorInvert()) {
                                     NavigationLink(destination: ENCMView()) {
-                                        EntryRectangleWithIcon(systemImage: "house.fill", color: .purple, text: "Espaços navegante®", externalLink: false)
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "house.fill"),
+                                            color: .purple,
+                                            text: "Espaços navegante®",
+                                            externalLink: false
+                                        )
                                     }
                                     NavigationLink(destination: FAQView()) {
-                                        EntryRectangleWithIcon(systemImage: "questionmark.diamond.fill", color: .orange, text: "Perguntas Frequentes", externalLink: false)
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "questionmark.diamond.fill"),
+                                            color: .orange,
+                                            text: "Perguntas Frequentes",
+                                            externalLink: false
+                                        )
                                     }
                                     Link(destination: URL(string: "https://www.carrismetropolitana.pt/apoio/")!) {
-                                        EntryRectangleWithIcon(systemImage: "ellipsis.bubble.fill", color: .blue, text: "Apoio ao Cliente", externalLink: true)
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "ellipsis.bubble.fill"),
+                                            color: .blue,
+                                            text: "Apoio ao Cliente",
+                                            externalLink: true
+                                        )
                                     }
                                 }
                                 .textCase(nil)
@@ -68,9 +83,24 @@ struct MoreView: View {
                             
                             VStack(alignment: .leading, spacing: 15.0) {
                                 Section(header: Text("Viajar").bold().font(.title2).foregroundStyle(.windowBackground).colorInvert()) {
-                                    EntryRectangleWithIcon(systemImage: "creditcard.fill", color: .pink, text: "Carregar o Passe", externalLink: false)
-                                    EntryRectangleWithIcon(systemImage: "bolt.fill", color: .pink, text: "Cartões e Descontos", externalLink: false)
-                                    EntryRectangleWithIcon(systemImage: "eurosign.circle.fill", color: .pink, text: "Tarifários", externalLink: false)
+//                                    EntryRectangleWithIcon(systemImage: "creditcard.fill", color: .pink, text: "Carregar o Passe", externalLink: false)
+//                                    EntryRectangleWithIcon(systemImage: "bolt.fill", color: .pink, text: "Cartões e Descontos", externalLink: false)
+                                    Link(destination: URL(string: "https://www.carrismetropolitana.pt/tarifarios/")!) {
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "eurosign.circle.fill"),
+                                            color: .pink,
+                                            text: "Tarifários",
+                                            externalLink: true
+                                        )
+                                    }
+                                    Link(destination: URL(string: "https://www.navegante.pt/")!) {
+                                        EntryRectangleWithIcon(
+                                            icon: Image(.naveganteCardIcon),
+                                            color: .cmYellow,
+                                            text: "navegante®",
+                                            externalLink: true
+                                        )
+                                    }
                                 }
                                 .textCase(nil)
                             }
@@ -78,16 +108,36 @@ struct MoreView: View {
                             VStack(alignment: .leading, spacing: 15.0) {
                                 Section(header: Text("Carris Metropolitana").bold().font(.title2).foregroundStyle(.windowBackground).colorInvert()) {
                                     Link(destination: URL(string: "https://www.carrismetropolitana.pt/motoristas/")!) {
-                                        EntryRectangleWithIcon(systemImage: "person.badge.shield.checkmark.fill", color: .yellow, text: "Recrutamento", externalLink: true)
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "person.badge.shield.checkmark.fill"),
+                                            color: .yellow,
+                                            text: "Recrutamento",
+                                            externalLink: true
+                                        )
                                     }
                                     Link(destination: URL(string: "https://www.carrismetropolitana.pt/opendata/")!) {
-                                        EntryRectangleWithIcon(systemImage: "wand.and.stars.inverse", color: .blue, text: "Dados Abertos", externalLink: true)
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "wand.and.stars.inverse"),
+                                            color: .blue,
+                                            text: "Dados Abertos",
+                                            externalLink: true
+                                        )
                                     }
                                     Link(destination: URL(string: "https://www.carrismetropolitana.pt/politica-de-privacidade/")!) {
-                                        EntryRectangleWithIcon(systemImage: "lock.square.fill", color: .blue, text: "Privacidade", externalLink: true) // is false in mockup
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "lock.square.fill"),
+                                            color: .blue,
+                                            text: "Privacidade",
+                                            externalLink: true // is false in mockup
+                                        )
                                     }
                                     Link(destination: URL(string: "https://www.carrismetropolitana.pt/aviso-legal/")!) {
-                                        EntryRectangleWithIcon(systemImage: "checkmark.seal.fill", color: .blue, text: "Aviso Legal", externalLink: true) // is false in mockup
+                                        EntryRectangleWithIcon(
+                                            icon: Image(systemName: "checkmark.seal.fill"),
+                                            color: .blue,
+                                            text: "Aviso Legal",
+                                            externalLink: true // is false in mockup
+                                        )
                                     }
                                 }
                                 .textCase(nil)
@@ -145,7 +195,7 @@ struct MoreView: View {
 struct EntryRectangleWithIcon: View {
     @Environment(\.colorScheme) var colorScheme
 
-    let systemImage: String
+    let icon: Image
     let color: Color
     let text: String
     let externalLink: Bool
@@ -156,7 +206,7 @@ struct EntryRectangleWithIcon: View {
             RoundedRectangle(cornerRadius: 20.0)
                 .fill(.cmSystemBackground100)
                 .frame(height: 80)
-                .shadow(color: .black.opacity(0.1), radius: 10)
+                .shadow(color: .black.opacity(0.05), radius: 10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(.cmSystemBorder100, lineWidth: 1)
@@ -165,7 +215,7 @@ struct EntryRectangleWithIcon: View {
 //                
 //            } label: {
                 HStack {
-                    Image(systemName: systemImage)
+                    icon
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(color)
