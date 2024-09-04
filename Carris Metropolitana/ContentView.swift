@@ -21,8 +21,6 @@ class TabCoordinator: ObservableObject {
 }
 
 struct ContentView: View {
-    @State private var isShowingLaunchAnimation = true
-    
     @StateObject private var tabCoordinator = TabCoordinator()
     
     var body: some View {
@@ -51,30 +49,15 @@ struct ContentView: View {
                         Label("Mais", systemImage: "ellipsis")
                     }
                     .tag(Tab.more)
-                
-                
-                
-            }.overlay {
-                if isShowingLaunchAnimation {
-                    CMLogoAnimation()
-                        .transition(.opacity)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(.cmLaunchBackground)
-                        .ignoresSafeArea()
-                }
             }
             .environmentObject(tabCoordinator)
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { // this is getting toggled by the video ending; replaced toggle with hardcoded bool
-                withAnimation {
-                    isShowingLaunchAnimation = false
-                }
-            }
-            
             let appearance = UITabBarAppearance()
 //                    appearance.configureWithOpaqueBackground()
             appearance.backgroundEffect = UIBlurEffect(style: .systemMaterial)
+            appearance.backgroundColor = UIColor(.cmSystemBackground100).withAlphaComponent(0.6)
+            
             appearance.stackedLayoutAppearance.normal.iconColor = .gray
             appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.gray]
                     

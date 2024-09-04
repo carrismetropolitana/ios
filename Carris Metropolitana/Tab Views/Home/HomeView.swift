@@ -33,7 +33,10 @@ struct HomeView: View {
                 }
                 .background(.cmYellow)
                 
-                if (onboarded) {
+                if (
+//                    onboarded
+                    favoritesManager.favorites.count > 0
+                ) {
                     PersonalUserView()
                 } else {
                     UnregisteredUserView(onAddFavoritesButtonClick: {
