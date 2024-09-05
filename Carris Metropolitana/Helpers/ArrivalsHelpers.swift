@@ -21,7 +21,7 @@ func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeET
         let scheduledArrivalAfterMidnight = tripHasScheduledArrival && Int($0.scheduledArrival!.prefix(2))! > 23
         
         // Fix for past midnight estimatedArrivals represented as being in the day before
-        if !estimatedArrivalAfterMidnight && scheduledArrivalAfterMidnight {
+        if tripHasEstimatedArrival && !estimatedArrivalAfterMidnight && scheduledArrivalAfterMidnight {
             let fixedEta = RealtimeETA(
                 lineId: $0.lineId,
                 patternId: $0.patternId,
@@ -93,8 +93,9 @@ func filterAndSortCurrentAndFuturePatternETAs(_ etas: [PatternRealtimeETA]) -> [
         let scheduledArrivalAfterMidnight = tripHasScheduledArrival && Int($0.scheduledArrival!.prefix(2))! > 23
         
         // Fix for past midnight estimatedArrivals represented as being in the day before
-        if !estimatedArrivalAfterMidnight && scheduledArrivalAfterMidnight {
-            let fixedEta = RealtimeETA(
+        if tripHasEstimatedArrival && !estimatedArrivalAfterMidnight && scheduledArrivalAfterMidnight {
+            let fixedEta = PatternRealtimeETA(
+                stopId: $0.stopId,
                 lineId: $0.lineId,
                 patternId: $0.patternId,
                 routeId: $0.routeId,
