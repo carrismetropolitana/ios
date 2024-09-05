@@ -145,19 +145,19 @@ struct LineDetailsView: View {
                                             }
                                             .padding()
                                             Spacer()
-                                            Button {
-                                                withAnimation {
-                                                    isMapExpanded.toggle()
-                                                }
-                                            } label: {
-                                                Image(systemName: isMapExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
-                                                    .padding(10.0)
-                                                    .background {
-                                                        Circle()
-                                                            .fill(.thickMaterial)
-                                                    }
-                                                    .padding()
-                                            }
+//                                            Button {
+//                                                withAnimation {
+//                                                    isMapExpanded.toggle()
+//                                                }
+//                                            } label: {
+//                                                Image(systemName: isMapExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+//                                                    .padding(10.0)
+//                                                    .background {
+//                                                        Circle()
+//                                                            .fill(.thickMaterial)
+//                                                    }
+//                                                    .padding()
+//                                            }
                                         }
                                     }
                                 }
