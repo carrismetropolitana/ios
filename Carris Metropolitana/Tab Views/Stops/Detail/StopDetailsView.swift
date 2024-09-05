@@ -35,6 +35,8 @@ struct StopDetailsView: View {
     @State private var intermodalAttributionExpanded = true
     @State private var visibleImageId = 0
     
+    @State private var stopDestinationsExpanded = false
+    
     var body: some View {
         let stopAlerts = alertsManager.alerts.filter {
             var isStopAffected = false
@@ -254,15 +256,14 @@ struct StopDetailsView: View {
                     Text("Destinos a partir desta paragem")
                         .bold()
                         .font(.title2)
-                        .foregroundStyle(.windowBackground)
-                        .colorInvert()
+                        .foregroundStyle(.cmSystemText100)
                     Spacer()
                 }
                 
                 if stopPatterns.count > 0 {
                     VStack(spacing: 0) {
                         
-                        ForEach(stopPatterns.indices, id: \.hashValue) { patternIndex in
+                        ForEach(stopDestinationsExpanded ? stopPatterns.indices : stopPatterns.prefix(4).indices, id: \.hashValue) { patternIndex in
                             let pattern = stopPatterns[patternIndex]
                             
                             // TODO: this will lead to a crash if a new line is introduced and the lines in linesManager haven't been updated yet, fix
@@ -280,83 +281,19 @@ struct StopDetailsView: View {
                             }
                             
                         }
-//                        HStack {
-//                            LineEntry(
-//                                line: Line(
-//                                    id: "1523",
-//                                    shortName: "1523",
-//                                    longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
-//                                    color: "#C61D23",
-//                                    textColor: "#FFFFFF",
-//                                    routes: ["1523_0"],
-//                                    patterns: ["1523_0_1", "1523_0_2"],
-//                                    municipalities: ["1111", "1110"],
-//                                    localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
-//                                    facilities: []
-//                                )
-//                            )
-//                            Image(systemName: "chevron.right")
-//                                .foregroundStyle(.secondary)
-//                                .padding(.trailing, 3.0)
-//                        }
-//                        .padding(.horizontal, 10.0)
-//                        .padding(.top, 8.0)
-//                        .padding(.bottom, 2.0)
-//                        Divider()
-//                        HStack {
-//                            LineEntry(
-//                                line: Line(
-//                                    id: "1523",
-//                                    shortName: "1523",
-//                                    longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
-//                                    color: "#C61D23",
-//                                    textColor: "#FFFFFF",
-//                                    routes: ["1523_0"],
-//                                    patterns: ["1523_0_1", "1523_0_2"],
-//                                    municipalities: ["1111", "1110"],
-//                                    localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
-//                                    facilities: []
-//                                )
-//                            )
-//                            Image(systemName: "chevron.right")
-//                                .foregroundStyle(.secondary)
-//                                .padding(.trailing, 3.0)
-//                        }
-//                        .padding(.horizontal, 10.0)
-//                        .padding(.vertical, 2.0)
-//                        Divider()
-//                        HStack {
-//                            LineEntry(
-//                                line: Line(
-//                                    id: "1523",
-//                                    shortName: "1523",
-//                                    longName: "Agualva Cacém (Estação) - Oeiras (Estação)",
-//                                    color: "#C61D23",
-//                                    textColor: "#FFFFFF",
-//                                    routes: ["1523_0"],
-//                                    patterns: ["1523_0_1", "1523_0_2"],
-//                                    municipalities: ["1111", "1110"],
-//                                    localities: ["Cacém", "Sintra", "Taguspark", "São Marcos", "Leião", "Oeiras", "Porto Salvo", "Alto da Bela Vista"],
-//                                    facilities: []
-//                                )
-//                            )
-//                            Image(systemName: "chevron.right")
-//                                .foregroundStyle(.secondary)
-//                                .padding(.trailing, 3.0)
-//                        }
-//                        .padding(.horizontal, 10.0)
-//                        .padding(.vertical, 2.0)
                         
-                        
-                        if stopPatterns.count > 500 { // while collapsed routes are not implemented
+                        if !stopDestinationsExpanded && stopPatterns.count > 4 {
                             Divider()
-                            
-                            HStack {
-                                Text("Ver mais destinos")
-                                    .font(.headline)
-                                Spacer()
-                                Image(systemName: "chevron.down")
-                                    .foregroundStyle(.secondary)
+                            Button {
+                                stopDestinationsExpanded = true
+                            } label: {
+                                HStack {
+                                    Text("Ver mais destinos")
+                                        .font(.headline)
+                                    Spacer()
+                                    Image(systemName: "chevron.down")
+                                        .foregroundStyle(.secondary)
+                                }
                             }
                             .padding(.horizontal, 10.0)
                             .padding(.top, 10.0)
@@ -369,6 +306,7 @@ struct StopDetailsView: View {
                 }
             }
             .padding()
+            
             
             VStack {
                 HStack {
@@ -432,6 +370,15 @@ struct StopDetailsView: View {
                     .padding(.bottom, 12.0)
                 }
                 .background(RoundedRectangle(cornerRadius: 15.0).fill(.cmLaunchBackground))
+                .blur(radius: 10)
+                .overlay(
+                    Text("Em breve".uppercased())
+                        .foregroundStyle(.white)
+                        .font(.callout)
+                        .fontWeight(.heavy)
+                        .padding(.horizontal, 10.0)
+                        .background(Capsule().fill(.gray))
+                )
             }
             .padding()
             
@@ -471,6 +418,15 @@ struct StopDetailsView: View {
             .background(RoundedRectangle(cornerRadius: 15.0).fill(.cmLaunchBackground))
             .padding(.horizontal)
             .padding(.bottom)
+            .blur(radius: 10)
+            .overlay(
+                Text("Em breve".uppercased())
+                    .foregroundStyle(.white)
+                    .font(.callout)
+                    .fontWeight(.heavy)
+                    .padding(.horizontal, 10.0)
+                    .background(Capsule().fill(.gray))
+            )
             
             UserFeedbackForm(
                 title: "Estas informações estão corretas?",
