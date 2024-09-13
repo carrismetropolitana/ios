@@ -13,6 +13,7 @@ struct LinesView: View {
     @EnvironmentObject var vehiclesManager: VehiclesManager
 //    @State private var lines: [Line] = []
     @State private var searchTerm = ""
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -46,6 +47,7 @@ struct LinesView: View {
 //                    .background(.cmYellow)
                     
                     LinesListView(lines: linesManager.lines, searchTerm: $searchTerm)
+                    
                 }
             }
 //            .navigationTitle("Pesquisar Linhas")
@@ -90,101 +92,132 @@ struct LinesListView: View {
     
     var onClickOverride: ((_ lineId: String) -> Void)? = nil
     
+    @State private var mightBeLookingForExternalAgencyLine = false
+    @State private var agencyClarificationHelpSheetPresented = false
+    @State private var sheetHeight: CGFloat = .zero
+    
+    @State private var hasSearched = false
+    
     var body: some View {
-        List {
-            if !isSearching {
-                if searchHistoryManager.searchHistory.count > 0 {
-                    Section(header: HStack {
-                        Text("Recentes").bold().font(.title2).foregroundStyle(.windowBackground).offset(x:-15).colorInvert()
-                        Spacer()
-                        Button() {
-                            withAnimation {
-                                searchHistoryManager.wipeSearchHistory()
-                            }
-                        } label: {
-                            Text("Limpar")
-                                .font(.caption)
-                                .padding(.horizontal, 5.0)
-                                .padding(.vertical, 2.0)
-                                .background {
-                                    Capsule()
-                                        .stroke(.gray, lineWidth: 1)
+        VStack {
+            List {
+                if !isSearching {
+                    if searchHistoryManager.searchHistory.count > 0 {
+                        Section(header: HStack {
+                            Text("Recentes").bold().font(.title2).foregroundStyle(.windowBackground).offset(x:-15).colorInvert()
+                            Spacer()
+                            Button() {
+                                withAnimation {
+                                    searchHistoryManager.wipeSearchHistory()
                                 }
+                            } label: {
+                                Text("Limpar")
+                                    .font(.caption)
+                                    .padding(.horizontal, 5.0)
+                                    .padding(.vertical, 2.0)
+                                    .background {
+                                        Capsule()
+                                            .stroke(.gray, lineWidth: 1)
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                        }) {
+                            ForEach(searchHistoryManager.searchHistory, id: \.self) { lineId in
+                                let line = lines.first { $0.id == lineId }
+                                
+                                if let line = line {
+                                    if let onClickOverride = onClickOverride {
+                                        Button {
+                                            onClickOverride(line.id)
+                                        } label: {
+                                            LineEntry(line: line)
+                                        }
+                                        .buttonStyle(.plain)
+                                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                                    } else {
+                                        NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
+                                            LineEntry(line: line)
+                                        }
+                                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                                    }
+                                }
+                            }
                         }
-                        .buttonStyle(.plain)
-                    }) {
-                        ForEach(searchHistoryManager.searchHistory, id: \.self) { lineId in
-                            let line = lines.first { $0.id == lineId }
-                            
-                            if let line = line {
-                                if let onClickOverride = onClickOverride {
-                                    Button {
-                                        onClickOverride(line.id)
-                                    } label: {
-                                        LineEntry(line: line)
-                                    }
-                                    .buttonStyle(.plain)
-                                    .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
-                                } else {
-                                    NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
-                                        LineEntry(line: line)
-                                    }
-                                    .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
-                                }
-                            }
+                        .textCase(nil)
+                        .listRowBackground(Color.cmSystemBackground100)
+                        .listRowSeparatorTint(Color.cmSystemBorder100)
+                    }
+                    
+                    if onClickOverride == nil {
+                        if let location = locationManager.location {
+                            aroundMeLines(location.coordinate)
                         }
                     }
-                    .textCase(nil)
-                    .listRowBackground(Color.cmSystemBackground100)
-                    .listRowSeparatorTint(Color.cmSystemBorder100)
+                }
+                Section(
+                    header: 
+                        isSearching
+                    ? nil // AnyView(Text("hasSearched \(hasSearched ? "yes" : "no")"))
+                            : AnyView(Text("Todas as Linhas").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()),
+                    footer: (isSearching && mightBeLookingForExternalAgencyLine) ? LookingForExternalAgencyLine(lineName: searchTerm.uppercased(), onLearnMoreClick: { agencyClarificationHelpSheetPresented = true }) : nil
+                ) {
+                    ForEach(isSearching ? searchFilteredLines : lines) { line in
+                        if let onClickOverride = onClickOverride {
+                            Button {
+                                onClickOverride(line.id)
+                            } label: {
+                                LineEntry(line: line)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                        } else {
+                            NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
+                                LineEntry(line: line)
+                            }
+                            .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
+                        }
+                    }
+                }
+                .textCase(nil)
+                .listRowBackground(Color.cmSystemBackground100)
+                .listRowSeparatorTint(Color.cmSystemBorder100)
+            }
+            .background(.cmSystemBackground200)
+            .scrollContentBackground(.hidden)
+            .contentMargins(.top, isSearching ? 25 : 0, for: .scrollContent)
+//            .onChange(of: isSearching) {
+//                if searchFilteredLines.count == 0 {
+//                    searchFilteredLines = lines
+//                }
+//            }
+            .onChange(of: searchTerm) {
+                
+                let filtered = lines.filter {
+                    $0.longName.localizedCaseInsensitiveContains(searchTerm) || $0.shortName.localizedCaseInsensitiveContains(searchTerm)
                 }
                 
-                if onClickOverride == nil {
-                    if let location = locationManager.location {
-                        aroundMeLines(location.coordinate)
-                    }
-                }
-            }
-            Section(header: isSearching ? nil :  Text("Todas as Linhas").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
-                ForEach(isSearching ? searchFilteredLines : lines) { line in
-                    if let onClickOverride = onClickOverride {
-                        Button {
-                            onClickOverride(line.id)
-                        } label: {
-                            LineEntry(line: line)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
-                    } else {
-                        NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
-                            LineEntry(line: line)
-                        }
-                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha"))
-                    }
-                }
-            }
-            .textCase(nil)
-            .listRowBackground(Color.cmSystemBackground100)
-            .listRowSeparatorTint(Color.cmSystemBorder100)
-        }
-        .background(.cmSystemBackground200)
-        .scrollContentBackground(.hidden)
-        .contentMargins(.top, isSearching ? 25 : 0, for: .scrollContent)
-        .onChange(of: isSearching) {
-            if searchFilteredLines.count == 0 {
-                searchFilteredLines = lines
-            }
-        }
-        .onChange(of: searchTerm) {
-            print(searchTerm)
-            let filtered = lines.filter {
-                $0.longName.localizedCaseInsensitiveContains(searchTerm) || $0.shortName.localizedCaseInsensitiveContains(searchTerm)
-            }
-            if filtered.count > 0 {
                 searchFilteredLines = filtered
-            } else {
-                searchFilteredLines = lines
+                
+                hasSearched = true
+                
+                mightBeLookingForExternalAgencyLine = isCcflLine(searchTerm)
             }
+            .onChange(of: isSearching) {
+                if !isSearching {
+                    hasSearched = false
+                }
+            }
+        }
+        .sheet(isPresented: $agencyClarificationHelpSheetPresented) {
+            AgencyClarificationHelpSheetView()
+                .readHeight()
+                .onPreferenceChange(HeightPreferenceKey.self) { height in
+                    if let height {
+                        sheetHeight = height
+                    }
+                }
+                .presentationDetents([.height(sheetHeight)])
+                .presentationDragIndicator(.visible)
         }
     }
     
@@ -301,6 +334,75 @@ struct LineEntry: View {
     }
 }
 
+
+struct LookingForExternalAgencyLine: View {
+    let lineName: String
+    let onLearnMoreClick: () -> Void
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            
+            VStack(alignment: .center) {
+                Text("Estará à procura da linha \(lineName) da CARRIS?")
+                    .font(.subheadline)
+                Button("Saiba mais") {
+                    onLearnMoreClick()
+                }
+                .tint(.secondary)
+                .bold()
+            }
+            .foregroundStyle(.secondary)
+            
+            Spacer()
+        }
+    }
+}
+
+struct AgencyClarificationHelpSheetView: View {
+    var body: some View {
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("\(Image(systemName: "info.circle")) INFORMAÇÃO")
+                        .foregroundStyle(.secondary)
+                        .font(.footnote)
+                        .fontWeight(.heavy)
+                    Text("A Carris Metropolitana faz parte da Carris?")
+                        .bold()
+                        .font(.title3)
+                }.padding(.horizontal).padding(.top)
+                Spacer()
+            }
+            Divider()
+            
+            VStack(spacing: 20.0) {
+                
+                Text("Não.\nEncontra-se na app da Carris Metropolitana, poderá encontrar informação sobre as linhas da CARRIS nas plataformas da mesma.")
+                    .font(.headline)
+                    .bold()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 15.0).fill(.quaternary))
+                
+                VStack(spacing: 10.0) {
+                    HStack {
+                        Text("Detalhes")
+                            .bold()
+                            .font(.title2)
+                        Spacer()
+                    }
+                    
+                    Text("A Carris Metropolitana e a Carris são entidades e marcas distintas, cada uma com as suas operações e áreas geográficas específicas.\n\nA Carris Metropolitana é a marca estabelecida pela Transportes Metropolitanos de Lisboa (TML), que gere os serviços de transporte público rodoviário em várias regiões municipais e intermunicipais da área metropolitana.\n\nPor sua vez, a Carris opera exclusivamente no município de Lisboa, tal como a MobiCascais em Cascais e os TCB (Transportes Coletivos do Barreiro) no Barreiro.")
+                        .italic()
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding()
+        }
+    }
+}
+
 /* This should all be in another file —— was positioned here for now for easier debugging **/
 
 extension CLLocationCoordinate2D {
@@ -345,3 +447,30 @@ func closestStops(to location: CLLocationCoordinate2D, stops: [Stop], maxResults
     return Array(Set(sortedStops.prefix(maxResults)))
 }
 
+struct HeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat?
+
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        guard let nextValue = nextValue() else { return }
+        value = nextValue
+    }
+}
+
+private struct ReadHeightModifier: ViewModifier {
+    private var sizeView: some View {
+        GeometryReader { geometry in
+            Color.clear.preference(key: HeightPreferenceKey.self,
+                value: geometry.size.height)
+        }
+    }
+
+    func body(content: Content) -> some View {
+        content.background(sizeView)
+    }
+}
+
+extension View {
+    func readHeight() -> some View {
+        self.modifier(ReadHeightModifier())
+    }
+}
