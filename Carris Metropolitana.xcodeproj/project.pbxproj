@@ -27,6 +27,8 @@
 		792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */; };
 		79323FAB2C49A14700AE9D50 /* VehicleLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */; };
 		794588B32C77882B000AE50A /* ViewHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794588B22C77882B000AE50A /* ViewHeight.swift */; };
+		79536F5C2C8610AE008A570B /* FavoriteLinesDisambiguationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79536F5B2C8610AE008A570B /* FavoriteLinesDisambiguationView.swift */; };
+		79536F5F2C8611C3008A570B /* DownloadOfflineDataPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79536F5E2C8611C3008A570B /* DownloadOfflineDataPromptView.swift */; };
 		7960AC852C48438300E0B615 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7960AC842C48438300E0B615 /* GoogleService-Info.plist */; };
 		7960AC882C48446B00E0B615 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 7960AC872C48446B00E0B615 /* FirebaseMessaging */; };
 		7960AC8A2C488CC300E0B615 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960AC892C488CC300E0B615 /* AppDelegate.swift */; };
@@ -34,6 +36,9 @@
 		7971D1D42BB42D6A00112BBC /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D32BB42D6A00112BBC /* ScheduleView.swift */; };
 		7971D1D62BB4506800112BBC /* AboutStopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D52BB4506800112BBC /* AboutStopView.swift */; };
 		7971D1D82BB4514300112BBC /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D72BB4514300112BBC /* Alert.swift */; };
+		7975165F2C9486F800B4B988 /* StartupMessageSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7975165E2C9486F800B4B988 /* StartupMessageSheetView.swift */; };
+		797516622C9487F500B4B988 /* CMWebAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797516612C9487F500B4B988 /* CMWebAPI.swift */; };
+		797516642C9487FF00B4B988 /* CMWebModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797516632C9487FF00B4B988 /* CMWebModels.swift */; };
 		7977520F2C375D83008CC644 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7977520E2C375D83008CC644 /* ErrorView.swift */; };
 		797C32E52C2A25B500E5860D /* CustomerSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797C32E42C2A25B500E5860D /* CustomerSupportView.swift */; };
 		797C32E72C2A308900E5860D /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797C32E62C2A308900E5860D /* ImageViewer.swift */; };
@@ -47,11 +52,13 @@
 		7991D6B32BB1CFE7002E6638 /* PulseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7991D6B22BB1CFE7002E6638 /* PulseAnimation.swift */; };
 		7991D6B62BB1F016002E6638 /* StopDetailsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7991D6B52BB1F016002E6638 /* StopDetailsSheetView.swift */; };
 		7992BEB72C383E5B00B5138F /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7992BEB62C383E5B00B5138F /* Analytics.swift */; };
+		7996E05A2C88FDF3004B5876 /* OtherAgencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996E0592C88FDF3004B5876 /* OtherAgencies.swift */; };
 		799C0D442BB8C50C005A7512 /* LoadingBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799C0D432BB8C50C005A7512 /* LoadingBar.swift */; };
 		799E63B62C02C71C00BCBEB8 /* AlertsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E63B52C02C71C00BCBEB8 /* AlertsSheetView.swift */; };
 		799E63B92C02D19E00BCBEB8 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E63B82C02D19E00BCBEB8 /* FavoritesManager.swift */; };
 		79A1904B2C3EC0A400752D80 /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A1904A2C3EC0A400752D80 /* Navigation.swift */; };
 		79A1904E2C3F32F800752D80 /* CMLogoLoopDark.json in Resources */ = {isa = PBXBuildFile; fileRef = 79A1904D2C3F32F800752D80 /* CMLogoLoopDark.json */; };
+		79A1FAB92C926C9600F25285 /* BundleVersioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A1FAB82C926C9600F25285 /* BundleVersioning.swift */; };
 		79A532F12C12365000019D6F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A532F02C12365000019D6F /* OnboardingView.swift */; };
 		79A5AB042C2711490005201E /* ImagePixelColorPredominanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A5AB032C2711490005201E /* ImagePixelColorPredominanceTest.swift */; };
 		79A6AA2B2C2CB15100737380 /* WrappingHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */; };
@@ -177,12 +184,17 @@
 		792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCNavigationStackBug.swift; sourceTree = "<group>"; };
 		79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLookup.swift; sourceTree = "<group>"; };
 		794588B22C77882B000AE50A /* ViewHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHeight.swift; sourceTree = "<group>"; };
+		79536F5B2C8610AE008A570B /* FavoriteLinesDisambiguationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteLinesDisambiguationView.swift; sourceTree = "<group>"; };
+		79536F5E2C8611C3008A570B /* DownloadOfflineDataPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOfflineDataPromptView.swift; sourceTree = "<group>"; };
 		7960AC842C48438300E0B615 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7960AC892C488CC300E0B615 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeAndVehiclesMapView.swift; sourceTree = "<group>"; };
 		7971D1D32BB42D6A00112BBC /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		7971D1D52BB4506800112BBC /* AboutStopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutStopView.swift; sourceTree = "<group>"; };
 		7971D1D72BB4514300112BBC /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		7975165E2C9486F800B4B988 /* StartupMessageSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupMessageSheetView.swift; sourceTree = "<group>"; };
+		797516612C9487F500B4B988 /* CMWebAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWebAPI.swift; sourceTree = "<group>"; };
+		797516632C9487FF00B4B988 /* CMWebModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWebModels.swift; sourceTree = "<group>"; };
 		7977520E2C375D83008CC644 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		797C32E42C2A25B500E5860D /* CustomerSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerSupportView.swift; sourceTree = "<group>"; };
 		797C32E62C2A308900E5860D /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
@@ -195,11 +207,13 @@
 		7991D6B22BB1CFE7002E6638 /* PulseAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseAnimation.swift; sourceTree = "<group>"; };
 		7991D6B52BB1F016002E6638 /* StopDetailsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopDetailsSheetView.swift; sourceTree = "<group>"; };
 		7992BEB62C383E5B00B5138F /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		7996E0592C88FDF3004B5876 /* OtherAgencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherAgencies.swift; sourceTree = "<group>"; };
 		799C0D432BB8C50C005A7512 /* LoadingBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingBar.swift; sourceTree = "<group>"; };
 		799E63B52C02C71C00BCBEB8 /* AlertsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsSheetView.swift; sourceTree = "<group>"; };
 		799E63B82C02D19E00BCBEB8 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
 		79A1904A2C3EC0A400752D80 /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		79A1904D2C3F32F800752D80 /* CMLogoLoopDark.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CMLogoLoopDark.json; sourceTree = "<group>"; };
+		79A1FAB82C926C9600F25285 /* BundleVersioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleVersioning.swift; sourceTree = "<group>"; };
 		79A532F02C12365000019D6F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		79A5AB032C2711490005201E /* ImagePixelColorPredominanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePixelColorPredominanceTest.swift; sourceTree = "<group>"; };
 		79A6AA2A2C2CB15100737380 /* WrappingHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappingHStack.swift; sourceTree = "<group>"; };
@@ -214,6 +228,7 @@
 		79CA0A702BA2F4E4000F4900 /* FavoriteStopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStopWidgetView.swift; sourceTree = "<group>"; };
 		79CA0A722BA2F4F0000F4900 /* FavoriteLineWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteLineWidgetView.swift; sourceTree = "<group>"; };
 		79CA0A742BA2F4FD000F4900 /* SmartNotificationWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartNotificationWidgetView.swift; sourceTree = "<group>"; };
+		79CCB5582C91965900A3D39C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		79CD78A02BA73767003D30F2 /* FacilityIconsPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityIconsPreviewView.swift; sourceTree = "<group>"; };
 		79CD78A62BA78001003D30F2 /* AnotherMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnotherMapView.swift; sourceTree = "<group>"; };
 		79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreMapView.swift; sourceTree = "<group>"; };
@@ -322,6 +337,39 @@
 			path = CMGrafanaAPI;
 			sourceTree = "<group>";
 		};
+		79536F5D2C8611AB008A570B /* Offline Mode */ = {
+			isa = PBXGroup;
+			children = (
+				79536F5E2C8611C3008A570B /* DownloadOfflineDataPromptView.swift */,
+			);
+			path = "Offline Mode";
+			sourceTree = "<group>";
+		};
+		797516562C94843A00B4B988 /* Startup */ = {
+			isa = PBXGroup;
+			children = (
+				797516592C9486C700B4B988 /* Messages */,
+			);
+			path = Startup;
+			sourceTree = "<group>";
+		};
+		797516592C9486C700B4B988 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				7975165E2C9486F800B4B988 /* StartupMessageSheetView.swift */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
+		797516602C9487DA00B4B988 /* CMWebAPI */ = {
+			isa = PBXGroup;
+			children = (
+				797516612C9487F500B4B988 /* CMWebAPI.swift */,
+				797516632C9487FF00B4B988 /* CMWebModels.swift */,
+			);
+			path = CMWebAPI;
+			sourceTree = "<group>";
+		};
 		798B2E762BA3177600CBA9DC /* CMUserAPI */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,6 +441,8 @@
 			isa = PBXGroup;
 			children = (
 				79A1904A2C3EC0A400752D80 /* Navigation.swift */,
+				79A1FAB82C926C9600F25285 /* BundleVersioning.swift */,
+				7996E0592C88FDF3004B5876 /* OtherAgencies.swift */,
 				794588B22C77882B000AE50A /* ViewHeight.swift */,
 			);
 			path = Utils;
@@ -448,6 +498,7 @@
 			isa = PBXGroup;
 			children = (
 				791915772BA38D25009E5B29 /* LineDetailsView.swift */,
+				79536F5B2C8610AE008A570B /* FavoriteLinesDisambiguationView.swift */,
 				7971D1D32BB42D6A00112BBC /* ScheduleView.swift */,
 				791A70712C3D5FF400E789E5 /* ExpandedMapView.swift */,
 				7971D1D52BB4506800112BBC /* AboutStopView.swift */,
@@ -503,6 +554,7 @@
 			children = (
 				79B4A53B2C48976000E13D3E /* Carris Metropolitana.entitlements */,
 				791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */,
+				79CCB5582C91965900A3D39C /* PrivacyInfo.xcprivacy */,
 				79DB83682BA19A5D0023DD93 /* Carris Metropolitana */,
 				79DE904B2C493C5D00D3E859 /* NotificationServiceExtension */,
 				79D3B1652C77E56300E0AE52 /* VehicleLivePattern */,
@@ -563,6 +615,8 @@
 		79DB83822BA1B2600023DD93 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				797516562C94843A00B4B988 /* Startup */,
+				79536F5D2C8611AB008A570B /* Offline Mode */,
 				798D7CB12C79127A00F7B1D1 /* Common */,
 				798D7CAE2C79121900F7B1D1 /* Authentication */,
 				79CA0A6F2BA2F4BE000F4900 /* Internal Widgets */,
@@ -604,6 +658,7 @@
 		79DB83852BA1B5CC0023DD93 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				797516602C9487DA00B4B988 /* CMWebAPI */,
 				799E63B72C02D19000BCBEB8 /* Persistent Data */,
 				79F982412BB72453002B3997 /* IMLAPI */,
 				7913C13C2BB1B49A000F0DFA /* CMGrafanaAPI */,
@@ -711,6 +766,7 @@
 				79DB83632BA19A5D0023DD93 /* Frameworks */,
 				79DB83642BA19A5D0023DD93 /* Resources */,
 				79DE90522C493C5D00D3E859 /* Embed Foundation Extensions */,
+				79184FD72C9265AE002884D1 /* Set App Version and Build Number (CalVer) */,
 			);
 			buildRules = (
 			);
@@ -828,6 +884,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		79184FD72C9265AE002884D1 /* Set App Version and Build Number (CalVer) */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Set App Version and Build Number (CalVer)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# https://medium.com/@SteveBarnegren/better-xcode-build-numbers-e999aac6254d\n\n# Set App Version to current date\nversionNumber=$(date \"+%Y.%m.%d\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $versionNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n\n# Set Build Number to current unix timestamp in seconds\nbuildNumber=$(date \"+%s\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		79D3B15C2C77E56300E0AE52 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -877,6 +955,7 @@
 				79A89F3E2BDBDBD100DB5068 /* LoginSheetView.swift in Sources */,
 				79CA0A6C2BA2EC2F000F4900 /* CMAModels.swift in Sources */,
 				79E88CB92BAAE172001F3227 /* PersonalUserView.swift in Sources */,
+				797516622C9487F500B4B988 /* CMWebAPI.swift in Sources */,
 				797D32162C1379460063F57C /* AlertsManager.swift in Sources */,
 				7916BD7F2C1E138000C049B7 /* VehicleIdentifier.swift in Sources */,
 				7919157A2BA3BA07009E5B29 /* MapView.swift in Sources */,
@@ -893,13 +972,16 @@
 				791A70692C3C682E00E789E5 /* ETAPlayground.swift in Sources */,
 				79C6C4FF2C146B89003277A7 /* LocationManager.swift in Sources */,
 				7992BEB72C383E5B00B5138F /* Analytics.swift in Sources */,
+				79A1FAB92C926C9600F25285 /* BundleVersioning.swift in Sources */,
 				79C6C4FD2C1466AA003277A7 /* VehiclesManager.swift in Sources */,
 				79DB838F2BA1BA340023DD93 /* CMWHelpers.swift in Sources */,
+				79536F5C2C8610AE008A570B /* FavoriteLinesDisambiguationView.swift in Sources */,
 				798B2E782BA31F8000CBA9DC /* NetworkService.swift in Sources */,
 				79F1D88A2C7AA286005CB830 /* MapFloatingButton.swift in Sources */,
 				79E88CBF2BAAEC3A001F3227 /* SearchInput.swift in Sources */,
 				79F982402BB7202A002B3997 /* StopDetailsView.swift in Sources */,
 				79A5AB042C2711490005201E /* ImagePixelColorPredominanceTest.swift in Sources */,
+				7996E05A2C88FDF3004B5876 /* OtherAgencies.swift in Sources */,
 				79F1D88C2C7AA2AE005CB830 /* MapFloatingPickerMenu.swift in Sources */,
 				7971D1D22BB3668500112BBC /* ShapeAndVehiclesMapView.swift in Sources */,
 				79DB837F2BA19B9B0023DD93 /* StopsView.swift in Sources */,
@@ -923,8 +1005,10 @@
 				79DB836C2BA19A5D0023DD93 /* ContentView.swift in Sources */,
 				797C32E52C2A25B500E5860D /* CustomerSupportView.swift in Sources */,
 				799C0D442BB8C50C005A7512 /* LoadingBar.swift in Sources */,
+				79536F5F2C8611C3008A570B /* DownloadOfflineDataPromptView.swift in Sources */,
 				79E9D4F72C2F9CF700C6D181 /* StopsManager.swift in Sources */,
 				79E88CBB2BAAEAA5001F3227 /* SmartNotificationCustomizationView.swift in Sources */,
+				7975165F2C9486F800B4B988 /* StartupMessageSheetView.swift in Sources */,
 				79F2CA232C3C5F750067E938 /* HomeScreenBanner.swift in Sources */,
 				797C32E72C2A308900E5860D /* ImageViewer.swift in Sources */,
 				79FA6A252C1DF5B600E043C8 /* LinesManager.swift in Sources */,
@@ -937,6 +1021,7 @@
 				7971D1D82BB4514300112BBC /* Alert.swift in Sources */,
 				7971D1D42BB42D6A00112BBC /* ScheduleView.swift in Sources */,
 				79F04CD52C32440C003809E3 /* LinesSearchHistoryManager.swift in Sources */,
+				797516642C9487FF00B4B988 /* CMWebModels.swift in Sources */,
 				79F04CD32C32415C003809E3 /* SelectFavoriteLineView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -971,7 +1056,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VehicleLivePattern/Info.plist;
@@ -998,7 +1083,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VehicleLivePattern/Info.plist;
@@ -1147,10 +1232,11 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Carris Metropolitana/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = CMetropolitana;
@@ -1169,7 +1255,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 2024.09.12;
 				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1190,10 +1276,11 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "Carris Metropolitana.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Carris Metropolitana/Preview Content\"";
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Carris Metropolitana/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = CMetropolitana;
@@ -1212,7 +1299,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 2024.09.12;
 				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1228,7 +1315,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
@@ -1253,7 +1340,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;

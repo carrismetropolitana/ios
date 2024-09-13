@@ -23,6 +23,11 @@ class TabCoordinator: ObservableObject {
 struct ContentView: View {
     @StateObject private var tabCoordinator = TabCoordinator()
     
+    @State private var applicableStartupMessage: StartupMessage? = nil
+    @State private var startupMessageSheetPresented = false
+    
+    @AppStorage("lastShowedChangelogBuild") var lastShowedChangelogBuild: Int = 0
+    
     var body: some View {
         ZStack {
             TabView(selection: $tabCoordinator.selectedTab) {
@@ -66,6 +71,29 @@ struct ContentView: View {
                     
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
+        .onAppear {
+            Task {
+                let startupMessages = try await CMWebAPI.shared.getStartupMessages()
+                for message in startupMessages {
+                    if currentBuildInBuildSpan(maxBuild: message.maxBuild, minBuild: message.minBuild) {
+                        print("Current build in startup messages")
+                        applicableStartupMessage = message
+                        if message.presentationType == .changelog {
+                            lastShowedChangelogBuild = Int(Bundle.main.buildVersionNumber!) ?? -1
+                        }
+                        startupMessageSheetPresented = true
+                        break // select the first applicable message
+                    }
+                    print("Current build NOT in startup messages")
+                }
+            }
+        }
+        .sheet(isPresented: $startupMessageSheetPresented) {
+            if let message = applicableStartupMessage {
+                StartupMessageSheetView(url: URL(string: message.url)!)
+                    .interactiveDismissDisabled(message.presentationType == .breaking)
+            }
         }
     }
 }
