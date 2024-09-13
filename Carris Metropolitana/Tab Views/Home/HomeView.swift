@@ -13,6 +13,12 @@ struct HomeView: View {
     
 //    @State var isEasterEggVisible = false
     @AppStorage("onboarded") var onboarded: Bool = false
+//    @AppStorage("debugModeEnabled") var debugModeEnabled: Bool = false
+    @State private var debugModeEnabled = false
+    
+    @State private var cmLogoConsecutiveTaps: CGFloat = .zero
+    @State private var timer: Timer?
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -25,8 +31,30 @@ struct HomeView: View {
     //                        .onLongPressGesture(minimumDuration: 2) {
     //                            isEasterEggVisible.toggle()
     //                        }
+//                            .onTapGesture {
+//                                withAnimation {
+//                                    cmLogoConsecutiveTaps += 1
+//                                }
+//                                
+//                                if cmLogoConsecutiveTaps == 6 {
+//                                    withAnimation {
+//                                        cmLogoConsecutiveTaps = 30
+//                                        debugModeEnabled.toggle()
+//                                    }
+//                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+//                                        cmLogoConsecutiveTaps = -5
+//                                        withAnimation {
+//                                            cmLogoConsecutiveTaps = 0
+//                                        }
+//                                    }
+//                                }
+//                            }
+                            .offset(x: cmLogoConsecutiveTaps * 20.0)
                             .accessibilityLabel(Text("Logótipo da Carris Metropolitana"))
                         Spacer()
+                        if debugModeEnabled {
+                            DebugMenuButton()
+                        }
     //                    WifiConnectButton()
                     }
                     .padding()
@@ -49,6 +77,25 @@ struct HomeView: View {
 //        .sheet(isPresented: $isEasterEggVisible) {
 //            EasterEggView()
 //        }
+        .onChange(of: cmLogoConsecutiveTaps) {
+            if timer == nil {
+                if cmLogoConsecutiveTaps == 1 {
+                    timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
+                        withAnimation {
+                            cmLogoConsecutiveTaps = 0
+                        }
+                    }
+                }
+            } else {
+                timer?.invalidate()
+                timer = nil
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
+                    withAnimation {
+                        cmLogoConsecutiveTaps = 0
+                    }
+                }
+            }
+        }
         .sheet(isPresented: $isSheetOpen) {
             CustomizeWidgetsSheetView(isSheetOpen: $isSheetOpen)
                 .presentationDragIndicator(.visible)
@@ -77,6 +124,31 @@ struct WifiConnectButton: View {
             .padding(.trailing)
         }
         .frame(width: 180, height: 50)
+    }
+}
+
+
+struct DebugMenuButton: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 25.0)
+                .fill(.windowBackground)
+            HStack {
+                Circle()
+                    .overlay {
+                        Image(systemName: "wrench.and.screwdriver.fill")
+                            .foregroundStyle(.windowBackground)
+                    }
+                    .padding(.vertical, 5)
+                    .padding(.leading, 5)
+                Spacer()
+                Text("Debug")
+                    .bold()
+                    .lineLimit(1)
+            }
+            .padding(.trailing)
+        }
+        .frame(width: 130, height: 50)
     }
 }
 
