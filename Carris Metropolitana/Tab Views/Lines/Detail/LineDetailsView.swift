@@ -25,7 +25,7 @@ struct LineDetailsView: View {
     @State private var selectedStop: Stop?
     @State private var routes: [Route] = []
     @State private var patterns: [Pattern] = []
-    @State private var currentPatternEtas: [String: [PatternRealtimeETA]] = [:]
+    @State private var currentPatternEtas: [String: [PatternRealtimeETA]]? = nil
     @State private var unfilteredVehicles: [Vehicle] = []
     @State private var vehicles: [Vehicle] = []
     @State private var shape: CMShape?
@@ -105,11 +105,9 @@ struct LineDetailsView: View {
                             Group {
                                 Text("Selecionar destino")
                                 Picker("Selecionar destino", selection: $selectedPattern) {
-                                    ForEach(patterns, id: \.id) { pattern in // why the fuck does it need me to specify id if Pattern conforms to identifiable? is it because it is an optional? (Pattern?)
-                                        //                            Text("\(pattern.headsign) (\(routes.first(where: {$0.id == pattern.routeId})?.longName ?? ""))")
-                                        //                                .tag(pattern.id)
+                                    ForEach(patterns, id: \.id) { pattern in 
                                         Text(pattern.headsign)
-                                            .tag(pattern as Pattern?) // FUCK MEEEEE @see https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
+                                            .tag(pattern as Pattern?) // https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
                                     }
                                 }
                                 .frame(maxWidth: .infinity)
@@ -326,7 +324,7 @@ struct LineDetailsView: View {
 //                    currentPatternEtas = etasToSet
 //                }
                 
-                print("Got \(vehicles.count) vehicles and \(currentPatternEtas.count) ETAS for pattern \(selectedPattern!.id)")
+                print("Got \(vehicles.count) vehicles and \(currentPatternEtas?.count ?? 0) ETAS for pattern \(selectedPattern!.id)")
             }
         }
     }
@@ -353,12 +351,14 @@ private struct EtaEntryWithStopId {
 struct PatternLegs: View {
     @EnvironmentObject var stopsManager: StopsManager
     
+    @State private var sheetHeight: CGFloat = .zero
+    
     let pattern: Pattern
     @State private var isSheetPresented = false
     @State private var selectedSchedulesDate = Date()
     @Binding var selectedStop: Stop? // would be ok to just keep state inside this component but maybe in the future we may need to access from parent so lets keep it this way
     @State private var selectedStopIndex: Int = 0
-    fileprivate let etasWithStopIds: [String: [PatternRealtimeETA]]
+    fileprivate let etasWithStopIds: [String: [PatternRealtimeETA]]?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0)  {
@@ -371,9 +371,6 @@ struct PatternLegs: View {
                 let isSelectedByIndex = selectedStopIndex == pathStepIdx
                 
 //                let etas = etasWithStopIds.first(where: {$0.stopId == pathStep.stop.id})?.etas
-                let etas = etasWithStopIds[pathStep.stop.id]
-                
-                let nextEtas = etas != nil ? filterAndSortCurrentAndFuturePatternETAs(etas!) : []
                 
                 HStack {
                     HStack {
@@ -433,24 +430,31 @@ struct PatternLegs: View {
                                     }
                                 }
                                 
-                                HStack(spacing: 20.0) {
-                                    if let nextEtaEstimatedArrival = nextEtas.first?.estimatedArrivalUnix {
-                                        HStack {
-                                            let minutesToArrival = getRoundedMinuteDifferenceFromNow(nextEtaEstimatedArrival)
-                                            
-                                            
-                                            PulseLabel(accent: .green, label: Text(minutesToArrival <= 1 ? "A chegar" : "\(String(minutesToArrival)) minutos"))
+                                if let etas = etasWithStopIds?[pathStep.stop.id] {
+                                    let nextEtas = filterAndSortCurrentAndFuturePatternETAs(etas)
+                                    HStack(spacing: 20.0) {
+                                        if let nextEtaEstimatedArrival = nextEtas.first?.estimatedArrivalUnix {
+                                            HStack {
+                                                let minutesToArrival = getRoundedMinuteDifferenceFromNow(nextEtaEstimatedArrival)
+                                                
+                                                
+                                                PulseLabel(accent: .green, label: Text(minutesToArrival <= 1 ? "A chegar" : "\(String(minutesToArrival)) minutos"))
+                                            }
+                                        }
+                                        if isSelectedByIndex {
+                                            if nextEtas.count > 1 {
+                                                NextEtasView(nextEtas: Array(nextEtas.dropFirst().prefix(3)))
+                                            } else {
+                                                Text("Sem próximas passagens.")
+                                                    .font(.subheadline)
+                                                    .italic()
+                                                    .foregroundStyle(.secondary)
+                                            }
                                         }
                                     }
+                                } else {
                                     if isSelectedByIndex {
-                                        if nextEtas.count > 1 {
-                                            NextEtasView(nextEtas: Array(nextEtas.dropFirst().prefix(3)))
-                                        } else {
-                                            Text("Sem próximas passagens.")
-                                                .font(.subheadline)
-                                                .italic()
-                                                .foregroundStyle(.secondary)
-                                        }
+                                        LoadingBar(size: 10)
                                     }
                                 }
                                 
@@ -533,18 +537,22 @@ struct PatternLegs: View {
                 }
                 .padding(.horizontal)
                 
-                if selectedStop != nil {
-                    let scheduleColumns = schedulizeTripsForDateAndStop(stopId: selectedStop!.id, trips: pattern.trips, date: selectedSchedulesDate)
-                    if scheduleColumns.count > 0 {
-                        ScheduleView(scheduleColumns: scheduleColumns)
-                            .padding()
-                    } else {
-                        ContentUnavailableView("Sem horários para a data selecionada", systemImage: "calendar.badge.exclamationmark", description: Text("Experimente selecionar uma data mais próxima da atual.")) // TODO: need to make this manually for older OSes (only available on iOS 17)
-                    }
+                let scheduleColumns = schedulizeTripsForDateAndStop(stopId: pattern.path[selectedStopIndex].stop.id, trips: pattern.trips, date: selectedSchedulesDate)
+                if scheduleColumns.count > 0 {
+                    ScheduleView(scheduleColumns: scheduleColumns)
+                        .padding()
+                } else {
+                    ContentUnavailableView("Sem horários para a data selecionada", systemImage: "calendar.badge.exclamationmark", description: Text("Experimente selecionar uma data mais próxima da atual.")) // TODO: need to make this manually for older OSes (only available on iOS 17)
                 }
                 Spacer()
             }
-            .presentationDetents([.fraction(0.45)]) // TODO: dynamic detents, wrap to content height
+            .readHeight()
+            .onPreferenceChange(HeightPreferenceKey.self) { height in
+                if let height {
+                    sheetHeight = height
+                }
+            }
+            .presentationDetents([.height(sheetHeight)])
         }
     }
 }
@@ -629,6 +637,10 @@ func schedulizeTripsForDateAndStop(stopId: String, trips: [Trip], date: Date) ->
                 }
             }
         }
+    }
+    
+    let sortedSchedule = schedules.sorted {
+        $0.hour < $1.hour
     }
     
     return schedules

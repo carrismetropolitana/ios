@@ -16,7 +16,12 @@ struct StopDetailsSheetView: View {
     let onEtaClick: (_ eta: RealtimeETA) -> Void
     
     let stop: Stop
+    
+    
+    @Binding var seeAllNextEtas: Bool
+    
     @State private var nextEtas: [RealtimeETA] = []
+    
     var body: some View {
         VStack {
             Button {
@@ -65,7 +70,7 @@ struct StopDetailsSheetView: View {
             .padding(.top, 10.0)
             
             VStack(spacing: 0) {
-                ForEach(nextEtas.prefix(3).indices, id: \.self) { etaIdx in
+                ForEach(seeAllNextEtas ? nextEtas.indices : nextEtas.prefix(3).indices, id: \.self) { etaIdx in
                     let isLast = etaIdx == 2
                     
                     let eta = nextEtas[etaIdx]
@@ -96,9 +101,9 @@ struct StopDetailsSheetView: View {
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.tertiary)
                             }
-                            #if DEBUG
-                                Text(eta.tripId)
-                            #endif
+//                            #if DEBUG
+//                                Text(eta.tripId)
+//                            #endif
                         }
                         .padding()
                     }
@@ -113,15 +118,20 @@ struct StopDetailsSheetView: View {
                     
                 }
 //                if nextEtas.count > 3 {
-                if true {
-                    HStack {
-                        Text("Ver mais serviços nesta paragem")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.tertiary)
+//                if !seeAllNextEtas {
+                if false {
+                    Button {
+                        seeAllNextEtas = true
+                    } label: {
+                        HStack {
+                            Text("Ver mais serviços nesta paragem")
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Image(systemName: "chevron.down")
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding()
                     }
-                    .padding()
                 }
             }
             .background(RoundedRectangle(cornerRadius: 15.0).fill(.windowBackground))
