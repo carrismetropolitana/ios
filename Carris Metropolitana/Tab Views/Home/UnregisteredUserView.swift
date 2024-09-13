@@ -40,51 +40,45 @@ struct UnregisteredUserView: View {
     //                }
                 
                     
-                            ZStack {
-    //                            ConditionallyHiddenView(hidden: playerController.player.timeControlStatus != AVPlayer.TimeControlStatus.playing) {
-                                    playerController
-                                    .scaleEffect(1.2)
-                                    //                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    //                    .aspectRatio(contentMode: .fill)
-                                    //                                .frame(width: 300, height: 150)
-    //                                    .hidden()// TODO: fixme, if visible will hide status bar, probably something to do with the modal (hidden works)
-    //                            }
-                                
-                                // TODO: the player does not show controls because the zstack has a gesture listener attached, tap never gets to it. smart idea :) looks great and preserves thumbnail
-    //                            Image(uiImage: playerController.player.generateThumbnail(time: CMTime(seconds: 34, preferredTimescale: 60000))!)
-    //                                .resizable()
-    //                                .aspectRatio(contentMode: .fill)
-    ////                                .clipShape(RoundedRectangle(cornerRadius: 15))
-    ////                                .frame(width: 300, height: 150)
-                                    
-                                Circle()
-                                    .padding(45)
-                                    .foregroundStyle(.regularMaterial)
-                                    .overlay {
-                                        Image(systemName: "play.fill")
-                                            .font(.largeTitle)
-                                            .foregroundStyle(.white)
-                                    }
-                            }
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                            .frame(width: 300, height: 150)
-                            .shadow(color: .black.opacity(0.1), radius: 20)
-                            .onTapGesture {
-    //                                playerController.player.seek(to: CMTime(seconds: 0, preferredTimescale: 60000))
-                                do {
-                                    try AVAudioSession.sharedInstance().setCategory(.playback) // this plays the audio as audio from video playback in order to not depend from the ringer status (ringer switch)
-                                } catch {
-                                    print("Error setting AudioSession Category to Playback.")
-                                }
-                                playerController.enterFullscreen()
-                                playerController.player.play()
-                            }
-    //                    .onAppear {
-    //                        playerController.player.seek(to: CMTime(seconds: 30, preferredTimescale: 60000))
-    //                        playerController.player.play()
-    //                        playerController.player.pause()
-    //                    }
-    //                    .hidden()
+//                            ZStack {
+//    //                            ConditionallyHiddenView(hidden: playerController.player.timeControlStatus != AVPlayer.TimeControlStatus.playing) {
+//                                    playerController
+//                                    .scaleEffect(1.2)
+//                                    //                                .clipShape(RoundedRectangle(cornerRadius: 15))
+//                                    //                    .aspectRatio(contentMode: .fill)
+//                                    //                                .frame(width: 300, height: 150)
+//    //                                    .hidden()// TODO: fixme, if visible will hide status bar, probably something to do with the modal (hidden works)
+//    //                            }
+//                                
+//                                // TODO: the player does not show controls because the zstack has a gesture listener attached, tap never gets to it. smart idea :) looks great and preserves thumbnail
+//    //                            Image(uiImage: playerController.player.generateThumbnail(time: CMTime(seconds: 34, preferredTimescale: 60000))!)
+//    //                                .resizable()
+//    //                                .aspectRatio(contentMode: .fill)
+//    ////                                .clipShape(RoundedRectangle(cornerRadius: 15))
+//    ////                                .frame(width: 300, height: 150)
+//                                    
+//                                Circle()
+//                                    .padding(45)
+//                                    .foregroundStyle(.regularMaterial)
+//                                    .overlay {
+//                                        Image(systemName: "play.fill")
+//                                            .font(.largeTitle)
+//                                            .foregroundStyle(.white)
+//                                    }
+//                            }
+//                            .clipShape(RoundedRectangle(cornerRadius: 15))
+//                            .frame(width: 300, height: 150)
+//                            .shadow(color: .black.opacity(0.1), radius: 20)
+//                            .onTapGesture {
+//                                do {
+//                                    try AVAudioSession.sharedInstance().setCategory(.playback) // this plays the audio as audio from video playback in order to not depend from the ringer status (ringer switch)
+//                                } catch {
+//                                    print("Error setting AudioSession Category to Playback.")
+//                                }
+//                                playerController.enterFullscreen()
+//                                playerController.player.play()
+//                            }
+                
                 Text("Personalize a app com as suas linhas e paragens favoritas.")
                     .font(.headline)
                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
