@@ -32,7 +32,7 @@ struct StopDetailsView: View {
     @Binding var mapFlyToCoords: CLLocationCoordinate2D?
     
    @State private var images: [IMLPicture] = []
-    @State private var intermodalAttributionExpanded = true
+    @State private var intermodalAttributionExpanded = false
     @State private var visibleImageId = 0
     
     @State private var stopDestinationsExpanded = false
@@ -183,20 +183,20 @@ struct StopDetailsView: View {
                                 if intermodalAttributionExpanded {
                                     HStack {
                                         Text("Powered by".uppercased())
-                                            .font(.callout)
+                                            .font(.caption)
                                             .fontWeight(.heavy)
                                             .foregroundStyle(.secondary)
                                         Image(.intermodalLogo)
                                             .resizable()
                                             .scaledToFit()
-                                            .frame(height: 15.0)
+                                            .frame(height: 12.0)
                                     }
                                     .transition(.move(edge: .trailing).combined(with: .opacity))
                                 } else {
                                     Image(.intermodalMinimalLogo)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 20.0)
+                                        .frame(height: 15.0)
                                         .transition(.move(edge: .trailing).combined(with: .opacity))
                                 }
                             }
@@ -285,7 +285,9 @@ struct StopDetailsView: View {
                         if !stopDestinationsExpanded && stopPatterns.count > 4 {
                             Divider()
                             Button {
-                                stopDestinationsExpanded = true
+                                withAnimation(.snappy) {
+                                    stopDestinationsExpanded = true
+                                }
                             } label: {
                                 HStack {
                                     Text("Ver mais destinos")
@@ -294,10 +296,12 @@ struct StopDetailsView: View {
                                     Image(systemName: "chevron.down")
                                         .foregroundStyle(.secondary)
                                 }
+                                .padding(.horizontal, 10.0)
+                                .padding(.top, 15.0)
+                                .padding(.leading, 10.0)
+                                .padding(.bottom, 15.0)
                             }
-                            .padding(.horizontal, 10.0)
-                            .padding(.top, 10.0)
-                            .padding(.bottom, 20.0)
+                            .tint(.cmSystemText100)
                         }
                     }
                     .background(RoundedRectangle(cornerRadius: 15.0).fill(.cmLaunchBackground))
@@ -308,135 +312,135 @@ struct StopDetailsView: View {
             .padding()
             
             
-            VStack {
-                HStack {
-                    Text("Sobre esta paragem")
-                        .bold()
-                        .font(.title2)
-                        .foregroundStyle(.windowBackground)
-                        .colorInvert()
-                    Spacer()
-                }
-                
-                VStack {
-                    HStack {
-                       AboutStopItem(title: "Estado do Piso", description: "Desconhecido")
-                    }
-                    .padding(.horizontal, 20.0)
-                    .padding(.top, 12.0)
-                    .padding(.bottom, 5.0)
-                    
-                    Divider()
-                    
-                    HStack {
-                        AboutStopItem(title: "Material do Piso", description: "Desconhecido")
-                    }
-                    .padding(.horizontal, 20.0)
-                    .padding(.vertical, 5.0)
-                    
-                    Divider()
-                    
-                    HStack {
-                        AboutStopItem(title: "Tipo de Acesso à Paragem", description: "Desconhecido")
-                    }
-                    .padding(.horizontal, 20.0)
-                    .padding(.vertical, 5.0)
-                    
-                    Divider()
-                    
-                    HStack {
-                        AboutStopItem(title: "Estado da Passadeira", description: "Desconhecido")
-                    }
-                    .padding(.horizontal, 20.0)
-                    .padding(.vertical, 5.0)
-                    
-                    
-                    Divider()
-                    
-                    HStack {
-                        AboutStopItem(title: "Estacionamento Abusivo", description: "Desconhecido")
-                    }
-                    .padding(.horizontal, 20.0)
-                    .padding(.vertical, 5.0)
-                    
-                    
-                    Divider()
-                    
-                    HStack {
-                        AboutStopItem(title: "Data da Última Verificação de Acessibilidade", description: "Desconhecida")
-                    }
-                    .padding(.horizontal, 20.0)
-                    .padding(.top, 5.0)
-                    .padding(.bottom, 12.0)
-                }
-                .background(RoundedRectangle(cornerRadius: 15.0).fill(.cmLaunchBackground))
-                .blur(radius: 10)
-                .overlay(
-                    Text("Em breve".uppercased())
-                        .foregroundStyle(.white)
-                        .font(.callout)
-                        .fontWeight(.heavy)
-                        .padding(.horizontal, 10.0)
-                        .background(Capsule().fill(.gray))
-                )
-            }
-            .padding()
+//            VStack {
+//                HStack {
+//                    Text("Sobre esta paragem")
+//                        .bold()
+//                        .font(.title2)
+//                        .foregroundStyle(.windowBackground)
+//                        .colorInvert()
+//                    Spacer()
+//                }
+//                
+//                VStack {
+//                    HStack {
+//                       AboutStopItem(title: "Estado do Piso", description: "Desconhecido")
+//                    }
+//                    .padding(.horizontal, 20.0)
+//                    .padding(.top, 12.0)
+//                    .padding(.bottom, 5.0)
+//                    
+//                    Divider()
+//                    
+//                    HStack {
+//                        AboutStopItem(title: "Material do Piso", description: "Desconhecido")
+//                    }
+//                    .padding(.horizontal, 20.0)
+//                    .padding(.vertical, 5.0)
+//                    
+//                    Divider()
+//                    
+//                    HStack {
+//                        AboutStopItem(title: "Tipo de Acesso à Paragem", description: "Desconhecido")
+//                    }
+//                    .padding(.horizontal, 20.0)
+//                    .padding(.vertical, 5.0)
+//                    
+//                    Divider()
+//                    
+//                    HStack {
+//                        AboutStopItem(title: "Estado da Passadeira", description: "Desconhecido")
+//                    }
+//                    .padding(.horizontal, 20.0)
+//                    .padding(.vertical, 5.0)
+//                    
+//                    
+//                    Divider()
+//                    
+//                    HStack {
+//                        AboutStopItem(title: "Estacionamento Abusivo", description: "Desconhecido")
+//                    }
+//                    .padding(.horizontal, 20.0)
+//                    .padding(.vertical, 5.0)
+//                    
+//                    
+//                    Divider()
+//                    
+//                    HStack {
+//                        AboutStopItem(title: "Data da Última Verificação de Acessibilidade", description: "Desconhecida")
+//                    }
+//                    .padding(.horizontal, 20.0)
+//                    .padding(.top, 5.0)
+//                    .padding(.bottom, 12.0)
+//                }
+//                .background(RoundedRectangle(cornerRadius: 15.0).fill(.cmLaunchBackground))
+//                .blur(radius: 10)
+//                .overlay(
+//                    Text("Em breve".uppercased())
+//                        .foregroundStyle(.white)
+//                        .font(.callout)
+//                        .fontWeight(.heavy)
+//                        .padding(.horizontal, 10.0)
+//                        .background(Capsule().fill(.gray))
+//                )
+//            }
+//            .padding()
+//            
+//            VStack {
+//                HStack {
+//                   AboutStopItem(title: "Estado do Painel de Informação Real-Time", description: "Desconhecido")
+//                }
+//                .padding(.horizontal, 20.0)
+//                .padding(.top, 12.0)
+//                .padding(.bottom, 5.0)
+//                
+//                Divider()
+//                
+//                HStack {
+//                    AboutStopItem(title: "Estado da Sinalética H20A", description: "Descohecido")
+//                }
+//                .padding(.horizontal, 20.0)
+//                .padding(.vertical, 5.0)
+//                
+//                Divider()
+//                
+//                HStack {
+//                    AboutStopItem(title: "Disponibilização de Horários", description: "Desconhecido")
+//                }
+//                .padding(.horizontal, 20.0)
+//                .padding(.vertical, 5.0)
+//                
+//                Divider()
+//                
+//                HStack {
+//                    AboutStopItem(title: "Data da Última Verificação de Horários", description: "Desconhecida")
+//                }
+//                .padding(.horizontal, 20.0)
+//                .padding(.top, 5.0)
+//                .padding(.bottom, 12.0)
+//            }
+//            .background(RoundedRectangle(cornerRadius: 15.0).fill(.cmLaunchBackground))
+//            .padding(.horizontal)
+//            .padding(.bottom)
+//            .blur(radius: 10)
+//            .overlay(
+//                Text("Em breve".uppercased())
+//                    .foregroundStyle(.white)
+//                    .font(.callout)
+//                    .fontWeight(.heavy)
+//                    .padding(.horizontal, 10.0)
+//                    .background(Capsule().fill(.gray))
+//            )
             
-            VStack {
-                HStack {
-                   AboutStopItem(title: "Estado do Painel de Informação Real-Time", description: "Desconhecido")
-                }
-                .padding(.horizontal, 20.0)
-                .padding(.top, 12.0)
-                .padding(.bottom, 5.0)
-                
-                Divider()
-                
-                HStack {
-                    AboutStopItem(title: "Estado da Sinalética H20A", description: "Descohecido")
-                }
-                .padding(.horizontal, 20.0)
-                .padding(.vertical, 5.0)
-                
-                Divider()
-                
-                HStack {
-                    AboutStopItem(title: "Disponibilização de Horários", description: "Desconhecido")
-                }
-                .padding(.horizontal, 20.0)
-                .padding(.vertical, 5.0)
-                
-                Divider()
-                
-                HStack {
-                    AboutStopItem(title: "Data da Última Verificação de Horários", description: "Desconhecida")
-                }
-                .padding(.horizontal, 20.0)
-                .padding(.top, 5.0)
-                .padding(.bottom, 12.0)
-            }
-            .background(RoundedRectangle(cornerRadius: 15.0).fill(.cmLaunchBackground))
-            .padding(.horizontal)
-            .padding(.bottom)
-            .blur(radius: 10)
-            .overlay(
-                Text("Em breve".uppercased())
-                    .foregroundStyle(.white)
-                    .font(.callout)
-                    .fontWeight(.heavy)
-                    .padding(.horizontal, 10.0)
-                    .background(Capsule().fill(.gray))
-            )
-            
-            UserFeedbackForm(
-                title: "Estas informações estão corretas?",
-                description: "Ajude-nos a melhorar os transportes para todos.",
-                questions: [
-                    Question(text: "Percursos e Paragens", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Percursos e Paragens")}),
-                    Question(text: "Estimativas de Chegada", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Estimativas de Chegada")}),
-                    Question(text: "Informações no Veículo", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Informações no Veículo")})
-                ]
-            )
+//            UserFeedbackForm(
+//                title: "Estas informações estão corretas?",
+//                description: "Ajude-nos a melhorar os transportes para todos.",
+//                questions: [
+//                    Question(text: "Percursos e Paragens", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Percursos e Paragens")}),
+//                    Question(text: "Estimativas de Chegada", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Estimativas de Chegada")}),
+//                    Question(text: "Informações no Veículo", type: .yesOrNo, onAction: {value in print("User responded with value \(value) to question Informações no Veículo")})
+//                ]
+//            )
         }
         .navigationTitle("Paragem")
         .background(Color(uiColor: UIColor.secondarySystemBackground)) // mimics list background, apparently cant have specific unstyled items on list wihtout unstyling all (unstyled here is plain style)
@@ -509,6 +513,7 @@ struct StopPatternEntry: View {
                         .bold()
                         .font(.subheadline)
                         .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     Spacer()
                 }
                 .frame(height: 40)
