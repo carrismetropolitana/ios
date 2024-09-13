@@ -23,7 +23,7 @@ struct MoreView: View {
     @State private var selectedNewsImageURL: URL? = nil
     
     var body: some View {
-        NavigationStack { // its the fucking stack
+        NavigationStack {
              VStack {
                  NavigationLink(destination: selectedNews != nil ? AnyView(NewsView(news: selectedNews!, newsImageURL: selectedNewsImageURL!)) : AnyView(EmptyView()), isActive: $isCarouselDetailPresented) {
                      EmptyView()
@@ -146,6 +146,14 @@ struct MoreView: View {
                         .padding(.horizontal)
                         .padding(.bottom)
                         .handleOpenURLInApp()
+                        
+                        if let releaseVersionNumber = Bundle.main.releaseVersionNumber,
+                           let buildVersionNumber = Bundle.main.buildVersionNumber {
+                            Text("Versão \(releaseVersionNumber) (\(buildVersionNumber))")
+                                .foregroundStyle(.cmSystemText300)
+                                .bold()
+                                .padding(.bottom, 30.0)
+                        }
                     }
                 }
                 .navigationTitle("Novidades")

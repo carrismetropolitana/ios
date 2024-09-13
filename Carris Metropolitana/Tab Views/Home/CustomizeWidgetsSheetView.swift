@@ -128,7 +128,7 @@ struct CustomizeWidgetsSheetView: View {
                                     .foregroundStyle(widget.type == .smartNotification ? .secondary : .primary)
                                 Spacer()
                                 if widget.type == .smartNotification {
-                                    Text("EM BREVE")
+                                    Text("Em breve".uppercased())
                                         .foregroundStyle(.white)
                                         .font(.callout)
                                         .fontWeight(.heavy)
