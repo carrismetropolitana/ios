@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct VehicleLivePatternBundle: WidgetBundle {
     var body: some Widget {
-        VehicleLivePattern()
+//        VehicleLivePattern()
         VehicleLivePatternLiveActivity()
     }
 }
