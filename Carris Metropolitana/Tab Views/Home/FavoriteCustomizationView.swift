@@ -202,31 +202,8 @@ struct FavoriteCustomizationView: View {
                                 if patternsForSelectedItem.count > 0 {
                                     if selectedPatternIds.count > 0 {
                                         favoritesManager.addFavorite(
-                                            FavoriteItem(type: .stop, patternIds: selectedPatternIds, stopId: selectedStopId ?? overrideFavoriteItem?.stopId ?? overrideItemId)
+                                            FavoriteItem(type: .stop, patternIds: selectedPatternIds, stopId: selectedStopId ?? overrideFavoriteItem?.stopId ?? overrideItemId, receiveNotifications: sendNotifications)
                                             )
-                                            
-                                        if (sendNotifications) {
-                                            if let stopId = selectedStopId {
-                                                Messaging.messaging().subscribe(toTopic: "cm.realtime.alerts.stop.\(stopId)") { error in
-                                                    print("Subscribed to selected stop id")
-                                                }
-                                            }
-                                            
-                                            let routeIds = selectedPatternIds.map {
-                                                var components = $0.split(separator: "_")
-                                                if components.count > 1 {
-                                                    components.removeLast()
-                                                }
-                                                return components.joined(separator: "_")
-                                            }
-                                            
-                                            for routeId in routeIds {
-                                                Messaging.messaging().subscribe(toTopic: "cm.realtime.alerts.route.\(routeId)") { error in
-                                                    
-                                                }
-                                            }
-                                        }
-                                        
                                         isSelfPresented.toggle()
                                     } else {
                                         errorTitle = "Selecione pelo menos um destino."
@@ -243,24 +220,10 @@ struct FavoriteCustomizationView: View {
                                                 type: .pattern,
                                                 patternIds: selectedPatternIds,
                                                 displayName: "\(selectedLineId ?? overrideFavoriteItem?.lineId ?? overrideItemId!) - \(patternsForSelectedItem.first { $0.id == selectedPatternIds[0] }!.headsign)",
-                                                lineId: selectedLineId ?? overrideFavoriteItem?.lineId ?? overrideItemId
+                                                lineId: selectedLineId ?? overrideFavoriteItem?.lineId ?? overrideItemId,
+                                                receiveNotifications: sendNotifications
                                             )
                                         )
-                                        
-                                        if (sendNotifications) {
-                                            let routeIds = selectedPatternIds.map {
-                                                var components = $0.split(separator: "_")
-                                                if components.count > 1 {
-                                                    components.removeLast()
-                                                }
-                                                return components.joined(separator: "_")
-                                            }
-                                            
-                                            for routeId in routeIds {
-                                                Messaging.messaging().subscribe(toTopic: "cm.realtime.alerts.route.\(routeId)") { error in
-                                                }
-                                            }
-                                        }
                                         
                                         isSelfPresented.toggle()
                                     } else {
@@ -306,6 +269,7 @@ struct FavoriteCustomizationView: View {
         .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
         .onAppear {
             if let fav = overrideFavoriteItem {
+                sendNotifications = fav.receiveNotifications
                 print("Appeared with override fav item \(fav.id)")
                 if fav.type == .stop {
                     let stop = stopsManager.stops.first { $0.id == fav.stopId }
@@ -370,9 +334,11 @@ struct FavoriteCustomizationView: View {
                     }
                 }
                 if favoritesManager.isFavorited(itemId: itemId, itemType: type == .stop ? .stop : .pattern) {
-                    selectedPatternIds = favoritesManager.favorites.first {
+                    let overridenFavoriteItem = favoritesManager.favorites.first {
                         itemId == (type == .stop ? $0.stopId : $0.lineId)
-                    }!.patternIds
+                    }
+                    sendNotifications = overridenFavoriteItem!.receiveNotifications
+                    selectedPatternIds = overridenFavoriteItem!.patternIds
                 }
             }
         }
