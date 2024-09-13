@@ -17,6 +17,7 @@ struct StopsView: View {
     @EnvironmentObject var linesManager: LinesManager
     
     @State private var isSheetPresented = false
+    @State private var sheetHeight: CGFloat = .zero
     
     @State private var searchTerm = ""
     @FocusState private var isSearchFieldFocused: Bool
@@ -42,12 +43,12 @@ struct StopsView: View {
     @State private var patternIdToBePresented: String? = nil
     @State private var shouldPresentLineDetailsView = false
     
-    @State private var sheetHeight: CGFloat = .zero
-    
     @State private var mapVisualStyle: MapVisualStyle = .standard
     
     @State private var mapVisible: Bool = true
     
+    @State private var seeAllNextEtas = false
+//    @State private var sheetPresentationDetents: [PresentationDetent] = [.fraction(0.5)]
     
     var body: some View {
         var suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!.coordinate, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
@@ -251,19 +252,29 @@ struct StopsView: View {
                                 isSheetPresented = true
                                 print("\(patternIdToBePresented) :: \(lineIdToBePresented)")
                             }
-                        }, stop: stop)
+                        }, stop: stop, seeAllNextEtas: $seeAllNextEtas)
                     }
                 }
-//                .fixedSize(horizontal: false, vertical: true)
-//                .modifier(GetHeightModifier(height: $sheetHeight))
+//                .readHeight()
+//                .onPreferenceChange(HeightPreferenceKey.self) { height in
+//                    if let height {
+//                        sheetHeight = height
+//                    }
+//                }
                 .presentationDragIndicator(.visible)
                 .presentationBackground(.regularMaterial)
                 .presentationDetents([.fraction(0.5)])
+//                .presentationDetents(sheetPresentationDetents)
 //                .presentationDetents([.height(sheetHeight)])
 //                .onDisappear {
                     // selectedStopId = "" // TODO: (fixme) empty string because mapView checks for nil
 //                }
             }
+//            .onChange(of: seeAllNextEtas) {
+//                if seeAllNextEtas {
+//                    sheetPresentationDetents.append(.large)
+//                }
+//            }
             .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
             .onAppear {
                 vehiclesManager.stopFetching()
