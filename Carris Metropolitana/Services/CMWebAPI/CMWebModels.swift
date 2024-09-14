@@ -11,7 +11,8 @@ struct StartupMessage: Codable {
     let maxBuild: Int
     let minBuild: Int
     let presentationType: PresentationType
-    let url: String
+    let urlHost: String
+    let urlPath: String
     
     enum PresentationType: String, Codable {
         case breaking, changelog

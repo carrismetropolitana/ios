@@ -77,22 +77,27 @@ struct ContentView: View {
                 let startupMessages = try await CMWebAPI.shared.getStartupMessages()
                 for message in startupMessages {
                     if currentBuildInBuildSpan(maxBuild: message.maxBuild, minBuild: message.minBuild) {
-                        print("Current build in startup messages")
-                        applicableStartupMessage = message
-                        if message.presentationType == .changelog {
-                            lastShowedChangelogBuild = Int(Bundle.main.buildVersionNumber!) ?? -1
+                        // TODO: this needs to have some way of recovering from a missing build Version
+                        if lastShowedChangelogBuild != Int(Bundle.main.buildVersionNumber ?? "-2") {
+                            print("Current build in startup messages")
+                            applicableStartupMessage = message
+                            if message.presentationType == .changelog {
+                                lastShowedChangelogBuild = Int(Bundle.main.buildVersionNumber!) ?? -1
+                            }
+                            startupMessageSheetPresented = true
+                            break // select the first applicable message
                         }
-                        startupMessageSheetPresented = true
-                        break // select the first applicable message
+                        print("Current build NOT in startup messages")
                     }
-                    print("Current build NOT in startup messages")
                 }
             }
         }
         .sheet(isPresented: $startupMessageSheetPresented) {
-            if let message = applicableStartupMessage {
-                StartupMessageSheetView(url: URL(string: message.url)!)
+            if let message = applicableStartupMessage,
+               let url = addLocaleAndBuild(host: message.urlHost, path: message.urlPath) {
+                StartupMessageSheetView(url: url)
                     .interactiveDismissDisabled(message.presentationType == .breaking)
+                    .presentationDragIndicator(.visible) // TODO: consider hiding when non dismissable
             }
         }
     }

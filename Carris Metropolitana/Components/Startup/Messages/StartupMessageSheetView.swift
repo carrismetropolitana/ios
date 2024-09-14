@@ -42,8 +42,7 @@ struct StartupMessageWebView: UIViewRepresentable {
     }
     
     func updateUIView(_ webView: WKWebView, context: Context) {
-        let request = URLRequest(url: addLocaleAndBuild(to: url)!)
-        print(request.url)
+        let request = URLRequest(url: url)
         webView.load(request)
     }
     
@@ -75,10 +74,10 @@ struct StartupMessageWebView: UIViewRepresentable {
     }
 }
 
-func addLocaleAndBuild(to url: URL) -> URL? {
+func addLocaleAndBuild(host: String, path: String) -> URL? {
+    let url = URL(string: "\(host)\(Locale.current.languageCode ?? "pt")\(path)")!
     if var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) {
         var queryItems = urlComponents.queryItems ?? []
-        queryItems.append(URLQueryItem(name: "locale", value: Locale.current.languageCode))
         queryItems.append(URLQueryItem(name: "build", value: Bundle.main.buildVersionNumber ?? "UNKNOWN"))
 
         urlComponents.queryItems = queryItems
