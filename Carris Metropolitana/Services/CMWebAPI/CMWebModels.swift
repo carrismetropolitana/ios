@@ -8,8 +8,8 @@
 import Foundation
 
 struct StartupMessage: Codable {
-    let maxBuild: Int
-    let minBuild: Int
+    let maxBuild: Int?
+    let minBuild: Int?
     let presentationType: PresentationType
     let urlHost: String
     let urlPath: String

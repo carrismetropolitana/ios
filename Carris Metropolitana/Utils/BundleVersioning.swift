@@ -16,10 +16,24 @@ extension Bundle {
     }
 }
 
-func currentBuildInBuildSpan(maxBuild: Int, minBuild: Int) -> Bool {
+func currentBuildInBuildInterval(maxBuild: Int?, minBuild: Int?) -> Bool {
     if let buildVersionNumber = Int(Bundle.main.buildVersionNumber!) {
-        return buildVersionNumber < maxBuild
-            && buildVersionNumber > maxBuild
+        guard !(maxBuild == nil && minBuild == nil) else {
+            return false
+        }
+        
+        if let maxBuild = maxBuild, let minBuild = minBuild {
+            return (buildVersionNumber < maxBuild
+                    && buildVersionNumber > minBuild)
+        }
+        
+        if let maxBuild = maxBuild {
+            return buildVersionNumber < maxBuild && minBuild == nil
+        }
+        
+        if let minBuild = minBuild {
+            return buildVersionNumber > minBuild && maxBuild == nil
+        }
     }
     return false
 }

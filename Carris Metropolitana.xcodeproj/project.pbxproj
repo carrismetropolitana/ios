@@ -1255,7 +1255,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2024.09.12;
+				MARKETING_VERSION = 2024.09.14;
 				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1299,7 +1299,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2024.09.12;
+				MARKETING_VERSION = 2024.09.14;
 				PRODUCT_BUNDLE_IDENTIFIER = pt.carrismetropolitana.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

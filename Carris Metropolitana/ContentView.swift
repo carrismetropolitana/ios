@@ -76,7 +76,7 @@ struct ContentView: View {
             Task {
                 let startupMessages = try await CMWebAPI.shared.getStartupMessages()
                 for message in startupMessages {
-                    if currentBuildInBuildSpan(maxBuild: message.maxBuild, minBuild: message.minBuild) {
+                    if currentBuildInBuildInterval(maxBuild: message.maxBuild, minBuild: message.minBuild) {
                         // TODO: this needs to have some way of recovering from a missing build Version
                         if lastShowedChangelogBuild != Int(Bundle.main.buildVersionNumber ?? "-2") {
                             print("Current build in startup messages")
