@@ -9,17 +9,21 @@ import SwiftUI
 import WebKit
 
 struct StartupMessageSheetView: View {
+    @Environment(\.openURL) private var openURL
     @Environment(\.presentationMode) var presentationMode
     
     let url: URL
     var body: some View {
         StartupMessageWebView(
             url: url,
-            onExternalURLOpen: { externalURL in},
+            onExternalURLOpen: { externalURL in
+                openURL(externalURL)
+            },
             onSelfDismiss: {
                 presentationMode.wrappedValue.dismiss()
             }
         )
+        .ignoresSafeArea()
     }
 }
 
@@ -38,6 +42,7 @@ struct StartupMessageWebView: UIViewRepresentable {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
         webView.underPageBackgroundColor = .clear
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
         return webView
     }
     
@@ -58,11 +63,13 @@ struct StartupMessageWebView: UIViewRepresentable {
         }
         
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-            if let url = navigationAction.request.url, url != parent.url {
-                self.parent.onExternalURLOpen(url)
-                decisionHandler(.cancel)
-            } else {
-                decisionHandler(.allow)
+            if let url = navigationAction.request.url {
+                if !(url.host()?.contains("carrismetropolitana.pt"))! {
+                    self.parent.onExternalURLOpen(url)
+                    decisionHandler(.cancel)
+                } else {
+                    decisionHandler(.allow)
+                }
             }
         }
         
