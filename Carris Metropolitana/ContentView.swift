@@ -26,7 +26,7 @@ struct ContentView: View {
     @State private var applicableStartupMessage: StartupMessage? = nil
     @State private var startupMessageSheetPresented = false
     
-    @AppStorage("lastShowedChangelogBuild") var lastShowedChangelogBuild: Int = 0
+    @AppStorage("lastShowedChangelogMessageId") var lastShowedChangelogMessageId: String = ""
     
     var body: some View {
         ZStack {
@@ -77,17 +77,17 @@ struct ContentView: View {
                 let startupMessages = try await CMWebAPI.shared.getStartupMessages()
                 for message in startupMessages {
                     if currentBuildInBuildInterval(maxBuild: message.buildMax, minBuild: message.buildMin) {
-                        // TODO: this needs to have some way of recovering from a missing build Version
-                        if lastShowedChangelogBuild != Int(Bundle.main.buildVersionNumber ?? "-2") {
-                            print("Current build in startup messages")
+                        if (message.presentationType == .changelog && lastShowedChangelogMessageId != message.messageId)
+                            || message.presentationType == .breaking {
                             applicableStartupMessage = message
-                            if message.presentationType == .changelog {
-                                lastShowedChangelogBuild = Int(Bundle.main.buildVersionNumber!) ?? -1
-                            }
                             startupMessageSheetPresented = true
-                            break // select the first applicable message
                         }
-                        print("Current build NOT in startup messages")
+                        
+                        if message.presentationType == .changelog {
+                            lastShowedChangelogMessageId = message.messageId
+                        }
+                        
+                        break // stop at the first applicable message
                     }
                 }
             }
