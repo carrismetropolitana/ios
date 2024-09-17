@@ -639,11 +639,11 @@ func schedulizeTripsForDateAndStop(stopId: String, trips: [Trip], date: Date) ->
         }
     }
     
-    let sortedSchedule = schedules.sorted {
+    let sortedSchedules = schedules.sorted {
         $0.hour < $1.hour
     }
     
-    return schedules
+    return sortedSchedules
 }
 
 
