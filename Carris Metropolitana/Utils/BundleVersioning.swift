@@ -28,11 +28,11 @@ func currentBuildInBuildInterval(maxBuild: Int?, minBuild: Int?) -> Bool {
         }
         
         if let maxBuild = maxBuild {
-            return buildVersionNumber < maxBuild && minBuild == nil
+            return buildVersionNumber < maxBuild
         }
         
         if let minBuild = minBuild {
-            return buildVersionNumber > minBuild && maxBuild == nil
+            return buildVersionNumber > minBuild
         }
     }
     return false
