@@ -191,9 +191,9 @@ struct LinesListView: View {
 //                }
 //            }
             .onChange(of: searchTerm) {
-                
+                let normalizedSearchTerm = searchTerm.normalizedForSearch()
                 let filtered = lines.filter {
-                    $0.longName.localizedCaseInsensitiveContains(searchTerm) || $0.shortName.localizedCaseInsensitiveContains(searchTerm)
+                    $0.longName.normalizedForSearch().localizedCaseInsensitiveContains(normalizedSearchTerm) || $0.shortName.normalizedForSearch().localizedCaseInsensitiveContains(normalizedSearchTerm)
                 }
                 
                 searchFilteredLines = filtered

@@ -61,10 +61,11 @@ struct SelectFavoriteStopView: View {
             }
         }
         .onChange(of: searchTerm) {
-            print(searchTerm)
+            let normalizedSearchTerm = searchTerm.normalizedForSearch()
             let filtered = stopsManager.stops.filter {
-                $0.id.localizedCaseInsensitiveContains(searchTerm) || $0.name.localizedCaseInsensitiveContains(searchTerm)
+                $0.id.normalizedForSearch().localizedCaseInsensitiveContains(normalizedSearchTerm) || $0.name.normalizedForSearch().localizedCaseInsensitiveContains(normalizedSearchTerm)
             }
+            
             if filtered.count > 0 {
                 suggestedStops = filtered
             } else {
