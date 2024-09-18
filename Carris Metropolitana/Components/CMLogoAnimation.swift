@@ -13,7 +13,7 @@ struct CMLogoAnimation: View {
     var body: some View {
         VStack {
             LottieView(animation: .named(colorScheme == .light ? "CMLogoLoop" : "CMLogoLoopDark"))
-                .animationSpeed(1.5)
+                .animationSpeed(2.3)
                 .playing(loopMode: .autoReverse)
                 .frame(width: 250)
         }
