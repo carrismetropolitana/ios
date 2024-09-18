@@ -24,7 +24,7 @@ func getMapVisualStyleString(for mapVisualStyle: MapVisualStyle) -> String {
 struct MapLibreMapView: UIViewRepresentable {
     @Environment(\.colorScheme) var colorScheme
     
-    @EnvironmentObject var locationManager: LocationManager
+//    @EnvironmentObject var locationManager: LocationManager
     
     var stops: [Stop]
     @Binding var selectedStopId: String?
@@ -49,7 +49,7 @@ struct MapLibreMapView: UIViewRepresentable {
         mapView.logoView.isHidden = true
         mapView.attributionButtonPosition = .bottomLeft
         
-        if let location = locationManager.location {
+        if let location = mapView.userLocation {
             mapView.setCenter(
                 location.coordinate,
                 zoomLevel: 12,
@@ -204,15 +204,10 @@ struct MapLibreMapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
-            print("finished loading mapstyle")
+            print("MapView loaded Style -> \(mapVisualStyle)")
+            // control.updateStyle(mapView)
             control.addStops(to: mapView)
-            print("calling updateb tiles baceuse syle loaded")
-            print("FROM CONTROLLED MV: \(mapVisualStyle)")
             control.updateTiles(on: mapView, to: mapVisualStyle)
-            print("added stops, \(style.source(withIdentifier: "stops-layer")), \(style.layer(withIdentifier: "stops"))")
-            
-            print("from delegate map, flytoCoords is \(control.flyToCoords)")
-            
         }
         
         func mapViewDidFinishLoadingMap(_ mapView: MLNMapView) {
@@ -229,7 +224,7 @@ struct MapLibreMapView: UIViewRepresentable {
         
         mapView.setCamera(
             camera,
-            withDuration: 3,
+            withDuration: 1,
             animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut))
     }
     
@@ -243,7 +238,7 @@ struct MapLibreMapView: UIViewRepresentable {
             
             mapView.setCamera(
                 camera,
-                withDuration: 3,
+                withDuration: 1,
                 animationTimingFunction: CAMediaTimingFunction(name: .easeInEaseOut))
         }
     }
