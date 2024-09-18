@@ -25,7 +25,7 @@ struct NewsView: View {
     var drag: some Gesture {
             DragGesture()
             .onChanged({gesture in
-                    if gesture.startLocation.x < CGFloat(100.0){
+                    if gesture.startLocation.x < CGFloat(100.0) {
                         print("edge pan, offset \(gesture.translation.width), \(gesture.translation.height)")
                     }
                  })
@@ -48,9 +48,8 @@ struct NewsView: View {
                             }
                             .buttonStyle(.plain)
                             Spacer()
-                            Button {
-//                                presentationMode.wrappedValue.dismiss()
-                            } label: {
+                            
+                            ShareLink(item: URL(string: news.link)!) {
                                 RoundHeaderButtonView(imageSystemName: "square.and.arrow.up")
                                     .frame(width: 32, height: 32)
                             }

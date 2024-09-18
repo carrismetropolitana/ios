@@ -443,6 +443,13 @@ struct StopDetailsView: View {
 //            )
         }
         .navigationTitle("Paragem")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                ShareLink(item: URL(string: "https://beta.carrismetropolitana.pt/stops/\(stop.id)")!) {
+                    Image(systemName: "square.and.arrow.up")
+                }
+            }
+        }
         .background(Color(uiColor: UIColor.secondarySystemBackground)) // mimics list background, apparently cant have specific unstyled items on list wihtout unstyling all (unstyled here is plain style)
         .sheet(isPresented: $isAlertsSheetPresented) {
             // try await AlertsService.fetchNew()
