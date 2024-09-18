@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct StopSearchResultsView: View {
+    let stops: [Stop]
+    let onStopSelected: (Stop) -> Void
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            LazyVStack {
+                ForEach(stops) { stop in
+                    Button {
+                        onStopSelected(stop)
+                    } label: {
+                        StopSearchResultEntry(stop: stop)
+                            .padding(.horizontal)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(
+                        Text("Paragem número \(stop.id.map { String($0) }.joined(separator: " ")), \(stop.ttsName ?? stop.name)", comment: "Paragem resultado de pesquisa")
+                    )
+                }
+            }
+        }
+        .contentMargins(.top, 70, for: .scrollContent)
     }
 }
 
-#Preview {
-    StopSearchResultsView()
-}
+//#Preview {
+//    StopSearchResultsView()
+//}

@@ -126,10 +126,10 @@ struct StopsView: View {
                 .padding()
                 
                 if (isSearching) {
-                    searchResultsOverlay()
+                    searchResultsOverlay
                 }
                 
-                searchBar()
+                searchBar
                 
             }
             //            .onAppear {
@@ -185,11 +185,11 @@ struct StopsView: View {
                 let t1 = Date().timeIntervalSince1970
                 
                 let stops = stopsManager.stops
-                let normalizedSearchTerm = searchTerm.lowercased()
+                let normalizedSearchTerm = searchTerm.normalizedForSearch()
                 let filtered = stops.filter({
-                    $0.name.lowercased().contains(normalizedSearchTerm)
-                    || $0.id.lowercased().contains(normalizedSearchTerm)
-                    || ($0.ttsName != nil && $0.ttsName!.lowercased().contains(normalizedSearchTerm))
+                    $0.name.normalizedForSearch().contains(normalizedSearchTerm)
+                    || $0.id.normalizedForSearch().contains(normalizedSearchTerm)
+                    || ($0.ttsName != nil && $0.ttsName!.normalizedForSearch().contains(normalizedSearchTerm))
                 })
                 
                 let t2 = Date().timeIntervalSince1970
@@ -291,7 +291,7 @@ struct StopsView: View {
         }
     }
     
-    private func searchBar() -> some View {
+    var searchBar: some View {
         VStack {
             HStack(alignment: .center) {
                 if (!isSearching) {
@@ -350,7 +350,7 @@ struct StopsView: View {
     }
     
     
-    private func searchResultsOverlay() -> some View {
+    var searchResultsOverlay: some View {
         ZStack {
             Color.clear
                 .background(.ultraThinMaterial)

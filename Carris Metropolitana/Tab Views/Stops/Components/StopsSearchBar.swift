@@ -1,5 +1,5 @@
 //
-//  SearchBar.swift
+//  StopsSearchBar.swift
 //  Carris Metropolitana
 //
 //  Created by João Pereira on 14/09/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SearchBar: View {
+struct StopsSearchBar: View {
     @Binding var searchTerm: String
     @Binding var isSearching: Bool
     @FocusState private var isSearchFieldFocused: Bool
@@ -51,6 +51,6 @@ struct SearchBar: View {
     }
 }
 
-#Preview {
-    SearchBar()
-}
+//#Preview {
+//    StopsSearchBar()
+//}
