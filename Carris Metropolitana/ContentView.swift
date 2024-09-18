@@ -27,6 +27,7 @@ struct ContentView: View {
     @State private var startupMessageSheetPresented = false
     
     @AppStorage("lastShowedChangelogMessageId") var lastShowedChangelogMessageId: String = ""
+    @AppStorage("firstLaunchTime") var firstLaunchTime: Double = 0
     
     var body: some View {
         ZStack {
@@ -90,6 +91,11 @@ struct ContentView: View {
                         break // stop at the first applicable message
                     }
                 }
+            }
+        }
+        .onAppear {
+            if firstLaunchTime == 0 {
+                firstLaunchTime = Date.now.timeIntervalSince1970
             }
         }
         .sheet(isPresented: $startupMessageSheetPresented) {
