@@ -438,6 +438,7 @@ struct PatternLegs: View {
                                 
                                 if let etas = etasWithStopIds?[pathStep.stop.id] {
                                     let nextEtas = filterAndSortCurrentAndFuturePatternETAs(etas)
+                                    var nextEtaIsRealtime = false
                                     HStack(spacing: 20.0) {
                                         if let nextEtaEstimatedArrival = nextEtas.first?.estimatedArrivalUnix {
                                             HStack {
@@ -446,10 +447,11 @@ struct PatternLegs: View {
                                                 
                                                 PulseLabel(accent: .green, label: Text(minutesToArrival <= 1 ? "A chegar" : "\(String(minutesToArrival)) minutos"))
                                             }
+                                            let _ = nextEtaIsRealtime = true
                                         }
                                         if isSelectedByIndex {
                                             if nextEtas.count > 1 {
-                                                NextEtasView(nextEtas: Array(nextEtas.dropFirst().prefix(3)))
+                                                NextEtasView(nextEtas: Array(nextEtaIsRealtime ? nextEtas.dropFirst().prefix(3) : nextEtas.prefix(3)))
                                             } else {
                                                 Text("Sem próximas passagens.")
                                                     .font(.subheadline)
