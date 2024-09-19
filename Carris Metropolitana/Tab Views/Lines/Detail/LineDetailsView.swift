@@ -106,8 +106,14 @@ struct LineDetailsView: View {
                                 Text("Selecionar destino")
                                 Picker("Selecionar destino", selection: $selectedPattern) {
                                     ForEach(patterns, id: \.id) { pattern in 
-                                        Text(pattern.headsign)
-                                            .tag(pattern as Pattern?) // https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
+                                        let route = routes.first { $0.patterns.contains(pattern.id) }
+                                        Button {} label: {
+                                            Text(pattern.headsign)
+                                            if let route {
+                                                Text(route.longName)
+                                            }
+                                        }
+                                        .tag(pattern as Pattern?) // https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
                                     }
                                 }
                                 .frame(maxWidth: .infinity)

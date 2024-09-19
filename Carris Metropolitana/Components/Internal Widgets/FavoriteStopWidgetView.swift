@@ -41,7 +41,6 @@ struct FavoriteStopWidgetView: View {
                             Text(stop.name)
                                 .font(.callout)
                                 .bold()
-                            // TODO: should just left align or ellipsis (lineLimit 1)
                                 .multilineTextAlignment(.leading)
                                 .lineLimit(1)
                         } else {
