@@ -222,7 +222,7 @@ struct LinesListView: View {
     }
     
     private func aroundMeLines(_ location: CLLocationCoordinate2D) -> some View {
-        let linesAroundUser = closestStops(to: location, stops: stopsManager.stops, maxResults: 3, needsLines: true).compactMap { $0.lines![0] }
+        let linesAroundUser = closestStops(to: location, stops: stopsManager.stops, maxResults: 3, needsLines: true).compactMap { $0.lines![0] }.uniqueHashableElementsPreservingOrder()
         return (
             Section(header: Text("À Minha Volta").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
                 
@@ -245,6 +245,13 @@ struct LinesListView: View {
     }
     
     
+}
+
+extension Array where Element: Hashable {
+    func uniqueHashableElementsPreservingOrder() -> [Element] {
+        var seen = Set<Element>()
+        return self.filter { seen.insert($0).inserted }
+    }
 }
 
 extension Color {
@@ -444,7 +451,7 @@ func closestStops(to location: CLLocationCoordinate2D, stops: [Stop], maxResults
         }
     }
     
-    return Array(Set(sortedStops.prefix(maxResults)))
+    return Array(sortedStops.prefix(maxResults))
 }
 
 struct HeightPreferenceKey: PreferenceKey {
