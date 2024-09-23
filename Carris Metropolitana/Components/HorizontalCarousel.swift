@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+enum ContentType {
+    case news, alert
+}
+struct CarouselItem {
+    let contentId: Int
+    let contentType: ContentType
+    let imageURL: URL
+}
+
 struct HorizontalCarousel: View {
     let items: [CarouselItem]
     let onItemClick: (_ item: CarouselItem) -> Void
