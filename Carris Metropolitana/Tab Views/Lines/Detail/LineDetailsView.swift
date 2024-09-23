@@ -134,10 +134,10 @@ struct LineDetailsView: View {
                                         HStack {
                                             HStack {
                                                 Circle()
-                                                    .fill(.green.gradient.opacity(0.3))
+                                                    .fill(vehicles.count == 0 ? .gray.opacity(0.3) : .green.opacity(0.3))
                                                     .frame(height: 20.0)
-                                                Text("\(vehicles.count) veículo\(vehicles.count == 1 ? "" : "s") em circulação")
-                                                    .foregroundStyle(.green)
+                                                Text("\(vehicles.count == 0 ? "Sem" : "")\(vehicles.count > 0 ? String(vehicles.count) : "") veículo\(vehicles.count == 1 ? "" : "s") em circulação")
+                                                    .foregroundStyle(vehicles.count == 0 ? .gray : .green)
                                                     .bold()
                                                     .font(.footnote)
                                                     .padding(.horizontal, 5.0)

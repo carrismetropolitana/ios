@@ -31,18 +31,17 @@ struct MoreView: View {
                 ScrollView {
                     VStack(spacing: 20.0) {
                         if (carouselItems.count > 0) {
-                            LoopingCarousel(items: carouselItems, onItemClick: { item in
+                            HorizontalCarousel(items: carouselItems, onItemClick: { item in
                                 selectedNews = news.first { $0.id == item.contentId }
                                 selectedNewsImageURL = item.imageURL
                                 isCarouselDetailPresented.toggle()
                             })
-                            .frame(height: 200)
                             .padding(.vertical)
                         } else {
                             RoundedRectangle(cornerRadius: 15.0)
                                 .fill(.quaternary)
                                 .frame(height: 200)
-                                .padding(.horizontal, 10.0)
+                                .padding(.horizontal)
                                 .padding(.vertical)
 //                                .overlay {
 //                                    LoadingBar(size: 10)

@@ -117,10 +117,10 @@ struct FavoriteLineWidgetView: View {
                             HStack {
                                 HStack {
                                     Circle()
-                                        .fill(.green.gradient.opacity(0.3))
+                                        .fill(filteredVehiclesBinding.wrappedValue.count == 0 ? .gray.opacity(0.3) : .green.opacity(0.3))
                                         .frame(height: 20.0)
-                                    Text("\(filteredVehiclesBinding.wrappedValue.count) veículo\(filteredVehiclesBinding.wrappedValue.count == 1 ? "" : "s") em circulação")
-                                        .foregroundStyle(.green)
+                                    Text("\(filteredVehiclesBinding.wrappedValue.count == 0 ? "Sem" : "")\(filteredVehiclesBinding.wrappedValue.count > 0 ? String(filteredVehiclesBinding.wrappedValue.count) : "") veículo\(filteredVehiclesBinding.wrappedValue.count == 1 ? "" : "s") em circulação")
+                                        .foregroundStyle(filteredVehiclesBinding.wrappedValue.count == 0 ? .gray : .green)
                                         .bold()
                                         .font(.footnote)
                                         .padding(.horizontal, 5.0)
