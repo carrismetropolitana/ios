@@ -98,17 +98,13 @@
 		79DB837D2BA19B8C0023DD93 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB837C2BA19B8C0023DD93 /* HomeView.swift */; };
 		79DB837F2BA19B9B0023DD93 /* StopsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB837E2BA19B9B0023DD93 /* StopsView.swift */; };
 		79DB83812BA19BAC0023DD93 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83802BA19BAC0023DD93 /* MoreView.swift */; };
-		79DB83842BA1B2710023DD93 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83832BA1B2710023DD93 /* CarouselView.swift */; };
 		79DB83892BA1B5ED0023DD93 /* HTTPAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83882BA1B5ED0023DD93 /* HTTPAPI.swift */; };
 		79DB838C2BA1B6320023DD93 /* CMWModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB838B2BA1B6320023DD93 /* CMWModels.swift */; };
 		79DB838F2BA1BA340023DD93 /* CMWHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB838E2BA1BA340023DD93 /* CMWHelpers.swift */; };
-		79DB83912BA1CD2E0023DD93 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83902BA1CD2E0023DD93 /* Carousel.swift */; };
 		79DC32052C0DD4FA00BC2D97 /* CMUserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */; };
-		79DE7D452C1D009900BE09BB /* LoopingCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */; };
 		79DE904D2C493C5D00D3E859 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE904C2C493C5D00D3E859 /* NotificationService.swift */; };
 		79DE90512C493C5D00D3E859 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		79DE90582C493DFE00D3E859 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 79DE90572C493DFE00D3E859 /* FirebaseMessaging */; };
-		79E22D172C24981E0067F157 /* CMLoopingCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E22D162C24981E0067F157 /* CMLoopingCarousel.swift */; };
 		79E88CB72BAAD538001F3227 /* CustomizeWidgetsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CB62BAAD538001F3227 /* CustomizeWidgetsSheetView.swift */; };
 		79E88CB92BAAE172001F3227 /* PersonalUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CB82BAAE172001F3227 /* PersonalUserView.swift */; };
 		79E88CBB2BAAEAA5001F3227 /* SmartNotificationCustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CBA2BAAEAA5001F3227 /* SmartNotificationCustomizationView.swift */; };
@@ -260,17 +256,13 @@
 		79DB837C2BA19B8C0023DD93 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		79DB837E2BA19B9B0023DD93 /* StopsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsView.swift; sourceTree = "<group>"; };
 		79DB83802BA19BAC0023DD93 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
-		79DB83832BA1B2710023DD93 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		79DB83882BA1B5ED0023DD93 /* HTTPAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPAPI.swift; sourceTree = "<group>"; };
 		79DB838B2BA1B6320023DD93 /* CMWModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWModels.swift; sourceTree = "<group>"; };
 		79DB838E2BA1BA340023DD93 /* CMWHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWHelpers.swift; sourceTree = "<group>"; };
-		79DB83902BA1CD2E0023DD93 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMUserAPI.swift; sourceTree = "<group>"; };
-		79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingCarouselView.swift; sourceTree = "<group>"; };
 		79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		79DE904C2C493C5D00D3E859 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		79DE904E2C493C5D00D3E859 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		79E22D162C24981E0067F157 /* CMLoopingCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMLoopingCarousel.swift; sourceTree = "<group>"; };
 		79E88CB62BAAD538001F3227 /* CustomizeWidgetsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeWidgetsSheetView.swift; sourceTree = "<group>"; };
 		79E88CB82BAAE172001F3227 /* PersonalUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalUserView.swift; sourceTree = "<group>"; };
 		79E88CBA2BAAEAA5001F3227 /* SmartNotificationCustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartNotificationCustomizationView.swift; sourceTree = "<group>"; };
@@ -641,9 +633,7 @@
 				79CA0A6F2BA2F4BE000F4900 /* Internal Widgets */,
 				798D7CAF2C79122600F7B1D1 /* Maps */,
 				798D7CB02C79125700F7B1D1 /* Debug */,
-				79DB83832BA1B2710023DD93 /* CarouselView.swift */,
 				79D6714F2CA1C57C0003396A /* HorizontalCarousel.swift */,
-				79DB83902BA1CD2E0023DD93 /* Carousel.swift */,
 				79AB3C9D2C72CC5900122AA1 /* StopsFilterTest.swift */,
 				798B2E7B2BA336A500CBA9DC /* PlayerViewController.swift */,
 				791915792BA3BA07009E5B29 /* MapView.swift */,
@@ -653,10 +643,8 @@
 				79CD78A02BA73767003D30F2 /* FacilityIconsPreviewView.swift */,
 				7991D6B22BB1CFE7002E6638 /* PulseAnimation.swift */,
 				7912F69F2C09DF70005D31DF /* NewsWebView.swift */,
-				79E22D162C24981E0067F157 /* CMLoopingCarousel.swift */,
 				79F0ABD82C02B2F1008FA0D9 /* VehicleIdentifier1.swift */,
 				79CD78A62BA78001003D30F2 /* AnotherMapView.swift */,
-				79DE7D442C1D009900BE09BB /* LoopingCarouselView.swift */,
 				79F2CA222C3C5F750067E938 /* HomeScreenBanner.swift */,
 				79A532F02C12365000019D6F /* OnboardingView.swift */,
 				790CB9822BE29E0D0011B0EA /* EasterEggView.swift */,
@@ -960,7 +948,6 @@
 				799023472C9B058F00D30404 /* String.swift in Sources */,
 				79DC32052C0DD4FA00BC2D97 /* CMUserAPI.swift in Sources */,
 				791A706B2C3D343C00E789E5 /* CMLogoAnimation.swift in Sources */,
-				79E22D172C24981E0067F157 /* CMLoopingCarousel.swift in Sources */,
 				79CA0A732BA2F4F0000F4900 /* FavoriteLineWidgetView.swift in Sources */,
 				79CA0A6E2BA2F3AE000F4900 /* CMAPI.swift in Sources */,
 				797D321A2C1384290063F57C /* SquaredButton.swift in Sources */,
@@ -1015,13 +1002,10 @@
 				7991D6B32BB1CFE7002E6638 /* PulseAnimation.swift in Sources */,
 				79A1904B2C3EC0A400752D80 /* Navigation.swift in Sources */,
 				79B8BE4D2C9645FD00313253 /* StopSearchResultsView.swift in Sources */,
-				79DB83842BA1B2710023DD93 /* CarouselView.swift in Sources */,
 				79E9D4F32C2F855500C6D181 /* UserFeedbackForm.swift in Sources */,
 				79F04CD12C31E555003809E3 /* SelectFavoriteStopView.swift in Sources */,
-				79DE7D452C1D009900BE09BB /* LoopingCarouselView.swift in Sources */,
 				79CDD65C2C0643920078EC5E /* PatternStop.swift in Sources */,
 				794588B32C77882B000AE50A /* ViewHeight.swift in Sources */,
-				79DB83912BA1CD2E0023DD93 /* Carousel.swift in Sources */,
 				791E09952BA53D9D002899EC /* SFSafariView.swift in Sources */,
 				799E63B62C02C71C00BCBEB8 /* AlertsSheetView.swift in Sources */,
 				79CA0A752BA2F4FD000F4900 /* SmartNotificationWidgetView.swift in Sources */,
