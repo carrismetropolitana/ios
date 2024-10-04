@@ -3,6 +3,16 @@
     {
       "filename" : "lostBus.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "lostBus_dark.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

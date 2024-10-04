@@ -132,36 +132,9 @@ struct LineDetailsView: View {
                                     VStack {
                                         Spacer()
                                         HStack {
-                                            HStack {
-                                                Circle()
-                                                    .fill(vehicles.count == 0 ? .gray.opacity(0.3) : .green.opacity(0.3))
-                                                    .frame(height: 20.0)
-                                                Text("\(vehicles.count == 0 ? "Sem" : "")\(vehicles.count > 0 ? String(vehicles.count) : "") veículo\(vehicles.count == 1 ? "" : "s") em circulação")
-                                                    .foregroundStyle(vehicles.count == 0 ? .gray : .green)
-                                                    .bold()
-                                                    .font(.footnote)
-                                                    .padding(.horizontal, 5.0)
-                                            }
-                                            .padding(5.0)
-                                            .background {
-                                                Capsule()
-                                                    .fill(.white.shadow(.drop(color: .black.opacity(0.2), radius: 10)))
-                                            }
-                                            .padding()
+                                            CirculatingVehiclesIndicator(vehiclesCount: vehicles.count)
+                                                .padding()
                                             Spacer()
-//                                            Button {
-//                                                withAnimation {
-//                                                    isMapExpanded.toggle()
-//                                                }
-//                                            } label: {
-//                                                Image(systemName: isMapExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
-//                                                    .padding(10.0)
-//                                                    .background {
-//                                                        Circle()
-//                                                            .fill(.thickMaterial)
-//                                                    }
-//                                                    .padding()
-//                                            }
                                         }
                                     }
                                 }
@@ -382,7 +355,7 @@ struct PatternLegs: View {
                     HStack {
                         ZStack {
                             VStack {
-                                Text("—")
+                                Text(verbatim: "—")
                                     .bold()
                                     .offset(x: 10, y: -2)
                                     .padding(.top, isSelectedByIndex ? 10 : 0)
@@ -572,7 +545,7 @@ struct NextEtasView: View {
         ForEach(nextEtas, id: \.self) { eta in
             if let estimatedArrival = eta.estimatedArrival {
                 let timeComponents = estimatedArrival.components(separatedBy: ":")
-                Text("\(timeComponents[0]):\(timeComponents[1])")
+                Text(verbatim: "\(timeComponents[0]):\(timeComponents[1])")
                     .foregroundStyle(.green)
             }
             
@@ -580,7 +553,7 @@ struct NextEtasView: View {
                 let timeComponents = scheduledArrival.components(separatedBy: ":")
                 let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
                 let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
-                Text(adjustedArrival ?? arrivalWithoutSeconds)
+                Text(verbatim: adjustedArrival ?? arrivalWithoutSeconds)
             }
             
         }

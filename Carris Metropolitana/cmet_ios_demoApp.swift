@@ -49,7 +49,7 @@ struct cmet_ios_demoApp: App {
                         .zIndex(1)
                     
                         .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7) { // this is getting toggled by the video ending; replaced toggle with hardcoded bool
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.7) {
                                 withAnimation {
                                     isShowingLaunchAnimation = false
                                 }
