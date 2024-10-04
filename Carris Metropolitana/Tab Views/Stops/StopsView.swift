@@ -88,9 +88,8 @@ struct StopsView: View {
                     ) { EmptyView() }
                 }
                 
-                MapLibreMapView(
+                StopsMapView(
                     stops: stopsManager.stops,
-                    selectedStopId: $selectedStopId,
                     onStopSelect: { stopId in
                         selectedStopId = stopId
                         isSheetPresented = true

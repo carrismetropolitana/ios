@@ -12,10 +12,10 @@ struct MoreView: View {
     @State private var news: [News] = []
     @State private var carouselItems: [CarouselItem] = []
     let dummyCarouselItems = [
-        CarouselItem(contentId: 0, contentType: .news, imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/06/AF-Inquerito-Noticia-_-Banner.png")!),
-        CarouselItem(contentId: 1, contentType: .news, imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/06/Linhas-Mar_Banner.png")!),
-        CarouselItem(contentId: 2, contentType: .news, imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/05/AF-_-Santo-Antonio_Banner-1.png")!),
-        CarouselItem(contentId: 3, contentType: .news, imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/05/Banner-Mini-Passageiros.png")!)
+        CarouselItem(contentId: 0, contentType: .news, contentTitle: "Inquérito", imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/06/AF-Inquerito-Noticia-_-Banner.png")!),
+        CarouselItem(contentId: 1, contentType: .news, contentTitle: "Linhas Mar", imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/06/Linhas-Mar_Banner.png")!),
+        CarouselItem(contentId: 2, contentType: .news, contentTitle: "Santo António", imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/05/AF-_-Santo-Antonio_Banner-1.png")!),
+        CarouselItem(contentId: 3, contentType: .news, contentTitle: "Mini Passageiros Carris Metropolitana", imageURL: URL(string: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/05/Banner-Mini-Passageiros.png")!)
     ]
     
     @State private var isCarouselDetailPresented = false
@@ -37,6 +37,7 @@ struct MoreView: View {
                                 isCarouselDetailPresented.toggle()
                             })
                             .padding(.vertical)
+                            .accessibilityLabel("Carrossel de notícias")
                         } else {
                             RoundedRectangle(cornerRadius: 15.0)
                                 .fill(.quaternary)
@@ -183,7 +184,7 @@ struct MoreView: View {
         for newsItem in news {
             do {
                 let imageURL = try await CMWordpressAPI.shared.getMediaURL(mediaId: newsItem.featuredMedia)
-                let carouselItem = CarouselItem(contentId: newsItem.id, contentType: .news, imageURL: imageURL)
+                let carouselItem = CarouselItem(contentId: newsItem.id, contentType: .news, contentTitle: newsItem.title.rendered, imageURL: imageURL)
                 carouselItems.append(carouselItem)
             } catch {
                 print("Failed to fetch media URL for news item with ID \(newsItem.id): \(error)")

@@ -1,5 +1,5 @@
 //
-//  MapLibreMapView.swift
+//  StopsMapView.swift
 //  Carris Metropolitana
 //
 //  Created by João Pereira on 17/03/2024.
@@ -21,13 +21,14 @@ func getMapVisualStyleString(for mapVisualStyle: MapVisualStyle) -> String {
     }
 }
 
-struct MapLibreMapView: UIViewRepresentable {
+
+struct StopsMapView: UIViewRepresentable {
     @Environment(\.colorScheme) var colorScheme
     
 //    @EnvironmentObject var locationManager: LocationManager
     
     var stops: [Stop]
-    @Binding var selectedStopId: String?
+//    @Binding var selectedStopId: String?
     
     let onStopSelect: (_ stopId: String) -> Void
     
@@ -36,8 +37,10 @@ struct MapLibreMapView: UIViewRepresentable {
     
     var mapVisualStyle: MapVisualStyle = .standard
     
+    var showPopupOnStopSelect: Bool = false
+    
     func makeUIView(context: Context) -> MLNMapView {
-        print("MapLibreMapView makeUIView called")
+        print("StopsMapView makeUIView called")
         //        let styleURL = URL(string: "https://maps.carrismetropolitana.pt/styles/default/style.json")
         //        let styleURL = URL(string: colorScheme == .light ? "https://maps.carrismetropolitana.pt/styles/default/style.json" : "https://api.maptiler.com/maps/e9d3c77d-4552-4ed6-83dd-1075b67bd977/style.json?key=NvTfdJJxC0xa6dknGF48")
         
@@ -176,11 +179,11 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     class Coordinator: NSObject, MLNMapViewDelegate {
-        var control: MapLibreMapView
+        var control: StopsMapView
         var mapVisualStyle: MapVisualStyle // is this really how this is supposed to be done??
         var flyToCoords: CLLocationCoordinate2D?
         
-        init(_ control: MapLibreMapView) {
+        init(_ control: StopsMapView) {
             self.control = control
             self.mapVisualStyle = control.mapVisualStyle
             self.flyToCoords = control.flyToCoords
@@ -192,15 +195,54 @@ struct MapLibreMapView: UIViewRepresentable {
             let point = sender.location(in: mapView)
             let features = mapView.visibleFeatures(at: point, styleLayerIdentifiers: ["stops-layer"])
             
+            // Try matching the exact point first.
             if let feature = features.last { // if there are multiple overlapping select the last
                 if let stopId = feature.attribute(forKey: "id") as? String {
 //                    control.selectedStopId = ""
 //                    DispatchQueue.main.async {
 //                        self.control.selectedStopId = stopId
 //                    }
-                    control.onStopSelect(stopId)
+                    if (control.showPopupOnStopSelect) {
+                        showPopup(feature: feature, mapView: mapView)
+                        return
+                    } else {
+                        control.onStopSelect(stopId)
+                        return
+                    }
                 }
             }
+            
+            let touchCoordinate = mapView.convert(point, toCoordinateFrom: sender.view!)
+            let touchLocation = CLLocation(latitude: touchCoordinate.latitude, longitude: touchCoordinate.longitude)
+
+
+            // Otherwise, get all features within a rect the size of a touch (44x44).
+            let touchRect = CGRect(origin: point, size: .zero).insetBy(dx: -22.0, dy: -22.0)
+            let possibleFeatures = mapView.visibleFeatures(in: touchRect, styleLayerIdentifiers: Set(["stops-layer"])).filter { $0 is MLNPointFeature }
+            
+            // Select the closest feature to the touch center. Basically this solves having to click exactly on the annotation, giving the user a little more margin for click error
+            let closestFeatures = possibleFeatures.sorted(by: {
+                CLLocation(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude).distance(from: touchLocation) < CLLocation(latitude: $1.coordinate.latitude, longitude: $1.coordinate.longitude).distance(from: touchLocation)
+            })
+            if let feature = closestFeatures.first {
+                guard let closestFeature = feature as? MLNPointFeature else {
+                    fatalError("Failed to cast selected feature as MLNPointFeature")
+                }
+                if let stopId = feature.attribute(forKey: "id") as? String {
+                    if (control.showPopupOnStopSelect) {
+                        showPopup(feature: feature, mapView: mapView)
+                        return
+                    } else {
+                        control.onStopSelect(stopId)
+                        return
+                    }
+                }
+                return
+            }
+            
+            
+            // If no features were found, deselect the selected annotation, if any.
+            mapView.deselectAnnotation(mapView.selectedAnnotations.first, animated: true)
         }
         
         func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
@@ -212,6 +254,68 @@ struct MapLibreMapView: UIViewRepresentable {
         
         func mapViewDidFinishLoadingMap(_ mapView: MLNMapView) {
             print("mapviewdidfinishloadingmap")
+        }
+        
+        func mapView(_: MLNMapView, annotationCanShowCallout annotation: MLNAnnotation) -> Bool {
+            return !(annotation is MLNUserLocation)
+        }
+        
+        // can't do this because the map will try to access the annotation by pointer onDisappear which is left dangling at that point because the annotation was removed. it's okay to leave it because it's invisible. this was an issue because if an annotation is selected and then the map disappears it will still try to access the annotation and cause an error by trying because of the now dangling pointer
+//        func mapView(_ mapView: MLNMapView, didDeselect annotation: MLNAnnotation) {
+//            mapView.removeAnnotations([annotation])
+//        }
+        
+        func mapView(_ mapView: MLNMapView, viewFor annotation: MLNAnnotation) -> MLNAnnotationView? {
+            guard !(annotation is MLNUserLocation) else {
+                return nil
+            }
+
+            let reuseIdentifier = "stopAnnotation"
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
+
+            if annotationView == nil {
+                annotationView = MLNAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+            }
+
+            return annotationView
+        }
+    
+
+        // wow
+        func mapView(_ mapView: MLNMapView, rightCalloutAccessoryViewFor annotation: MLNAnnotation) -> UIView? {
+            let configuration = UIImage.SymbolConfiguration(weight: .medium)
+            let chevronImage = UIImage(systemName: "chevron.right", withConfiguration: configuration)
+            let chevronImageView = UIImageView(image: chevronImage)
+            chevronImageView.tintColor = .black
+            
+            let containerButton = UIButton(frame: CGRect(x: 0, y: 0, width: chevronImageView.frame.width + 20, height: chevronImageView.frame.height + 20))
+            containerButton.addSubview(chevronImageView)
+            chevronImageView.center = containerButton.center
+            
+            // Make the button's background clear
+            containerButton.backgroundColor = .clear
+            
+            return containerButton
+        }
+        
+        func mapView(_ mapView: MLNMapView, tapOnCalloutFor annotation: MLNAnnotation) {
+            // double optional
+            if let optionalSelectedStopId = annotation.subtitle,
+               let selectedStopId = optionalSelectedStopId  { // a little finnicky, maybe filter features and find the one whose coordinates are the same as annotation's and get the id from there?
+                control.onStopSelect(selectedStopId)
+                
+                // not really needed since we're not removing the annotation but still
+                mapView.deselectAnnotation(annotation, animated: true)
+            }
+        }
+        
+        private func showPopup(feature: MLNFeature, mapView: MLNMapView) {
+            let point = MLNPointFeature()
+            point.title = feature.attributes["name"] as? String
+            point.subtitle = feature.attributes["id"] as? String
+            point.coordinate = feature.coordinate
+            
+            mapView.selectAnnotation(point, animated: true, completionHandler: nil)
         }
     }
     
@@ -243,12 +347,12 @@ struct MapLibreMapView: UIViewRepresentable {
         }
     }
     
-    func makeCoordinator() -> MapLibreMapView.Coordinator {
+    func makeCoordinator() -> StopsMapView.Coordinator {
         Coordinator(self)
     }
     
     func updateUIView(_ uiView: MLNMapView, context: Context) {
-        print("MapLibreMapView updateUIView called")
+        print("StopsMapView updateUIView called")
         print("updateUIView called with \(stops.count) stops")
         
         guard let style = uiView.style else {

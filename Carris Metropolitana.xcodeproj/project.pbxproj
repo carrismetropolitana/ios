@@ -23,6 +23,7 @@
 		791A70702C3D353B00E789E5 /* CMLogoLoop.json in Resources */ = {isa = PBXBuildFile; fileRef = 791A706F2C3D353B00E789E5 /* CMLogoLoop.json */; };
 		791A70722C3D5FF400E789E5 /* ExpandedMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791A70712C3D5FF400E789E5 /* ExpandedMapView.swift */; };
 		791A70742C3DBA4000E789E5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */; };
+		791C21642CA44F11009D8966 /* CirculatingVehiclesIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C21632CA44F11009D8966 /* CirculatingVehiclesIndicator.swift */; };
 		791E09952BA53D9D002899EC /* SFSafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E09942BA53D9D002899EC /* SFSafariView.swift */; };
 		792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */; };
 		79323FAB2C49A14700AE9D50 /* VehicleLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */; };
@@ -180,10 +181,15 @@
 		791A706F2C3D353B00E789E5 /* CMLogoLoop.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CMLogoLoop.json; sourceTree = "<group>"; };
 		791A70712C3D5FF400E789E5 /* ExpandedMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedMapView.swift; sourceTree = "<group>"; };
 		791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		791C21632CA44F11009D8966 /* CirculatingVehiclesIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirculatingVehiclesIndicator.swift; sourceTree = "<group>"; };
 		791E09942BA53D9D002899EC /* SFSafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSafariView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCNavigationStackBug.swift; sourceTree = "<group>"; };
 		79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLookup.swift; sourceTree = "<group>"; };
 		794588B22C77882B000AE50A /* ViewHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHeight.swift; sourceTree = "<group>"; };
+		794FDB5F2CAC388200F3936D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
+		794FDB602CAC38D600F3936D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		794FDB622CAC3A8300F3936D /* download_appstore.svg */ = {isa = PBXFileReference; lastKnownFileType = text; path = download_appstore.svg; sourceTree = "<group>"; };
+		794FDB642CAC42DE00F3936D /* mockups.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mockups.png; sourceTree = "<group>"; };
 		79536F5B2C8610AE008A570B /* FavoriteLinesDisambiguationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteLinesDisambiguationView.swift; sourceTree = "<group>"; };
 		79536F5E2C8611C3008A570B /* DownloadOfflineDataPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadOfflineDataPromptView.swift; sourceTree = "<group>"; };
 		7960AC842C48438300E0B615 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -335,6 +341,15 @@
 			children = (
 			);
 			path = CMGrafanaAPI;
+			sourceTree = "<group>";
+		};
+		794FDB612CAC3A6700F3936D /* ExternalAssets */ = {
+			isa = PBXGroup;
+			children = (
+				794FDB642CAC42DE00F3936D /* mockups.png */,
+				794FDB622CAC3A8300F3936D /* download_appstore.svg */,
+			);
+			path = ExternalAssets;
 			sourceTree = "<group>";
 		};
 		79536F5D2C8611AB008A570B /* Offline Mode */ = {
@@ -566,6 +581,9 @@
 				79B4A53B2C48976000E13D3E /* Carris Metropolitana.entitlements */,
 				791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */,
 				79CCB5582C91965900A3D39C /* PrivacyInfo.xcprivacy */,
+				794FDB5F2CAC388200F3936D /* README.md */,
+				794FDB602CAC38D600F3936D /* .gitignore */,
+				794FDB612CAC3A6700F3936D /* ExternalAssets */,
 				79DB83682BA19A5D0023DD93 /* Carris Metropolitana */,
 				79DE904B2C493C5D00D3E859 /* NotificationServiceExtension */,
 				79D3B1652C77E56300E0AE52 /* VehicleLivePattern */,
@@ -733,6 +751,7 @@
 			children = (
 				79F1D8892C7AA286005CB830 /* MapFloatingButton.swift */,
 				79F1D88B2C7AA2AE005CB830 /* MapFloatingPickerMenu.swift */,
+				791C21632CA44F11009D8966 /* CirculatingVehiclesIndicator.swift */,
 			);
 			path = "Map Overlays";
 			sourceTree = "<group>";
@@ -970,6 +989,7 @@
 				7916BD7F2C1E138000C049B7 /* VehicleIdentifier.swift in Sources */,
 				7919157A2BA3BA07009E5B29 /* MapView.swift in Sources */,
 				792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */,
+				791C21642CA44F11009D8966 /* CirculatingVehiclesIndicator.swift in Sources */,
 				79E920AB2C7BF89100BD2440 /* ArrivalsHelpers.swift in Sources */,
 				79F982452BB724E7002B3997 /* IMLModel.swift in Sources */,
 				79AB3C9E2C72CC5900122AA1 /* StopsFilterTest.swift in Sources */,
