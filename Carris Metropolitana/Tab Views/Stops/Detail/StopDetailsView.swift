@@ -179,40 +179,20 @@ struct StopDetailsView: View {
                     VStack {
                         HStack {
                             Spacer()
-                            HStack {
-                                if intermodalAttributionExpanded {
-                                    HStack {
-                                        Text("Powered by".uppercased())
-                                            .font(.caption)
-                                            .fontWeight(.heavy)
-                                            .foregroundStyle(.secondary)
-                                        Image(.intermodalLogo)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 12.0)
+                            IntermodalAttribution(expanded: intermodalAttributionExpanded)
+                                .padding(10.0)
+                                .background(
+                                    UnevenRoundedRectangle(
+                                        cornerRadii: RectangleCornerRadii(
+                                            topLeading: 0.0, bottomLeading: 10.0, bottomTrailing: 0.0, topTrailing: 0.0
+                                        )
+                                    ).fill(.cmSystemBackground100)
+                                )
+                                .onTapGesture {
+                                    withAnimation(.snappy(duration: 0.3)) {
+                                        intermodalAttributionExpanded.toggle()
                                     }
-                                    .transition(.move(edge: .trailing).combined(with: .opacity))
-                                } else {
-                                    Image(.intermodalMinimalLogo)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 15.0)
-                                        .transition(.move(edge: .trailing).combined(with: .opacity))
                                 }
-                            }
-                            .padding(10.0)
-                            .background(
-                                UnevenRoundedRectangle(
-                                    cornerRadii: RectangleCornerRadii(
-                                        topLeading: 0.0, bottomLeading: 10.0, bottomTrailing: 0.0, topTrailing: 0.0
-                                    )
-                                ).fill(.cmSystemBackground100)
-                            )
-                            .onTapGesture {
-                                withAnimation(.snappy(duration: 0.3)) {
-                                    intermodalAttributionExpanded.toggle()
-                                }
-                            }
                         }
                         Spacer()
                     }
