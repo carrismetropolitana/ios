@@ -29,6 +29,24 @@ struct Line: Codable, Identifiable
     let facilities: [Facility]
 }
 
+struct LineV2: Codable, Identifiable {
+    var id: String {
+        return lineId
+    }
+    
+    let lineId: String
+    let shortName: String
+    let longName: String
+    let ttsName: String?
+    let color: String
+    let textColor: String
+    let routeIds: [String]
+    let patternIds: [String]
+    let municipalityIds: [String]
+    let localities: [String?]
+    let facilities: [Facility]
+}
+
 struct Route: Codable { // TODO: chng to Route
     let id: String
     let lineId: String
