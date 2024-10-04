@@ -75,6 +75,7 @@ struct StopDetailsSheetView: View {
                     
                     let eta = nextEtas[etaIdx]
                     
+                    
                     let fullLine = linesManager.lines.first(where: {
                         $0.id == eta.lineId
                     })
@@ -91,12 +92,12 @@ struct StopDetailsSheetView: View {
                                     .lineLimit(1)
                                 Spacer()
                                 if let estimatedArrival = eta.estimatedArrivalUnix {
-                                    PulseLabel(accent: .green, label: Text("\(getRoundedMinuteDifferenceFromNow(estimatedArrival)) min"))
+                                    PulseLabel(accent: .green, label: Text(verbatim: "\(getRoundedMinuteDifferenceFromNow(estimatedArrival)) min"))
                                 } else if let scheduledArrival = eta.scheduledArrival {
                                     let timeComponents = scheduledArrival.components(separatedBy: ":")
                                     let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
                                     let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
-                                    Text(adjustedArrival ?? arrivalWithoutSeconds)
+                                    Text(verbatim: adjustedArrival ?? arrivalWithoutSeconds)
                                 }
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.tertiary)

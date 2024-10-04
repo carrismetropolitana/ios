@@ -27,12 +27,12 @@ struct SmartNotificationWidgetView: View {
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Hospital (Elvas)")
+                    Text(verbatim: "Hospital (Elvas)")
                         .bold()
                     HStack {
-                        Text("Cova da Piedade, Almada")
+                        Text(verbatim: "Cova da Piedade, Almada")
                             .foregroundStyle(.secondary)
-                        Text("020497")
+                        Text(verbatim: "020497")
                             .font(.custom("Menlo", size: 12.0).monospacedDigit())
 //                                    .font(.footnote)
                             .bold()
@@ -65,13 +65,13 @@ struct SmartNotificationWidgetView: View {
                 .frame(height: 3.0)
             
             HStack {
-                Text("\(Image(systemName: "bell.badge")) 7:30 \(Image(systemName: "arrow.right")) 8:30")
+                Text(verbatim: "\(Image(systemName: "bell.badge")) 7:30 \(Image(systemName: "arrow.right")) 8:30")
                     .foregroundStyle(Color(hex:"5f5f5f"))
                     .bold()
                     .padding(5.0)
                     .background(RoundedRectangle(cornerRadius: 5.0).fill(.quinary))
                 
-                Text("S  T  Q  Q  S  S  D")
+                Text(verbatim: "S  T  Q  Q  S  S  D")
                     .foregroundStyle(Color(hex:"5f5f5f"))
                     .bold()
                     .padding(5.0)

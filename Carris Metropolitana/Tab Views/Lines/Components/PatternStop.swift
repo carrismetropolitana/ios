@@ -32,11 +32,11 @@ struct PatternStop: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("Stop Name \(text)")
+                Text(verbatim: "Stop Name \(text)")
                     .fontWeight(expanded ? .heavy : .semibold)
                     .font(.callout)
                     .foregroundStyle(.primary)
-                Text("Locality, Municipality")
+                Text(verbatim: "Locality, Municipality")
                     .fontWeight(.semibold)
                     .font(.system(size: 14.0))
                     .foregroundStyle(.secondary)
@@ -74,7 +74,7 @@ struct PatternStop: View {
                                 if (relativePosition == .end) {
                                     Spacer()
                                 }
-                                Text("—")
+                                Text(verbatim: "—")
                                     .bold()
                                     .offset(x: 10)
                                     .frame(height: 6.0)
@@ -172,7 +172,7 @@ struct PatternStopWithInvisibleLeg: View {
                                 if (relativePosition == .end) {
                                     Spacer()
                                 }
-                                Text("—")
+                                Text(verbatim: "—")
                                     .bold()
                                     .offset(x: 12)
                                     .frame(height: 6.0)
@@ -325,8 +325,8 @@ struct TestPreview: View {
                 VStack {
                     Stepper("Next Stop Index", value: $nextStopIndex.animation(.snappy), in: 1...stops.count-1)
                         .padding()
-                    Text("Stops: \(stops.count)")
-                    Text("Pattern Legs Heights: \(patternLegsHeights.count)")
+                    Text(verbatim: "Stops: \(stops.count)")
+                    Text(verbatim: "Pattern Legs Heights: \(patternLegsHeights.count)")
                     Text(String(describing: patternLegsHeights))
                 }
             }
@@ -382,7 +382,7 @@ struct TestPreview: View {
                                         .overlay {
                                             HStack {
                                                 Spacer()
-                                                Text("\(geo.size.height)")
+                                                Text(verbatim: "\(geo.size.height)")
                                             }
                                         }
                                 })
@@ -411,7 +411,7 @@ struct TestPreview: View {
                                         .overlay {
                                             HStack {
                                                 Spacer()
-                                                Text("\(geo.size.height)")
+                                                Text(verbatim: "\(geo.size.height)")
                                             }
                                         }
                                 })

@@ -26,7 +26,7 @@ struct UserProfileSheetView: View {
                             .font(.headline)
                             .bold()
                             .foregroundStyle(.primary)
-                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eget mauris accumsan, ornare tortor non, tristique osdlio.")
+                        Text(verbatim: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eget mauris accumsan, ornare tortor non, tristique osdlio.")
                     }
                     .textCase(nil)
                     .listRowInsets(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 0))

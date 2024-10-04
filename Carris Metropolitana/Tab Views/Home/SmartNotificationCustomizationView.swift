@@ -40,7 +40,7 @@ struct SmartNotificationCustomizationView: View {
                 }
                 
                 VStack(spacing: 10) {
-                    Text("Notificar-me quando um veículo da linha")
+                    Text("Notificar-me quando um veículo da linha", comment: "Título do primeiro passo na criação de Notificação inteligente")
                         .bold()
                         .opacity(0.7)
                     SearchInput(text: $lineSearchText, placeholder: "Procurar linhas", leadingSystemIcon: "magnifyingglass", trailingSystemIcon: "chevron.right")
@@ -79,7 +79,7 @@ struct SmartNotificationCustomizationView: View {
                     .foregroundStyle(.tertiary)
                 
                 VStack(spacing: 10) {
-                    Text("da paragem")
+                    Text("da paragem", comment: "Título do passo em que se seleciona a paragem na criação de Notificação Inteligente")
                         .bold()
                         .opacity(0.7)
                     SearchInput(text: $lineSearchText, placeholder: "Procurar paragens", leadingSystemIcon: "magnifyingglass", trailingSystemIcon: "chevron.right")
@@ -91,18 +91,18 @@ struct SmartNotificationCustomizationView: View {
                     .foregroundStyle(.tertiary)
                 
                 VStack(spacing: 10) {
-                    Text("no período")
+                    Text("no período", comment: "Título do passo em que se seleciona o período na criação de Notificação Inteligente")
                         .bold()
                         .opacity(0.7)
                     VStack(alignment: .leading) {
-                        DatePicker("Hora de Início", selection: $startHour, displayedComponents: .hourAndMinute)
+                        DatePicker(String(localized: "Hora de Início", comment: "Na criação de Notificação Inteligente"), selection: $startHour, displayedComponents: .hourAndMinute)
                             .padding(.horizontal)
                         Divider()
-                        DatePicker("Hora de Fim", selection: $endHour, displayedComponents: .hourAndMinute)
+                        DatePicker(String(localized: "Hora de Fim", comment: "Na criação de Notificação inteligente"), selection: $endHour, displayedComponents: .hourAndMinute)
                             .padding(.horizontal)
                         Divider()
                         VStack(alignment: .leading) {
-                            Text("Dias da semana")
+                            Text("Dias da semana", comment: "Na criação de Notificação inteligente")
                             HStack {
                                 Spacer()
                                 WeekdaySelector(selectedDays: $selectedWeekDays)
@@ -119,7 +119,7 @@ struct SmartNotificationCustomizationView: View {
                 }
                 
                 
-                Text("Atenção!\nPor favor teste esta funcionalidade antes de a utilizar com confiança. Poderá ser necessário ajustar os tempos para garantir que chega ao local.")
+                Text("Atenção!\nPor favor teste esta funcionalidade antes de a utilizar com confiança. Poderá ser necessário ajustar os tempos para garantir que chega ao local.", comment: "Na criação de Notificação inteligente")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

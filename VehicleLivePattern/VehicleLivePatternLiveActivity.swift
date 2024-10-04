@@ -54,11 +54,11 @@ struct VehicleLivePatternLiveActivity: Widget {
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     HStack(alignment: .lastTextBaseline, spacing: 4) {
-                        Text("\(context.state.etaMinutesToSubscribedStop)")
+                        Text(verbatim: "\(context.state.etaMinutesToSubscribedStop)")
                             .font(.system(size: 20, design: .rounded))
                             .fontWeight(.heavy)
                             .foregroundStyle(.green)
-                        Text("min")
+                        Text(verbatim: "min")
                             .font(.system(size: 14, design: .rounded))
                             .fontWeight(.heavy)
                             .foregroundStyle(.green)
@@ -104,17 +104,17 @@ struct VehicleLivePatternLiveActivity: Widget {
                     }
             } compactTrailing: {
                 HStack(alignment: .lastTextBaseline, spacing: 4) {
-                    Text("\(context.state.etaMinutesToSubscribedStop)")
+                    Text(verbatim: "\(context.state.etaMinutesToSubscribedStop)")
                         .font(.system(size: 20, design: .rounded))
                         .fontWeight(.heavy)
                         .foregroundStyle(.green)
-                    Text("min")
+                    Text(verbatim: "min")
                         .font(.system(size: 14, design: .rounded))
                         .fontWeight(.heavy)
                         .foregroundStyle(.green)
                 }
             } minimal: {
-                Text("\(context.state.etaMinutesToSubscribedStop)")
+                Text(verbatim: "\(context.state.etaMinutesToSubscribedStop)")
                     .font(.system(size: 18, design: .rounded))
                     .fontWeight(.heavy)
                     .foregroundStyle(.cmYellow)

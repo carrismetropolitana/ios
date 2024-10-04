@@ -71,7 +71,7 @@ struct CustomizeWidgetsSheetView: View {
                                             .foregroundStyle(.tertiary)
                                             .padding(.trailing, 10)
                                         VStack(alignment: .leading) {
-                                            Text("\(fav.type == .stop ? "Paragem" : "Linha") Favorita")
+                                            Text("\(fav.type == .stop ? String(localized: "Paragem") : String(localized: "Linha")) Favorita", comment: "Na sheet de personalização dos favoritos")
                                                 .font(.footnote)
                                                 .foregroundStyle(.secondary)
                                             if fav.type == .stop {
@@ -100,16 +100,16 @@ struct CustomizeWidgetsSheetView: View {
                                 favoritesManager.moveFavorites(fromOffsets: indices, toOffset: newOffset)
                             })
                         } else {
-                            Text("Ainda não tem favoritos.\nExperimente adicionar um abaixo!")
+                            Text("Ainda não tem favoritos.\nExperimente adicionar um abaixo!", comment: "Na sheet de personalização dos favoritos")
                                 .foregroundStyle(.secondary)
                         }
                     } header: {
                         VStack(alignment: .leading) {
-                            Text("Ordenar Cartões")
+                            Text("Ordenar Cartões", comment: "Na sheet de personalização dos favoritos")
                                 .font(.headline)
                                 .bold()
                                 .foregroundStyle(.primary)
-                            Text("Organize os cartões como quer que apareçam na página principal. Altere a ordem deslizando no ícone \(Image(systemName: "line.3.horizontal"))") // wow i had no idea, cool, actually makes so much sense since SF Symbols conform to a common thing with Text
+                            Text("Organize os cartões como quer que apareçam na página principal. Altere a ordem deslizando no ícone \(Image(systemName: "line.3.horizontal"))", comment: "Na sheet de personalização dos favoritos") // wow i had no idea, cool, actually makes so much sense since SF Symbols conform to a common thing with Text
                         }
                         .textCase(nil)
                         .listRowInsets(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 0))
@@ -148,11 +148,11 @@ struct CustomizeWidgetsSheetView: View {
                         }
                     } header: {
                         VStack(alignment: .leading) {
-                            Text("Adicionar novo cartão")
+                            Text("Adicionar novo cartão", comment: "Na sheet de personalização dos favoritos")
                                 .font(.headline)
                                 .bold()
                                 .foregroundStyle(.primary)
-                            Text("Escolha um tipo de cartão para adicionar à página principal.")
+                            Text("Escolha um tipo de cartão para adicionar à página principal.", comment: "Na sheet de personalização dos favoritos")
                         }
                         .textCase(nil)
                         .listRowInsets(EdgeInsets(top: 40, leading: 0, bottom: 10, trailing: -8)) // wooow also new for me very kewl

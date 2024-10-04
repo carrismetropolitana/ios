@@ -85,8 +85,9 @@ struct FavoriteStopWidgetView: View {
             ForEach(patternIds.indices, id: \.self) { patternIdIdx in
                 let patternId = patternIds[patternIdIdx]
                 
-                if let pattern = fullPatterns.first(where: { $0.id == patternId }) {
-                    NavigationLink(destination: LineDetailsView(line: linesManager.lines.first { $0.id == pattern.lineId }!, overrideDisplayedPatternId: pattern.id)) {
+                if let pattern = fullPatterns.first(where: { $0.id == patternId }), let line = linesManager.lines.first(where: { $0.id == pattern.lineId }) {
+                    
+                    NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: pattern.id)) {
                         HStack(alignment: .center) {
                             Pill(text: pattern.lineId, color: Color(hex: pattern.color), textColor: Color(hex: pattern.textColor))
                             Image(systemName: "arrow.right")
@@ -103,7 +104,7 @@ struct FavoriteStopWidgetView: View {
                                     let eta = etas[0]
                                     if let estimatedArrival = eta.estimatedArrivalUnix {
                                         let minutesToArrival = getRoundedMinuteDifferenceFromNow(estimatedArrival)
-                                        Text("\(minutesToArrival > 1 ? "\(minutesToArrival) min" : "A chegar")")
+                                        Text(verbatim: "\(minutesToArrival > 1 ? "\(minutesToArrival) min" : String(localized: "A chegar"))")
                                             .foregroundStyle(.green)
                                             .fontWeight(.semibold)
                                     } else {
@@ -111,7 +112,7 @@ struct FavoriteStopWidgetView: View {
                                             let timeComponents = scheduledArrival.components(separatedBy: ":")
                                             let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
                                             let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
-                                            Text(adjustedArrival ?? arrivalWithoutSeconds)
+                                            Text(verbatim: adjustedArrival ?? arrivalWithoutSeconds)
                                                 .fontWeight(.semibold)
                                         }
                                     }

@@ -27,10 +27,10 @@ struct DownloadOfflineDataPromptView: View {
             }
             
             VStack {
-                Text("Tamanho estimado: 23.5 MB")
+                Text("Tamanho estimado: \("23.5 MB")")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text("Espaço disponível no dispositivo: 153.5 MB")
+                Text("Espaço disponível no dispositivo: \("153.5 MB")")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -65,7 +65,7 @@ struct DownloadOfflineDataDownloadingView: View {
             }
             
             VStack {
-                Text("Lines")
+                Text(verbatim: "Lines")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

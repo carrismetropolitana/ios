@@ -26,7 +26,7 @@ struct AlertsSheetView: View {
                                 .padding()
                         }
                     } else {
-                        ContentUnavailableView("Sem alertas", systemImage: "checkmark.diamond", description: Text("Esta \(source == .line ? "linha" : "paragem") não tem alertas.\nBoa viagem!"))
+                        ContentUnavailableView("Sem alertas", systemImage: "checkmark.diamond", description: Text("Esta \(source == .line ? "linha" : "paragem") não tem alertas.\nBoa viagem!", comment: "Texto no empty state da sheet dos alertas. %@ pode ser \"linha\" ou \"paragem\"."))
                             .frame(width: geo.size.width)
                             .frame(minHeight: geo.size.height) // TODO: manually implement for iOS < 17.0
                     }

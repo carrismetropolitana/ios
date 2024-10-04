@@ -47,7 +47,7 @@ struct SquaredButton: View {
                     )
             }.buttonStyle(.plain)
             if badgeValue > 0 {
-                Text("\(badgeValue)")
+                Text(verbatim: "\(badgeValue)")
                     .padding(.horizontal, badgeValue > 9 ? 5.0 : 7.0)
                     .padding(.vertical, 1.0)
                     .foregroundStyle(.white)

@@ -30,7 +30,8 @@ struct VehicleLookup: View {
 struct VehicleSearchInput: View {
     @State private var busSearchTerm = ""
     var body: some View {
-        TextField("1234", text: $busSearchTerm)
+        let placeholder = "1234"
+        TextField(placeholder, text: $busSearchTerm)
             .font(.system(size: 50.0))
             .fontWeight(.black)
             .multilineTextAlignment(.center)
@@ -50,7 +51,7 @@ struct VehicleSearchResult: View {
                     .foregroundStyle(.secondary)
                     .bold()
                     .font(.caption)
-                Text("Autocarro 12691")
+                Text("Autocarro \("12691")")
                     .font(.headline)
                     .fontWeight(.heavy)
             }

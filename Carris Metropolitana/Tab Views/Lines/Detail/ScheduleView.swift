@@ -18,9 +18,9 @@ struct ScheduleView: View {
     var body: some View {
         WrappingHStack(alignment: .topLeading, horizontalSpacing: 0.0) {
             VStack {
-                ColumnHeading(text: Text("Hora")
+                ColumnHeading(text: Text("Hora", comment: "Na primeira coluna dos horários na paragem")
                     .foregroundStyle(.white), cornerRadii: .init(topLeading: 25.0, bottomLeading: 25.0), width: 50.0)
-                Text("Min")
+                Text(verbatim: "Min")
             }
             ForEach(scheduleColumns.indices, id: \.self) { colIdx in
                 let isFirst = colIdx == 0

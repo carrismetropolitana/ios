@@ -20,11 +20,11 @@ struct LoginSheetView: View {
                 .font(.title)
                 .multilineTextAlignment(.center)
                 .padding(30)
-            Text("Logged in: \(____dev_isLoggedIn ? "Yes" : "No")")
+            Text(verbatim: "Logged in: \(____dev_isLoggedIn ? "Yes" : "No")")
             Button {
                 ____dev_isLoggedIn.toggle()
             } label: {
-                Text("Toggle isLoggedIn")
+                Text(verbatim: "Toggle isLoggedIn")
             }
             
             Spacer()

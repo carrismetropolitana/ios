@@ -535,23 +535,23 @@ struct StopPatternEntry: View {
 func getNameForFacility(_ facility: Facility) -> String? {
     switch facility {
     case .boat:
-        return "Barco"
+        return String(localized: "Barco", comment: "Nome de stop facility")
     case .lightRail:
-        return "Metro de superfície"
+        return String(localized: "Metro de superfície", comment: "Nome de stop facility")
     case .school:
-        return "Escola"
+        return String(localized: "Escola", comment: "Nome de stop facility")
     case .shopping:
-        return "Centro Comercial"
+        return String(localized: "Centro Comercial", comment: "Nome de stop facility")
     case .subway:
-        return "Metro"
+        return String(localized: "Metro", comment: "Nome de stop facility")
     case .train:
-        return "Comboio"
+        return String(localized: "Comboio", comment: "Nome de stop facility")
     case .transitOffice:
-        return "Espaço navegante®"
+        return String(localized: "Espaço navegante®", comment: "Nome de stop facility")
 //    case .bikeSharing:
-//        return "Bicicletas partilhadas"
+//        return String(localized: "Bicicletas partilhadas", comment: "Nome de stop facility")
 //    case .hospital:
-//        return "Hospital"
+//        return String(localized: "Hospital", comment: "Nome de stop facility")
     default:
         return nil
     }

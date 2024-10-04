@@ -22,7 +22,7 @@ struct UnregisteredUserView: View {
         let playerController = VideoPlayerViewController(player: self.player)
         ScrollView {
             VStack(alignment: .center, spacing: 30) {
-                Text("A Carris Metropolitana está mais próxima")
+                Text("A Carris Metropolitana está mais próxima", comment: "Ecrã inicial")
                     .font(.title)
                     .bold()
                     .padding(.horizontal, 20)
@@ -79,11 +79,11 @@ struct UnregisteredUserView: View {
 //                                playerController.player.play()
 //                            }
                 
-                Text("Personalize a app com as suas linhas e paragens favoritas.")
+                Text("Personalize a app com as suas linhas e paragens favoritas.", comment: "Ecrã inicial")
                     .font(.headline)
                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                     .padding(.horizontal, 30)
-                Text("Saiba exatamente onde andam todos os autocarros e exatamente quando chegam à sua paragem.")
+                Text("Saiba exatamente onde andam todos os autocarros e exatamente quando chegam à sua paragem.", comment: "Ecrã inicial")
                     .font(.callout)
                     .fontWeight(.semibold)
                     .padding(.horizontal, 50)
@@ -111,7 +111,7 @@ struct UnregisteredUserView: View {
                             onboarded = true
                         }
                     } label: {
-                        Text("Adicionar favoritos")
+                        Text("Adicionar favoritos", comment: "Botão no ecrã inicial")
                             .font(.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(.black)
@@ -124,7 +124,7 @@ struct UnregisteredUserView: View {
                     .cornerRadius(15)
                     .padding(.top, 30)
                     
-                    Text("Boas viagens!")
+                    Text("Boas viagens!", comment: "Ecrã inicial")
                         .bold()
                         .font(.caption)
                         .foregroundStyle(.secondary)

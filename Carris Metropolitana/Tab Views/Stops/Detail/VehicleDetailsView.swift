@@ -82,7 +82,7 @@ struct VehicleDetailsView: View {
             ScrollView {
                 VStack(spacing: 10.0) {
                     Pill(text: vehicle.lineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor))
-                    Text("para")
+                    Text("para", comment: "Texto entre o número da linha e o headsign de um autocarro na tracking view.")
                         .foregroundStyle(.secondary)
                         .font(.callout)
                     
@@ -93,7 +93,7 @@ struct VehicleDetailsView: View {
                     }
                     
                     if let info = vehicleStaticInfo {
-                        Text("\(info.make) \(info.model)")
+                        Text(verbatim: "\(info.make) \(info.model)")
                             .foregroundStyle(.secondary)
                             .font(.callout)
                     }
@@ -101,13 +101,11 @@ struct VehicleDetailsView: View {
                 
                 Divider()
                 HStack {
-//                    LicensePlate(licensePlate: "AA-00-AA")
                     VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicleStaticInfo?.licensePlate)
-                    Image(systemName: "circle")
+                    Pulse(size: 20.0, accent: .green)
                     Image(systemName: "figure.roll")
                         .foregroundStyle(vehicleStaticInfo?.wheelchair == 1 ? .blue : .secondary)
                     OccupationIndicator(occupied: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
-//                        .popoverTip(vehicleOccupationTip)
                         .onTapGesture {
                             isOccupationPopoverPresented.toggle()
                         }
@@ -149,6 +147,7 @@ struct VehicleDetailsView: View {
 //                )
             }
             .navigationTitle("Autocarro")
+            .contentMargins(.top, 20.0, for: .scrollContent)
             .onAppear {
                 vehiclesManager.startFetching()
                 Task {

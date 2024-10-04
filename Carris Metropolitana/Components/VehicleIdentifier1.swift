@@ -34,7 +34,7 @@ struct VehicleIdentifier: View {
    @State var placeholderOpacity: Double = 1
    
    var placeholder: some View {
-      Text("00000")
+       Text(verbatim: "00000")
          .font(Font.system(size: 12, weight: .bold, design: .monospaced) )
          .foregroundColor(.clear)
          .padding(.vertical, 2)
