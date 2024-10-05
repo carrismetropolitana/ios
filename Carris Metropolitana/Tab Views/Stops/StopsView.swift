@@ -50,14 +50,16 @@ struct StopsView: View {
     @State private var seeAllNextEtas = false
     
     // Search term debounce
-    @State private var debounceWorkItem: DispatchWorkItem?
+    @State private var debounceSearchItem: DispatchWorkItem?
+    // Location debounce
+    @State private var debounceLocationItem: DispatchWorkItem?
 
 //    @State private var sheetPresentationDetents: [PresentationDetent] = [.fraction(0.5)]
     
     var body: some View {
-        var suggestedStops = locationManager.location != nil ? closestStops(to: locationManager.location!.coordinate, stops: stopsManager.stops, maxResults: 10) : Array(stopsManager.stops.prefix(10))
         NavigationStack {
             ZStack {
+                var suggestedStops = []
                 if let stop = stopsManager.stops.first(where: {$0.id == selectedStopId}) {
                     NavigationLink(
                         destination: 
@@ -146,13 +148,24 @@ struct StopsView: View {
             ////                    shouldPresentStopDetailsView = false
             ////                }
             //            }
-//            .onChange(of: locationManager.location) {
-//                if stopsManager.stops.count > 0 {
-//                    if let location = locationManager.location {
-//                        closestStopsToUser = closestStops(to: locationManager.location!, stops: stopsManager.stops, maxResults: 10)
-//                    }
-//                }
-//            }
+            .onChange(of: locationManager.location) {
+                // Cancel the previous debounce operation if it's still pending
+                debounceLocationItem?.cancel()
+
+                // Create a new DispatchWorkItem for debouncing
+                debounceLocationItem = DispatchWorkItem {
+                    if stopsManager.stops.count > 0 {
+                        if let location = locationManager.location {
+                            suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
+                        } else {
+                            suggestedStops = Array(stopsManager.stops.prefix(10))
+                        }
+                    }
+                }
+
+                // Execute the debounce work item after 1000ms delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: debounceLocationItem!)
+            }
             .onChange(of: mapFlyToUserCoords) {
                 print("map flying to user coords")
             }
@@ -172,10 +185,18 @@ struct StopsView: View {
             
             
             .onChange(of: isSearchFieldFocused) {
+                if(suggestedStops.count == 0){
+                    if let location = locationManager.location {
+                        suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
+                    } else {
+                        suggestedStops = Array(stopsManager.stops.prefix(10))
+                    }
+                }
                 print("Search field focused, suggested stops count is \(suggestedStops.count)")
-                withAnimation(.smooth(duration: 0.3)) {
+                withAnimation(.smooth(duration: 0.2)) {
                     isSearching = isSearchFieldFocused
                 }
+                searchFilteredStops = suggestedStops
                 
                 if (!isSearchFieldFocused) {
                     searchTerm = ""
@@ -185,10 +206,10 @@ struct StopsView: View {
             
             .onChange(of: searchTerm) {
                 // Cancel the previous debounce operation if it's still pending
-                debounceWorkItem?.cancel()
+                debounceSearchItem?.cancel()
 
                 // Create a new DispatchWorkItem for debouncing
-                debounceWorkItem = DispatchWorkItem {
+                debounceSearchItem = DispatchWorkItem {
                     let stops = stopsManager.stops
                     let normalizedSearchTerm = searchTerm.normalizedForSearch()
                     let filtered = stops.filter({
@@ -205,7 +226,7 @@ struct StopsView: View {
                 }
 
                 // Execute the debounce work item after 250ms delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: debounceWorkItem!)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: debounceSearchItem!)
             }
             
             
