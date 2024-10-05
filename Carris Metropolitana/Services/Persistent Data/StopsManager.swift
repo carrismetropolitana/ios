@@ -20,11 +20,19 @@ class StopsManager: ObservableObject {
 
     func fetchStops() {
         Task {
-            let newStops = await CMAPI.shared.getStops()
-            DispatchQueue.main.async {
-                self.stops = newStops
-                print("Got \(newStops.count) new stops!")
+            var newStops = await CMAPI.shared.getStops()
+            for i in newStops.indices {
+                newStops[i].nameNormalized = newStops[i].name.normalizedForSearch()
+                if let ttsName = newStops[i].ttsName {
+                    newStops[i].ttsNameNormalized = ttsName.normalizedForSearch()
+                }
             }
+            let modifiedStops = newStops
+            DispatchQueue.main.async {
+                self.stops = modifiedStops
+                print("Got \(modifiedStops.count) new stops!")
+            }
+            
         }
     }
 

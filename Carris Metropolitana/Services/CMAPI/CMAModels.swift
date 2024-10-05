@@ -91,6 +91,8 @@ struct Stop: Codable, Identifiable, Hashable {
     let lines: [String]?
     let routes: [String]?
     let patterns: [String]?
+    var nameNormalized: String?
+    var ttsNameNormalized: String?
     
 //    enum CodingKeys: String, CodingKey {
 //        case id, name, latitude, longitude, locality
