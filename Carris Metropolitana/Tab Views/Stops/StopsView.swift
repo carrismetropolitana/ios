@@ -225,8 +225,8 @@ struct StopsView: View {
                     }
                 }
 
-                // Execute the debounce work item after 250ms delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: debounceSearchItem!)
+                // Execute the debounce work item after 100ms delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: debounceSearchItem!)
             }
             
             
