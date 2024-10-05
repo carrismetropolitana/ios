@@ -206,6 +206,11 @@ struct StopsMapView: UIViewRepresentable {
                         showPopup(feature: feature, mapView: mapView)
                         return
                     } else {
+                        // if let style = mapView.style {
+                        //     updateAndMakeVisibleSelectedStop(coordinate: feature.coordinate, style: style)
+                        // } else {
+                        //     print("[ADD_SELECTED_STOP_FLAG] — Style was not available.")
+                        // }
                         control.onStopSelect(stopId)
                         return
                     }
@@ -233,6 +238,11 @@ struct StopsMapView: UIViewRepresentable {
                         showPopup(feature: feature, mapView: mapView)
                         return
                     } else {
+                        // if let style = mapView.style {
+                        //     updateAndMakeVisibleSelectedStop(coordinate: feature.coordinate, style: style)
+                        // } else {
+                        //     print("[ADD_SELECTED_STOP_FLAG] — Style was not available.")
+                        // }
                         control.onStopSelect(stopId)
                         return
                     }
@@ -243,13 +253,23 @@ struct StopsMapView: UIViewRepresentable {
             
             // If no features were found, deselect the selected annotation, if any.
             mapView.deselectAnnotation(mapView.selectedAnnotations.first, animated: true)
+            // if let style = mapView.style {
+            //     hideSelectedStop(style: style)
+            // } else {
+            //     print("[ADD_SELECTED_STOP_FLAG] — (on hideSelectedStop): Style was not available.")
+            // }
         }
         
         func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
             print("MapView loaded Style -> \(mapVisualStyle)")
+            if let image = UIImage(named: "CMMapSelectedStop") {
+                style.setImage(image, forName: "cm-map-selected-stop")
+            }
             // control.updateStyle(mapView)
             control.addStops(to: mapView)
             control.updateTiles(on: mapView, to: mapVisualStyle)
+            
+            // addSelectedStopSource(style: style)
         }
         
         func mapViewDidFinishLoadingMap(_ mapView: MLNMapView) {
@@ -316,6 +336,67 @@ struct StopsMapView: UIViewRepresentable {
             point.coordinate = feature.coordinate
             
             mapView.selectAnnotation(point, animated: true, completionHandler: nil)
+        }
+        
+        // this might not be the best way to do this
+        
+        // can only be ran once per map init
+        private func addSelectedStopSource(style: MLNStyle) {
+            if style.source(withIdentifier: "selected-stop-source") == nil {
+                print("[ADD_FLAG_IMAGE] — Adding flag image.")
+                
+                let selectedStopSource = MLNShapeSource(identifier: "selected-stop-source", features: [])
+                
+                style.addSource(selectedStopSource)
+                print("[ADD_FLAG_IMAGE] — Added source to style.")
+            }
+        }
+        
+        private func addSelectedStopLayer(style: MLNStyle, forSource selectedStopSource: MLNSource) {
+            let selectedStopLayer = MLNSymbolStyleLayer(identifier: "selected-stop-layer", source: selectedStopSource)
+            selectedStopLayer.iconImageName = NSExpression(forConstantValue: "cm-map-selected-stop")
+            selectedStopLayer.iconAllowsOverlap = NSExpression(forConstantValue: true)
+            selectedStopLayer.iconIgnoresPlacement = NSExpression(forConstantValue: true)
+            selectedStopLayer.iconAnchor = NSExpression(forConstantValue: "bottom")
+            selectedStopLayer.symbolPlacement = NSExpression(forConstantValue: "point")
+//            selectedStopLayer.iconRotationAlignment = NSExpression(forConstantValue: "map")
+            selectedStopLayer.iconScale =  NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", [
+                10: NSExpression(forConstantValue: 0.1),
+                20: NSExpression(forConstantValue: 0.25)
+            ])
+            selectedStopLayer.iconOffset = NSExpression(forConstantValue: CGVector(dx: 0, dy: 5)) // nil defaults to CGVector(dx: 0, dy: 0)
+            selectedStopLayer.iconOpacity =  NSExpression(
+                format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', 0.5, %@)", [
+                    7: NSExpression(forConstantValue: 0),
+                    10: NSExpression(forConstantValue: 1)
+                ]
+            )
+            
+            if let stopsLayer = style.layer(withIdentifier: "stops-layer") {
+                style.insertLayer(selectedStopLayer, above: stopsLayer)
+                print("[ADD_FLAG_IMAGE] — Found stops layer so added flag above it.")
+            } else {
+                style.addLayer(selectedStopLayer)
+                print("[ADD_FLAG_IMAGE] — Stops layer not found so added flag on top of everything.")
+            }
+        }
+        
+        private func hideSelectedStop(style: MLNStyle) {
+            if let layer = style.layer(withIdentifier: "selected-stop-layer") {
+                print("[ADD_FLAG_IMAGE] — Layer already exists, removing...")
+                style.removeLayer(layer)
+            }
+        }
+        
+        private func updateAndMakeVisibleSelectedStop(coordinate: CLLocationCoordinate2D, style: MLNStyle) {
+            if let selectedStopSource = style.source(withIdentifier: "selected-stop-source") as? MLNShapeSource {
+                let selectedStopFeature = MLNPointFeature()
+                selectedStopFeature.coordinate = coordinate
+                
+                selectedStopSource.shape = MLNShapeCollectionFeature(shapes: [
+                    selectedStopFeature
+                ])
+            }
         }
     }
     

@@ -79,7 +79,7 @@
 		79CD78A12BA73767003D30F2 /* FacilityIconsPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD78A02BA73767003D30F2 /* FacilityIconsPreviewView.swift */; };
 		79CD78A72BA78001003D30F2 /* AnotherMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD78A62BA78001003D30F2 /* AnotherMapView.swift */; };
 		79CD78AA2BA78233003D30F2 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = 79CD78A92BA78233003D30F2 /* MapLibre */; };
-		79CD78AC2BA78256003D30F2 /* MapLibreMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */; };
+		79CD78AC2BA78256003D30F2 /* StopsMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD78AB2BA78256003D30F2 /* StopsMapView.swift */; };
 		79CDD65C2C0643920078EC5E /* PatternStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CDD65B2C0643920078EC5E /* PatternStop.swift */; };
 		79D227D62BA532F70068B5B4 /* ENCMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D227D52BA532F70068B5B4 /* ENCMView.swift */; };
 		79D3B1622C77E56300E0AE52 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79D3B1612C77E56300E0AE52 /* WidgetKit.framework */; };
@@ -91,6 +91,7 @@
 		79D3B16F2C77E56400E0AE52 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79D3B16E2C77E56400E0AE52 /* Assets.xcassets */; };
 		79D3B1732C77E56400E0AE52 /* VehicleLivePatternExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79D3B1602C77E56300E0AE52 /* VehicleLivePatternExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		79D671502CA1C57C0003396A /* HorizontalCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D6714F2CA1C57C0003396A /* HorizontalCarousel.swift */; };
+		79D78C812CB05324001E2757 /* IntermodalAttribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D78C802CB05324001E2757 /* IntermodalAttribution.swift */; };
 		79DB836A2BA19A5D0023DD93 /* cmet_ios_demoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB83692BA19A5D0023DD93 /* cmet_ios_demoApp.swift */; };
 		79DB836C2BA19A5D0023DD93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB836B2BA19A5D0023DD93 /* ContentView.swift */; };
 		79DB836E2BA19A5E0023DD93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79DB836D2BA19A5E0023DD93 /* Assets.xcassets */; };
@@ -240,7 +241,7 @@
 		79CCB5582C91965900A3D39C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		79CD78A02BA73767003D30F2 /* FacilityIconsPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityIconsPreviewView.swift; sourceTree = "<group>"; };
 		79CD78A62BA78001003D30F2 /* AnotherMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnotherMapView.swift; sourceTree = "<group>"; };
-		79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreMapView.swift; sourceTree = "<group>"; };
+		79CD78AB2BA78256003D30F2 /* StopsMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsMapView.swift; sourceTree = "<group>"; };
 		79CDD65B2C0643920078EC5E /* PatternStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternStop.swift; sourceTree = "<group>"; };
 		79D227D52BA532F70068B5B4 /* ENCMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENCMView.swift; sourceTree = "<group>"; };
 		79D3B1602C77E56300E0AE52 /* VehicleLivePatternExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = VehicleLivePatternExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +254,7 @@
 		79D3B16E2C77E56400E0AE52 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		79D3B1702C77E56400E0AE52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79D6714F2CA1C57C0003396A /* HorizontalCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCarousel.swift; sourceTree = "<group>"; };
+		79D78C802CB05324001E2757 /* IntermodalAttribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntermodalAttribution.swift; sourceTree = "<group>"; };
 		79DB83662BA19A5D0023DD93 /* Carris Metropolitana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Carris Metropolitana.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		79DB83692BA19A5D0023DD93 /* cmet_ios_demoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cmet_ios_demoApp.swift; sourceTree = "<group>"; };
 		79DB836B2BA19A5D0023DD93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -405,7 +407,7 @@
 			children = (
 				79F1D8882C7AA27B005CB830 /* Map Overlays */,
 				79EE5FC42BB7BE970060820F /* GenericMapView.swift */,
-				79CD78AB2BA78256003D30F2 /* MapLibreMapView.swift */,
+				79CD78AB2BA78256003D30F2 /* StopsMapView.swift */,
 				7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */,
 			);
 			path = Maps;
@@ -658,6 +660,7 @@
 				790817D82BEE1EF000EC0C82 /* PersistentDataController.swift */,
 				791E09942BA53D9D002899EC /* SFSafariView.swift */,
 				7916BD7E2C1E138000C049B7 /* VehicleIdentifier.swift */,
+				79D78C802CB05324001E2757 /* IntermodalAttribution.swift */,
 				79CD78A02BA73767003D30F2 /* FacilityIconsPreviewView.swift */,
 				7991D6B22BB1CFE7002E6638 /* PulseAnimation.swift */,
 				7912F69F2C09DF70005D31DF /* NewsWebView.swift */,
@@ -975,7 +978,7 @@
 				79E88CC22BAB76D3001F3227 /* LiveActivityService.swift in Sources */,
 				799E63B92C02D19E00BCBEB8 /* FavoritesManager.swift in Sources */,
 				798B2E7A2BA3317D00CBA9DC /* UnregisteredUserView.swift in Sources */,
-				79CD78AC2BA78256003D30F2 /* MapLibreMapView.swift in Sources */,
+				79CD78AC2BA78256003D30F2 /* StopsMapView.swift in Sources */,
 				79F0ABD92C02B2F1008FA0D9 /* VehicleIdentifier1.swift in Sources */,
 				7912F6A02C09DF70005D31DF /* NewsWebView.swift in Sources */,
 				79DB83892BA1B5ED0023DD93 /* HTTPAPI.swift in Sources */,
@@ -1002,6 +1005,7 @@
 				791A70692C3C682E00E789E5 /* ETAPlayground.swift in Sources */,
 				79C6C4FF2C146B89003277A7 /* LocationManager.swift in Sources */,
 				7992BEB72C383E5B00B5138F /* Analytics.swift in Sources */,
+				79D78C812CB05324001E2757 /* IntermodalAttribution.swift in Sources */,
 				79A1FAB92C926C9600F25285 /* BundleVersioning.swift in Sources */,
 				79C6C4FD2C1466AA003277A7 /* VehiclesManager.swift in Sources */,
 				79DB838F2BA1BA340023DD93 /* CMWHelpers.swift in Sources */,
