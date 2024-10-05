@@ -48,6 +48,10 @@ struct StopsView: View {
     @State private var mapVisible: Bool = true
     
     @State private var seeAllNextEtas = false
+    
+    // Search term debounce
+    @State private var debounceWorkItem: DispatchWorkItem?
+
 //    @State private var sheetPresentationDetents: [PresentationDetent] = [.fraction(0.5)]
     
     var body: some View {
@@ -180,26 +184,28 @@ struct StopsView: View {
             
             
             .onChange(of: searchTerm) {
-                print(searchTerm)
-                let t1 = Date().timeIntervalSince1970
-                
-                let stops = stopsManager.stops
-                let normalizedSearchTerm = searchTerm.normalizedForSearch()
-                let filtered = stops.filter({
-                    $0.name.normalizedForSearch().contains(normalizedSearchTerm)
-                    || $0.id.normalizedForSearch().contains(normalizedSearchTerm)
-                    || ($0.ttsName != nil && $0.ttsName!.normalizedForSearch().contains(normalizedSearchTerm))
-                })
-                
-                let t2 = Date().timeIntervalSince1970
-                
-                print("SEARCH TOOK \(t2-t1)s")
-                
-                if filtered.count > 0 {
-                    searchFilteredStops = filtered
-                } else {
-                    searchFilteredStops = suggestedStops
+                // Cancel the previous debounce operation if it's still pending
+                debounceWorkItem?.cancel()
+
+                // Create a new DispatchWorkItem for debouncing
+                debounceWorkItem = DispatchWorkItem {
+                    let stops = stopsManager.stops
+                    let normalizedSearchTerm = searchTerm.normalizedForSearch()
+                    let filtered = stops.filter({
+                        ($0.nameNormalized != nil && $0.nameNormalized!.contains(normalizedSearchTerm))
+                        || $0.id.contains(normalizedSearchTerm)
+                        || ($0.ttsNameNormalized != nil && $0.ttsNameNormalized!.contains(normalizedSearchTerm))
+                    })
+
+                    if filtered.count > 0 {
+                        searchFilteredStops = filtered
+                    } else {
+                        searchFilteredStops = suggestedStops
+                    }
                 }
+
+                // Execute the debounce work item after 250ms delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: debounceWorkItem!)
             }
             
             
