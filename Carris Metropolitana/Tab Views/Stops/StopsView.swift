@@ -311,9 +311,13 @@ struct StopsView: View {
                         flyToCoords = flyToCoordsFromExternalTab
                         selectedStopId = flownToStopIdFromExternalTab
                         isSheetPresented = true
-                        tabCoordinator.mapFlyToCoords = nil
                     }
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
+                    flyToCoords = nil
+                    tabCoordinator.mapFlyToCoords = nil
+                    tabCoordinator.flownToStopId = nil
+                })
             }
         }
     }
