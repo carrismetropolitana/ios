@@ -103,6 +103,7 @@ struct StopsView: View {
                     },
                     flyToCoords: flyToCoords,
                     shouldFlyToUserCoords: $mapFlyToUserCoords,
+                    mapVisible: $mapVisible,
                     mapVisualStyle: mapVisualStyle
                 ).ignoresSafeArea().onDisappear {
                     mapVisible = false
@@ -409,7 +410,13 @@ struct StopsView: View {
                 }
                 
             }
-            .contentMargins(.top, 70, for: .scrollContent)
+            .contentMargins(.top, 77, for: .scrollContent)
+        }
+        .onAppear(){
+            mapVisible = false
+        }
+        .onDisappear(){
+            mapVisible = true
         }
     }
     
