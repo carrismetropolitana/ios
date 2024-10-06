@@ -32,7 +32,7 @@ struct StopsMapView: UIViewRepresentable {
     
     let onStopSelect: (_ stopId: String) -> Void
     
-    var flyToCoords: CLLocationCoordinate2D?
+    @Binding var flyToCoords: CLLocationCoordinate2D?
     @Binding var shouldFlyToUserCoords: Bool
     
     var mapVisualStyle: MapVisualStyle = .standard
@@ -457,6 +457,7 @@ struct StopsMapView: UIViewRepresentable {
         if let flyToCoords = flyToCoords {
             flyToCoordinate(on: uiView, to: flyToCoords)
         }
+        flyToCoords = nil
         
         if shouldFlyToUserCoords {
             print("should fly to user coords is \(shouldFlyToUserCoords)")

@@ -101,7 +101,7 @@ struct StopsView: View {
                         isSheetPresented = true
                         print("Changed stopId to \(String(describing: selectedStopId))")
                     },
-                    flyToCoords: flyToCoords,
+                    flyToCoords: $flyToCoords,
                     shouldFlyToUserCoords: $mapFlyToUserCoords,
                     mapVisualStyle: mapVisualStyle
                 ).ignoresSafeArea().onDisappear {
@@ -313,11 +313,8 @@ struct StopsView: View {
                         isSheetPresented = true
                     }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
-                    flyToCoords = nil
-                    tabCoordinator.mapFlyToCoords = nil
-                    tabCoordinator.flownToStopId = nil
-                })
+                tabCoordinator.mapFlyToCoords = nil
+                tabCoordinator.flownToStopId = nil
             }
         }
     }
@@ -401,7 +398,6 @@ struct StopsView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
                                 selectedStopId = stop.id
                                 isSheetPresented = true
-                                flyToCoords=nil
                             })
 
                         } label: {
