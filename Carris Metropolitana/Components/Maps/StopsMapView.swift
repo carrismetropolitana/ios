@@ -417,7 +417,7 @@ struct StopsMapView: UIViewRepresentable {
         if let userLocation = mapView.userLocation {
             let camera = MLNMapCamera(
                 lookingAtCenter: userLocation.coordinate,
-                altitude: 5500,
+                altitude: 1500,
                 pitch: 0,
                 heading: 0)
             
