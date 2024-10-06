@@ -168,9 +168,6 @@ struct StopsView: View {
             }
             .onChange(of: mapFlyToUserCoords) {
                 print("map flying to user coords")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    flyToCoords = nil
-                }
             }
             .onChange(of: stopsManager.stops) {
                 if stopsManager.stops.count > 0 {
