@@ -373,6 +373,9 @@ struct StopsView: View {
                 }
             }
         }
+        .onTapGesture {
+            isSearchFieldFocused = true
+        }
     }
     
     
