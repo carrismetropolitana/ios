@@ -403,7 +403,7 @@ struct StopsMapView: UIViewRepresentable {
     func flyToCoordinate(on mapView: MLNMapView, to coordinate: CLLocationCoordinate2D) {
         let camera = MLNMapCamera(
             lookingAtCenter: coordinate,
-            altitude: 5500,
+            altitude: 1500,
             pitch: 0,
             heading: 0)
         
