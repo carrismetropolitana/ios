@@ -168,6 +168,9 @@ struct StopsView: View {
             }
             .onChange(of: mapFlyToUserCoords) {
                 print("map flying to user coords")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    flyToCoords = nil
+                }
             }
             .onChange(of: stopsManager.stops) {
                 if stopsManager.stops.count > 0 {
@@ -311,6 +314,7 @@ struct StopsView: View {
                         flyToCoords = flyToCoordsFromExternalTab
                         selectedStopId = flownToStopIdFromExternalTab
                         isSheetPresented = true
+                        tabCoordinator.mapFlyToCoords = nil
                     }
                 }
             }
@@ -388,12 +392,17 @@ struct StopsView: View {
                 LazyVStack {
                     ForEach(searchFilteredStops) { stop in
                         Button {
-                            flyToCoords = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
-                            isSearching = false
-                            isSearchFieldFocused = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-                                selectedStopId = stop.id
+                            DispatchQueue.main.async {
+                                isSearching = false
+                                isSearchFieldFocused = false
+                                flyToCoords = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
                             }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
+                                selectedStopId = stop.id
+                                isSheetPresented = true
+                                flyToCoords=nil
+                            })
+
                         } label: {
                             StopSearchResultEntry(stop: stop)
                                 .padding(.horizontal)
