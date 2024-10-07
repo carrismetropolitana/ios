@@ -186,14 +186,20 @@ struct StopsView: View {
             
             
             .onChange(of: isSearchFieldFocused) {
+                print("Search field focused, suggested stops count is \(suggestedStops.count)")
                 if(suggestedStops.count == 0){
+                // This should basically never run as
+                // - initial location is handled onAppear with async queued work and
+                // - location updates are handled by onChange of locationManager.location
                     if let location = locationManager.location {
+                        // This should basically never run as
+                        // - initial location is handled onAppear, and
+                        // - location updates are handled by onChange of locationManager.location
                         suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
                     } else {
                         suggestedStops = Array(stopsManager.stops.prefix(10))
                     }
                 }
-                print("Search field focused, suggested stops count is \(suggestedStops.count)")
                 withAnimation(.smooth(duration: 0.2)) {
                     isSearching = isSearchFieldFocused
                 }
@@ -312,6 +318,16 @@ struct StopsView: View {
                         flyToCoords = flyToCoordsFromExternalTab
                         selectedStopId = flownToStopIdFromExternalTab
                         isSheetPresented = true
+                    }
+                }
+                // Initialize the suggested stops right at tab open - reduces delay in tapping search
+                DispatchQueue.main.async{
+                    if(suggestedStops.count == 0){
+                        if let location = locationManager.location {
+                            suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
+                        } else {
+                            suggestedStops = Array(stopsManager.stops.prefix(10))
+                        }
                     }
                 }
             }
