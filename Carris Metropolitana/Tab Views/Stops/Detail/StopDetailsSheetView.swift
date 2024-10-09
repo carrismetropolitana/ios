@@ -88,8 +88,9 @@ struct StopDetailsSheetView: View {
                             HStack {
                                 Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor)) // TODO: match line colors to these
                                 Text(eta.headsign)
-                                    .bold()
-                                    .lineLimit(1)
+                                    .font(Font.system(size: 15, weight: .regular, design: .default))
+                                    .multilineTextAlignment(.leading)
+                                    .lineLimit(2)
                                 Spacer()
                                 if let estimatedArrival = eta.estimatedArrivalUnix {
                                     PulseLabel(accent: .green, label: Text(verbatim: "\(getRoundedMinuteDifferenceFromNow(estimatedArrival)) min"))
