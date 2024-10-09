@@ -145,12 +145,30 @@ struct StopsMapView: UIViewRepresentable {
         // Set the layer properties
         //        layer.circleColor = NSExpression(format: "mgl_step:from:stops:($zoomLevel, '#ffdd01', 9, '#ffffff')")
         layer.circleColor = NSExpression(forConstantValue: UIColor(.cmYellow))
-        layer.circleRadius = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-                                          [9: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 5), falseExpression: NSExpression(forConstantValue: 1)),
-                                           26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 25), falseExpression: NSExpression(forConstantValue: 20))])
-        layer.circleStrokeWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-                                               [9: NSExpression(forConstantValue: 0.01),
-                                                26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 8), falseExpression: NSExpression(forConstantValue: 7))])
+        layer.circleRadius = NSExpression(
+            forMLNInterpolating: .zoomLevelVariable,
+            curveType: .linear,
+            parameters: nil,
+            stops: NSExpression(forConstantValue: [
+                9: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"),
+                                trueExpression: NSExpression(forConstantValue: 5),
+                                falseExpression: NSExpression(forConstantValue: 1)),
+                26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"),
+                                 trueExpression: NSExpression(forConstantValue: 25),
+                                 falseExpression: NSExpression(forConstantValue: 20))
+            ])
+        )
+        layer.circleStrokeWidth = NSExpression(
+            forMLNInterpolating: .zoomLevelVariable,
+            curveType: .linear,
+            parameters: nil,
+            stops: NSExpression(forConstantValue: [
+                9: NSExpression(forConstantValue: 0.01),
+                26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"),
+                                 trueExpression: NSExpression(forConstantValue: 8),
+                                 falseExpression: NSExpression(forConstantValue: 7))
+            ])
+        )
         layer.circleStrokeColor = NSExpression(forConstantValue: UIColor(.black))
         layer.circlePitchAlignment = NSExpression(forConstantValue: "map")
         
@@ -366,17 +384,26 @@ struct StopsMapView: UIViewRepresentable {
             selectedStopLayer.iconAnchor = NSExpression(forConstantValue: "bottom")
             selectedStopLayer.symbolPlacement = NSExpression(forConstantValue: "point")
 //            selectedStopLayer.iconRotationAlignment = NSExpression(forConstantValue: "map")
-            selectedStopLayer.iconScale =  NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", [
-                10: NSExpression(forConstantValue: 0.1),
-                20: NSExpression(forConstantValue: 0.25)
-            ])
+            selectedStopLayer.iconScale = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    10: NSExpression(forConstantValue: 0.1),
+                    20: NSExpression(forConstantValue: 0.25)
+                ])
+            )
             selectedStopLayer.iconOffset = NSExpression(forConstantValue: CGVector(dx: 0, dy: 5)) // nil defaults to CGVector(dx: 0, dy: 0)
-            selectedStopLayer.iconOpacity =  NSExpression(
-                format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', 0.5, %@)", [
+            selectedStopLayer.iconOpacity = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: NSExpression(forConstantValue: 0.5), // If needed, or `nil` for linear interpolation
+                stops: NSExpression(forConstantValue: [
                     7: NSExpression(forConstantValue: 0),
                     10: NSExpression(forConstantValue: 1)
-                ]
+                ])
             )
+
             
             if let stopsLayer = style.layer(withIdentifier: "stops-layer") {
                 style.insertLayer(selectedStopLayer, above: stopsLayer)
