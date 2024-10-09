@@ -34,6 +34,7 @@ struct StopsMapView: UIViewRepresentable {
     
     @Binding var flyToCoords: CLLocationCoordinate2D?
     @Binding var shouldFlyToUserCoords: Bool
+    @Binding var mapVisible: Bool
     
     var mapVisualStyle: MapVisualStyle = .standard
     
@@ -182,11 +183,13 @@ struct StopsMapView: UIViewRepresentable {
         var control: StopsMapView
         var mapVisualStyle: MapVisualStyle // is this really how this is supposed to be done??
         var flyToCoords: CLLocationCoordinate2D?
+        var mapVisible: Bool = true
         
         init(_ control: StopsMapView) {
             self.control = control
             self.mapVisualStyle = control.mapVisualStyle
             self.flyToCoords = control.flyToCoords
+            self.mapVisible = control.mapVisible
         }
         
         @objc func handleTap(_ sender: UITapGestureRecognizer) {
@@ -261,6 +264,9 @@ struct StopsMapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
+            if (!mapVisible){
+                return
+            }
             print("MapView loaded Style -> \(mapVisualStyle)")
             if let image = UIImage(named: "CMMapSelectedStop") {
                 style.setImage(image, forName: "cm-map-selected-stop")
@@ -433,6 +439,9 @@ struct StopsMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: MLNMapView, context: Context) {
+        if (!mapVisible){
+            return
+        }
         print("StopsMapView updateUIView called")
         print("updateUIView called with \(stops.count) stops")
         

@@ -103,6 +103,7 @@ struct StopsView: View {
                     },
                     flyToCoords: $flyToCoords,
                     shouldFlyToUserCoords: $mapFlyToUserCoords,
+                    mapVisible: $mapVisible,
                     mapVisualStyle: mapVisualStyle
                 ).ignoresSafeArea().onDisappear {
                     mapVisible = false
@@ -185,14 +186,20 @@ struct StopsView: View {
             
             
             .onChange(of: isSearchFieldFocused) {
+                print("Search field focused, suggested stops count is \(suggestedStops.count)")
                 if(suggestedStops.count == 0){
+                // This should basically never run as
+                // - initial location is handled onAppear with async queued work and
+                // - location updates are handled by onChange of locationManager.location
                     if let location = locationManager.location {
+                        // This should basically never run as
+                        // - initial location is handled onAppear, and
+                        // - location updates are handled by onChange of locationManager.location
                         suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
                     } else {
                         suggestedStops = Array(stopsManager.stops.prefix(10))
                     }
                 }
-                print("Search field focused, suggested stops count is \(suggestedStops.count)")
                 withAnimation(.smooth(duration: 0.2)) {
                     isSearching = isSearchFieldFocused
                 }
@@ -313,8 +320,16 @@ struct StopsView: View {
                         isSheetPresented = true
                     }
                 }
-                tabCoordinator.mapFlyToCoords = nil
-                tabCoordinator.flownToStopId = nil
+                // Initialize the suggested stops right at tab open - reduces delay in tapping search
+                DispatchQueue.main.async{
+                    if(suggestedStops.count == 0){
+                        if let location = locationManager.location {
+                            suggestedStops = closestStops(to: location.coordinate, stops: stopsManager.stops, maxResults: 10)
+                        } else {
+                            suggestedStops = Array(stopsManager.stops.prefix(10))
+                        }
+                    }
+                }
             }
         }
     }
@@ -375,6 +390,9 @@ struct StopsView: View {
                 }
             }
         }
+        .onTapGesture {
+            isSearchFieldFocused = true
+        }
     }
     
     
@@ -412,7 +430,13 @@ struct StopsView: View {
                 }
                 
             }
-            .contentMargins(.top, 70, for: .scrollContent)
+            .contentMargins(.top, 77, for: .scrollContent)
+        }
+        .onAppear(){
+            mapVisible = false
+        }
+        .onDisappear(){
+            mapVisible = true
         }
     }
     

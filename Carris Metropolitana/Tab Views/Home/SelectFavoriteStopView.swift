@@ -32,7 +32,7 @@ struct SelectFavoriteStopView: View {
             StopsMapView(stops: stopsManager.stops, onStopSelect: { stopId in
                 selectedStopId = stopId
                 presentationMode.wrappedValue.dismiss()
-            }, flyToCoords: .constant(nil), shouldFlyToUserCoords: .constant(false), showPopupOnStopSelect: true)
+            }, flyToCoords: .constant(nil), shouldFlyToUserCoords: .constant(false), mapVisible: .constant(true), showPopupOnStopSelect: true)
                 .frame(height: 300)
             
             List {
