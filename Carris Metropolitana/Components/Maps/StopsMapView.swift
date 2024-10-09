@@ -32,7 +32,7 @@ struct StopsMapView: UIViewRepresentable {
     
     let onStopSelect: (_ stopId: String) -> Void
     
-    var flyToCoords: CLLocationCoordinate2D?
+    @Binding var flyToCoords: CLLocationCoordinate2D?
     @Binding var shouldFlyToUserCoords: Bool
     @Binding var mapVisible: Bool
     
@@ -409,7 +409,7 @@ struct StopsMapView: UIViewRepresentable {
     func flyToCoordinate(on mapView: MLNMapView, to coordinate: CLLocationCoordinate2D) {
         let camera = MLNMapCamera(
             lookingAtCenter: coordinate,
-            altitude: 5500,
+            altitude: 1500,
             pitch: 0,
             heading: 0)
         
@@ -423,7 +423,7 @@ struct StopsMapView: UIViewRepresentable {
         if let userLocation = mapView.userLocation {
             let camera = MLNMapCamera(
                 lookingAtCenter: userLocation.coordinate,
-                altitude: 5500,
+                altitude: 1500,
                 pitch: 0,
                 heading: 0)
             
@@ -466,6 +466,7 @@ struct StopsMapView: UIViewRepresentable {
         if let flyToCoords = flyToCoords {
             flyToCoordinate(on: uiView, to: flyToCoords)
         }
+        flyToCoords = nil
         
         if shouldFlyToUserCoords {
             print("should fly to user coords is \(shouldFlyToUserCoords)")

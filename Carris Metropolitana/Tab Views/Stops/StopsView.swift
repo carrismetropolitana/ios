@@ -101,7 +101,7 @@ struct StopsView: View {
                         isSheetPresented = true
                         print("Changed stopId to \(String(describing: selectedStopId))")
                     },
-                    flyToCoords: flyToCoords,
+                    flyToCoords: $flyToCoords,
                     shouldFlyToUserCoords: $mapFlyToUserCoords,
                     mapVisible: $mapVisible,
                     mapVisualStyle: mapVisualStyle
@@ -408,12 +408,16 @@ struct StopsView: View {
                 LazyVStack {
                     ForEach(searchFilteredStops) { stop in
                         Button {
-                            flyToCoords = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
-                            isSearching = false
-                            isSearchFieldFocused = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-                                selectedStopId = stop.id
+                            DispatchQueue.main.async {
+                                isSearching = false
+                                isSearchFieldFocused = false
+                                flyToCoords = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
                             }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
+                                selectedStopId = stop.id
+                                isSheetPresented = true
+                            })
+
                         } label: {
                             StopSearchResultEntry(stop: stop)
                                 .padding(.horizontal)
