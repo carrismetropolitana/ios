@@ -41,7 +41,7 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
 //             tap.require(toFail: recognizer)
 //         }
 //        mapView.addGestureRecognizer(tap)
-//        
+//
 
         // needed to respond to map events
         mapView.delegate = context.coordinator
@@ -192,11 +192,16 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             
             shapeLayer.lineJoin = NSExpression(forConstantValue: "round")
             shapeLayer.lineCap = NSExpression(forConstantValue: "round")
-            shapeLayer.lineColor = NSExpression(forConstantValue: UIColor(lineColor)) // TODO: change to route color
-            shapeLayer.lineWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", [
-                10: NSExpression(forConstantValue: 4),
-                20: NSExpression(forConstantValue: 12)
-            ])
+            shapeLayer.lineColor = NSExpression(forConstantValue: UIColor(lineColor))
+            shapeLayer.lineWidth = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    10: NSExpression(forConstantValue: 4),
+                    20: NSExpression(forConstantValue: 12)
+                ])
+            )
             
             // Vehicles (Symbol)
             let vehiclesLayer = MLNSymbolStyleLayer(identifier: "vehicles-layer", source: vehiclesSource)
@@ -206,10 +211,15 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             vehiclesLayer.iconAnchor = NSExpression(forConstantValue: "center")
             vehiclesLayer.symbolPlacement = NSExpression(forConstantValue: "point")
             vehiclesLayer.iconRotationAlignment = NSExpression(forConstantValue: "map")
-            vehiclesLayer.iconScale =  NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", [
-                10: NSExpression(forConstantValue: 0.05),
-                20: NSExpression(forConstantValue: 0.15)
-            ])
+            vehiclesLayer.iconScale = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    10: NSExpression(forConstantValue: 0.05),
+                    20: NSExpression(forConstantValue: 0.15)
+                ])
+            )
             vehiclesLayer.iconOffset = nil // nil defaults to CGVector(dx: 0, dy: 0)
             vehiclesLayer.iconRotation = NSExpression(forKeyPath: "bearing")
             
@@ -217,12 +227,36 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             // Stops (Circle)
             let stopsLayer = MLNCircleStyleLayer(identifier: "stops-layer", source: stopsSource)
             stopsLayer.circleColor = NSExpression(forConstantValue: UIColor(.white))
-            stopsLayer.circleRadius = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-                                              [9: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 5), falseExpression: NSExpression(forConstantValue: 1)),
-                                               26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 25), falseExpression: NSExpression(forConstantValue: 20))])
-            stopsLayer.circleStrokeWidth = NSExpression(format: "mgl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)",
-                                                   [9: NSExpression(forConstantValue: 0.01),
-                                                    26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"), trueExpression: NSExpression(forConstantValue: 8), falseExpression: NSExpression(forConstantValue: 7))])
+            stopsLayer.circleRadius = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    9: NSExpression(
+                        forConditional: NSPredicate(format: "selected == TRUE"),
+                        trueExpression: NSExpression(forConstantValue: 5),
+                        falseExpression: NSExpression(forConstantValue: 1)
+                    ),
+                    26: NSExpression(
+                        forConditional: NSPredicate(format: "selected == TRUE"),
+                        trueExpression: NSExpression(forConstantValue: 25),
+                        falseExpression: NSExpression(forConstantValue: 20)
+                    )
+                ])
+            )
+            stopsLayer.circleStrokeWidth = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    9: NSExpression(forConstantValue: 0.01),
+                    26: NSExpression(
+                        forConditional: NSPredicate(format: "selected == TRUE"),
+                        trueExpression: NSExpression(forConstantValue: 8),
+                        falseExpression: NSExpression(forConstantValue: 7)
+                    )
+                ])
+            )
             stopsLayer.circleStrokeColor = NSExpression(forConstantValue: UIColor(lineColor))
             stopsLayer.circlePitchAlignment = NSExpression(forConstantValue: "map")
             

@@ -143,19 +143,29 @@ struct StopsMapView: UIViewRepresentable {
         
         
         // Set the layer properties
-        //        layer.circleColor = NSExpression(format: "mgl_step:from:stops:($zoomLevel, '#ffdd01', 9, '#ffffff')")
-        layer.circleColor = NSExpression(forConstantValue: UIColor(.cmYellow))
+//        layer.circleColor = NSExpression(
+//            forMLNStepping: .zoomLevelVariable,
+//            from: NSExpression(forConstantValue: UIColor.cmYellow),
+//            stops: NSExpression(forConstantValue: [
+//                9: NSExpression(forConstantValue: UIColor.white)
+//            ])
+//        )
+        layer.circleColor = NSExpression(forConstantValue: UIColor.cmYellow)
         layer.circleRadius = NSExpression(
             forMLNInterpolating: .zoomLevelVariable,
             curveType: .linear,
             parameters: nil,
             stops: NSExpression(forConstantValue: [
-                9: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"),
-                                trueExpression: NSExpression(forConstantValue: 5),
-                                falseExpression: NSExpression(forConstantValue: 1)),
-                26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"),
-                                 trueExpression: NSExpression(forConstantValue: 25),
-                                 falseExpression: NSExpression(forConstantValue: 20))
+                9: NSExpression(
+                    forConditional: NSPredicate(format: "selected == TRUE"),
+                    trueExpression: NSExpression(forConstantValue: 5),
+                    falseExpression: NSExpression(forConstantValue: 1)
+                ),
+                26: NSExpression(
+                    forConditional: NSPredicate(format: "selected == TRUE"),
+                    trueExpression: NSExpression(forConstantValue: 25),
+                    falseExpression: NSExpression(forConstantValue: 20)
+                )
             ])
         )
         layer.circleStrokeWidth = NSExpression(
@@ -164,9 +174,11 @@ struct StopsMapView: UIViewRepresentable {
             parameters: nil,
             stops: NSExpression(forConstantValue: [
                 9: NSExpression(forConstantValue: 0.01),
-                26: NSExpression(forConditional: NSPredicate(format: "selected == TRUE"),
-                                 trueExpression: NSExpression(forConstantValue: 8),
-                                 falseExpression: NSExpression(forConstantValue: 7))
+                26: NSExpression(
+                    forConditional: NSPredicate(format: "selected == TRUE"),
+                    trueExpression: NSExpression(forConstantValue: 8),
+                    falseExpression: NSExpression(forConstantValue: 7)
+                )
             ])
         )
         layer.circleStrokeColor = NSExpression(forConstantValue: UIColor(.black))
@@ -397,13 +409,12 @@ struct StopsMapView: UIViewRepresentable {
             selectedStopLayer.iconOpacity = NSExpression(
                 forMLNInterpolating: .zoomLevelVariable,
                 curveType: .linear,
-                parameters: NSExpression(forConstantValue: 0.5), // If needed, or `nil` for linear interpolation
+                parameters: nil,
                 stops: NSExpression(forConstantValue: [
                     7: NSExpression(forConstantValue: 0),
                     10: NSExpression(forConstantValue: 1)
                 ])
             )
-
             
             if let stopsLayer = style.layer(withIdentifier: "stops-layer") {
                 style.insertLayer(selectedStopLayer, above: stopsLayer)
