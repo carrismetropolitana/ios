@@ -17,7 +17,7 @@ struct PulseLabel: View {
       HStack(spacing: 2) {
          Pulse(size: 20, accent: self.accent)
          label
-            .font(Font.system(size: 12, weight: .medium, design: .default) )
+            .font(Font.system(size: 16, weight: .medium, design: .default) )
             .foregroundColor(self.accent)
       }
    }

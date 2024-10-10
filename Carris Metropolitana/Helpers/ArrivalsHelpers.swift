@@ -16,12 +16,13 @@ func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeET
         let tripHasScheduledArrival = $0.scheduledArrivalUnix != nil
         let tripHasEstimatedArrival = $0.estimatedArrivalUnix != nil
         let tripEstimatedArrivalIsInThePast = $0.estimatedArrivalUnix ?? 0 <= Int(Date().timeIntervalSince1970)
+        let tripEstimatedArrivalIsInTheFuture = $0.estimatedArrivalUnix ?? 0 >= Int(Date().timeIntervalSince1970)
         
         let estimatedArrivalAfterMidnight = tripHasEstimatedArrival && Int($0.estimatedArrival!.prefix(2))! > 23
         let scheduledArrivalAfterMidnight = tripHasScheduledArrival && Int($0.scheduledArrival!.prefix(2))! > 23
         
         
-        if tripScheduledArrivalIsInThePast {
+        if tripScheduledArrivalIsInThePast && !tripEstimatedArrivalIsInTheFuture{
             return false
         }
         
@@ -172,7 +173,7 @@ func getRoundedMinuteDifferenceFromNow(_ refTimestamp: Int) -> Int {
     let now = Int(Date().timeIntervalSince1970)
     print("Rounded minute: NOW -> \(now); refTS -> \(refTimestamp)")
     let differenceInSeconds = now - refTimestamp
-    let differenceInMinutes = differenceInSeconds / 60
+    let differenceInMinutes = Double(differenceInSeconds) / 60.0
     print("Minute difference is: \(differenceInMinutes)")
-    return Int(differenceInMinutes.magnitude)
+    return Int(differenceInMinutes.magnitude.rounded(.towardZero))
 }
