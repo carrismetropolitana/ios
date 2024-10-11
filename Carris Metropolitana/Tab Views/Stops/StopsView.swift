@@ -349,7 +349,7 @@ struct StopsView: View {
                 }
                 TextField("", text: $searchTerm, prompt: Text("Nome ou número da paragem").foregroundColor(.gray).fontWeight(.semibold))
                     .padding(.leading, isSearching ? 18 : 0)
-                
+                    .autocorrectionDisabled()
                     .frame(height: 50)
                     .focused($isSearchFieldFocused)
                 //                            .background(.red)
