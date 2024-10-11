@@ -400,7 +400,7 @@ struct AgencyClarificationHelpSheetView: View {
                         Spacer()
                     }
                     
-                    Text("A Carris Metropolitana e a Carris são entidades e marcas distintas, cada uma com as suas operações e áreas geográficas específicas.\n\nA Carris Metropolitana é a marca estabelecida pela Transportes Metropolitanos de Lisboa (TML), que gere os serviços de transporte público rodoviário em várias regiões municipais e intermunicipais da área metropolitana.\n\nPor sua vez, a Carris opera exclusivamente no município de Lisboa, tal como a MobiCascais em Cascais e os TCB (Transportes Coletivos do Barreiro) no Barreiro.")
+                    Text("A Carris\u{00a0}Metropolitana e a CARRIS são entidades e marcas distintas, cada uma com as suas operações e áreas geográficas específicas.\n\nA Carris\u{00a0}Metropolitana é a marca estabelecida pela Transportes Metropolitanos de Lisboa (TML), que gere os serviços de transporte público rodoviário em várias regiões municipais e intermunicipais da área metropolitana.\n\nPor sua vez, a CARRIS opera exclusivamente no município de Lisboa, tal como a MobiCascais em Cascais e os TCB (Transportes Coletivos do Barreiro) no Barreiro.")
                         .italic()
                         .fixedSize(horizontal: false, vertical: true)
                 }
