@@ -12,9 +12,9 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
 //    @Environment(\.colorScheme) var colorScheme
     
     // TODO: These no longer need to be bindings
-    @Binding var stops: [Stop]
-    @Binding var vehicles: [Vehicle]
-    @Binding var shape: CMShape?
+    let stops: [Stop]
+    let vehicles: [Vehicle]
+    let shape: CMShape?
     var isUserInteractionEnabled: Bool = true
     let lineColor: Color
     

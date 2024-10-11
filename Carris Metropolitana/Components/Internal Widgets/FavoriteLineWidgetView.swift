@@ -101,11 +101,11 @@ struct FavoriteLineWidgetView: View {
                     onHeaderTap(pattern.lineId, patternId)
                 }
             } label : {
-                if let pattern = pattern, let shape = shape {
+                if let pattern, let shape {
                     ShapeAndVehiclesMapView(
-                        stops: patternStopsBinding,
-                        vehicles: filteredVehiclesBinding,
-                        shape: $shape,
+                        stops: pattern.path.compactMap { $0.stop },
+                        vehicles: vehiclesManager.vehicles.filter { $0.patternId == patternId },
+                        shape: shape,
                         isUserInteractionEnabled: false,
                         lineColor: Color(hex: pattern.color)
                     )

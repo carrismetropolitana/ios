@@ -233,7 +233,7 @@ struct FavoriteStopWidgetView: View {
         // Create a timer to trigger fetching every 5 seconds
         print("start feti on stop fav widget")
         timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { timer in
-            print("feti timer iter")
+            print("[FavoriteStopWidgetView stopId:\(stop?.id ?? "UNKNOWN")] — Timer-triggered arrivals fetch")
             Task {
                 try await loadEtas()
                 print(etasForPatterns.count)

@@ -10,10 +10,6 @@ import MapKit
 
 
 struct LineDetailsView: View {
-    @EnvironmentObject var alertsManager: AlertsManager
-    @EnvironmentObject var vehiclesManager: VehiclesManager
-    @EnvironmentObject var favoritesManager: FavoritesManager
-    
     @State private var timer: Timer?
     let line: Line
     let overrideDisplayedPatternId: String?
@@ -35,27 +31,11 @@ struct LineDetailsView: View {
     
     @State private var isMapExpanded = false
     
+    @State private var lineAlerts: [GtfsRtAlertEntity] = []
+    
 //    @State private var _______tempForUiDemoPurposes_isFavorited = false
     
     var body: some View {
-        let lineAlerts = alertsManager.alerts.filter {
-            var isLineAffected = false
-            for informedEntity in $0.alert.informedEntity {
-                if let routeId = informedEntity.routeId {
-                    if (line.routes.contains(routeId)) {
-                        isLineAffected = true
-                    }
-                }
-                
-                // show only line alerts or stops in line alerts too??
-//                if let stopId = informedEntity.stopId {
-//                    if (line.patterns.)
-//                }
-            }
-            
-            return isLineAffected
-        }
-        
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading) {
@@ -73,30 +53,19 @@ struct LineDetailsView: View {
                                     .bold()
                                     .padding(.horizontal)
                             }
-                            HStack(spacing: 10.0) {
-                                SquaredButton(
-                                    action: {
-                                        // FavoritesService.addLineToFavorites(lineId: line.id)
-                                        isFavoriteCustomizationSheetPresented.toggle()
-                                    },
-                                    systemIcon: favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? "star.fill" : "star",
-                                    //imageResourceIcon: nil, // FavoritesService.isFavorite(lineId: line.id) ? "star.fill" : "star"
-                                    iconColor: .yellow,
-                                    badgeValue: 0
-                                )
-                                SquaredButton(
-                                    action: {
-                                        isAlertsSheetPresented.toggle()
-                                    },
-                                    systemIcon: "exclamationmark.triangle",
-                                    //                                    systemIcon: nil,
-                                    //                                    imageResourceIcon: .exclamationMarkTriangleFilled,
-                                    iconColor: .primary,
-                                    badgeValue: lineAlerts.count
-                                )
-                            }
-                            .padding(.horizontal)
-                            .padding(.vertical, 10.0)
+                            
+                            
+                            LineDetailsSquaredButtonsRow(
+                                line: line,
+                                lineAlerts: $lineAlerts,
+                                onFavoriteCustomizationSheetPresent: {
+                                    isFavoriteCustomizationSheetPresented = true
+                                }, onAlertsSheetPresent: {
+                                    isAlertsSheetPresented = true
+                                }
+                            )
+                                .padding(.horizontal)
+                                .padding(.vertical, 10.0)
                             
                             
                             Divider()
@@ -124,29 +93,10 @@ struct LineDetailsView: View {
                             .padding(.horizontal)
                         }
                         .padding(.vertical)
-
-                        if let _ = shape {
-                            ShapeAndVehiclesMapView(stops: .constant(selectedPattern.path.compactMap {$0.stop}), vehicles: $vehicles, shape: $shape, lineColor: Color(hex: line.color))
-                                .frame(height: isMapExpanded ? 600 : 300)
-                                .overlay {
-                                    VStack {
-                                        Spacer()
-                                        HStack {
-                                            CirculatingVehiclesIndicator(vehiclesCount: vehicles.count)
-                                                .padding()
-                                            Spacer()
-                                        }
-                                    }
-                                }
-                        }
-                    
-                    
-                    
-                        PatternLegs(pattern: selectedPattern, selectedStop: $selectedStop, etasWithStopIds: currentPatternEtas)
-                            .padding(.vertical)
+                        
+                        LiveVehiclesAndEtasByPatternView(line: line, pattern: selectedPattern, shape: shape, selectedStop: $selectedStop)
                         
                     } else {
-    //                    LoadingBar(size: 10)
                         VStack {
                             CMLoadingAnimation()
                         }
@@ -204,7 +154,116 @@ struct LineDetailsView: View {
                     }
                 }
             }
+        }
+        .onChange(of: selectedPattern) {
+            vehicles = []
+            Task {
+                if let pattern = selectedPattern {
+                    shape = (try await CMAPI.shared.getShape(selectedPattern!.shapeId))
+                }
+            }
+        }
+    }
+}
+
+private struct LineDetailsSquaredButtonsRow: View {
+    @EnvironmentObject var alertsManager: AlertsManager
+    @EnvironmentObject var favoritesManager: FavoritesManager
+    
+    let line: Line
+    @Binding var lineAlerts: [GtfsRtAlertEntity]
+    
+    let onFavoriteCustomizationSheetPresent: () -> Void
+    let onAlertsSheetPresent: () -> Void
+    
+    var body: some View {
+        HStack(spacing: 10.0) {
+            SquaredButton(
+                action: {
+                    onFavoriteCustomizationSheetPresent()
+                },
+                systemIcon: favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? "star.fill" : "star",
+                //imageResourceIcon: nil, // FavoritesService.isFavorite(lineId: line.id) ? "star.fill" : "star"
+                iconColor: .yellow,
+                badgeValue: 0
+            )
+            SquaredButton(
+                action: {
+                    onAlertsSheetPresent()
+                },
+                systemIcon: "exclamationmark.triangle",
+                //                                    systemIcon: nil,
+                //                                    imageResourceIcon: .exclamationMarkTriangleFilled,
+                iconColor: .primary,
+                badgeValue: lineAlerts.count
+            )
+        }
+        .onAppear {
+            filterAlerts()
+        }
+        .onChange(of: alertsManager.alerts) {
+            filterAlerts()
+        }
+    }
+    
+    private func filterAlerts() {
+        lineAlerts = alertsManager.alerts.filter {
+            var isLineAffected = false
+            for informedEntity in $0.alert.informedEntity {
+                if let routeId = informedEntity.routeId {
+                    if (line.routes.contains(routeId)) {
+                        isLineAffected = true
+                    }
+                }
+                
+                // show only line alerts or stops in line alerts too??
+//                if let stopId = informedEntity.stopId {
+//                    if (line.patterns.)
+//                }
+            }
             
+            return isLineAffected
+        }
+
+    }
+}
+
+private struct LiveVehiclesAndEtasByPatternView: View {
+    @EnvironmentObject var vehiclesManager: VehiclesManager
+    
+    let line: Line
+    let pattern: Pattern?
+    let shape: CMShape?
+    
+    @State private var timer: Timer?
+    @State private var vehicles: [Vehicle] = []
+    @State private var currentPatternEtas: [String: [PatternRealtimeETA]]? = nil
+    @Binding var selectedStop: Stop?
+    
+    var body: some View {
+        VStack {
+            if let shape, let pattern {
+                ShapeAndVehiclesMapView(stops: pattern.path.compactMap {$0.stop}, vehicles: vehicles, shape: shape, lineColor: Color(hex: line.color))
+                    .frame(height: 300)
+                    .overlay {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                CirculatingVehiclesIndicator(vehiclesCount: vehicles.count)
+                                    .padding()
+                                Spacer()
+                            }
+                        }
+                    }
+            }
+            
+            
+            if let pattern {
+                PatternLegs(pattern: pattern, selectedStop: $selectedStop, etasWithStopIds: currentPatternEtas)
+                    .padding(.vertical)
+            }
+        }
+        .onAppear {
             vehiclesManager.startFetching()
             
             fetchVehiclesAndEtas()
@@ -212,98 +271,20 @@ struct LineDetailsView: View {
             startFetchingTimer()
         }
         .onDisappear {
-            print("LineDetailsView onDisappear called")
             stopFetchingTimer()
-//            vehiclesManager.stopFetching()
         }
-        .onChange(of: selectedPattern) { // manual vehicle clear and refetch on pattern change
-            vehicles = []
-            Task {
-                if let pattern = selectedPattern {
-                    vehicles = vehiclesManager.vehicles.filter {$0.patternId == pattern.id}
-                    
-                    print("Refiltered vehicles on pattern change. Got \(vehicles.count) vehicles for selected pattern.")
-                    
-                    shape = (try await CMAPI.shared.getShape(selectedPattern!.shapeId))
-                    
-                    print("Changed shape on pattern change")
-                }
-            }
-        }
-//        .onChange(of: selectedPattern) {
-//            print("Selected pattern changed!")
-//            Task {
-//                if selectedPattern != nil {
-//                    vehicles = (try await api.getVehicles()).filter {$0.patternId == selectedPattern!.id}
-//                    
-//                    var etas: [RealtimeETA] = []
-//                    for pathEntry in selectedPattern!.path { // do all these concurrently
-//                        etas = try await api.getETAs(pathEntry.stop.id)
-//                        currentPatternEtas.append(.init(stopId: pathEntry.stop.id, etas: etas))
-//                    }
-//                }
-//            }
-//        }
-        
-//        .onChange(of: selectedPattern) {
-//            print("Selected pattern changed!")
-//            Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
-//                Task {
-//                    if let pattern = selectedPattern {
-//                        vehicles = (try await api.getVehicles()).filter {$0.patternId == pattern.id}
-//                        
-//                        try await withThrowingTaskGroup(of: (stopId: String, etas: [RealtimeETA]).self) { group in
-//                            for pathEntry in pattern.path {
-//                                group.addTask {
-//                                    let etas = try await api.getETAs(pathEntry.stop.id)
-//                                    return (stopId: pathEntry.stop.id, etas: etas)
-//                                }
-//                            }
-//                            
-//                            var etasToSet: [EtaEntryWithStopId] = []
-//                            
-//                            for try await result in group {
-//                                etasToSet.append(.init(stopId: result.stopId, etas: result.etas))
-//                            }
-//                            
-//                            currentPatternEtas = etasToSet
-//                        }
-//                        
-//                        print("Got \(vehicles.count) vehicles and \(currentPatternEtas.count) ETAS for pattern \(selectedPattern!.id)")
-//                    }
-//                }
-//            }
-//        }
     }
-
+    
     private func fetchVehiclesAndEtas() {
         Task {
-            if let pattern = selectedPattern {
-//                unfilteredVehicles = try await CMAPI.shared.getVehicles()
+            if let pattern {
                 vehicles = vehiclesManager.vehicles.filter {$0.patternId == pattern.id}
                 
                 let etasForPattern = try await CMAPI.shared.getETAs(patternId: pattern.id)
                 
                 currentPatternEtas = arrangeByStopIds(etasForPattern)
                 
-//                try await withThrowingTaskGroup(of: (stopId: String, etas: [RealtimeETA]).self) { group in
-//                    for pathEntry in pattern.path {
-//                        group.addTask {
-//                            let etas = try await CMAPI.shared.getETAs(pathEntry.stop.id)
-//                            return (stopId: pathEntry.stop.id, etas: etas)
-//                        }
-//                    }
-//                    
-//                    var etasToSet: [EtaEntryWithStopId] = []
-//                    
-//                    for try await result in group {
-//                        etasToSet.append(.init(stopId: result.stopId, etas: result.etas))
-//                    }
-//                    
-//                    currentPatternEtas = etasToSet
-//                }
-                
-                print("Got \(vehicles.count) vehicles and \(currentPatternEtas?.count ?? 0) ETAS for pattern \(selectedPattern!.id)")
+                print("Got \(vehicles.count) vehicles and \(currentPatternEtas?.count ?? 0) ETAS for pattern \(pattern.id)")
             }
         }
     }

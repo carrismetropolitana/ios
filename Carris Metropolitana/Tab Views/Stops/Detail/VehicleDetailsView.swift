@@ -120,7 +120,7 @@ struct VehicleDetailsView: View {
                 Divider()
                 
                 if let pattern = vehiclePattern, let _ = vehicleShape {
-                    ShapeAndVehiclesMapView(stops: $vehicleStops, vehicles: .constant([vehicle]), shape: $vehicleShape, lineColor: Color(hex: pattern.color))
+                    ShapeAndVehiclesMapView(stops: vehicleStops, vehicles: [vehicle], shape: vehicleShape, lineColor: Color(hex: pattern.color))
                         .frame(height: 200)
                 }
                 

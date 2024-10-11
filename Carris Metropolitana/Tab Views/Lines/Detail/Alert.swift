@@ -44,9 +44,10 @@ struct CMAlert: View {
                         } placeholder: {
                             Color.clear
                         }
+                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
                         .frame(width: 128, height: 80)
                         .onTapGesture {
-                            lightboxPresented = true
+                            imageViewerPresented = true
                         }
                     }
                     Spacer()
@@ -70,7 +71,15 @@ struct CMAlert: View {
         }
         .sheet(isPresented: $imageViewerPresented) {
             if let imageUrl = URL(string: alertEntity.alert.image.localizedImage[0].url) {
-                
+                let imageAttachment = MediaAttachment(
+                    id: imageUrl.relativePath,
+                    type: "image",
+                    url: imageUrl,
+                    previewUrl: nil,
+                    description: nil,
+                    meta: nil)
+                MediaUIView(selectedAttachment: imageAttachment, attachments: [imageAttachment])
+                    .presentationDragIndicator(.visible)
             }
         }
     }

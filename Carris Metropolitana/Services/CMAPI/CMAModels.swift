@@ -335,7 +335,11 @@ struct GtfsRt: Codable {
 //    }
 }
 
-struct GtfsRtAlertEntity: Identifiable, Codable {
+struct GtfsRtAlertEntity: Identifiable, Codable, Equatable {
+    static func == (lhs: GtfsRtAlertEntity, rhs: GtfsRtAlertEntity) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     let id: String
     let alert: GtfsRtAlert
     
