@@ -15,9 +15,11 @@ struct PulseLabel: View {
    
    var body: some View {
       HStack(spacing: 2) {
-         Pulse(size: 20, accent: self.accent)
+         Pulse(size: 20, accent: self.accent).padding(-2)
          label
             .font(Font.system(size: 16, weight: .medium, design: .default) )
+            .bold()
+            .monospacedDigit()
             .foregroundColor(self.accent)
       }
    }

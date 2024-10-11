@@ -98,7 +98,12 @@ struct StopDetailsSheetView: View {
                                     let timeComponents = scheduledArrival.components(separatedBy: ":")
                                     let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
                                     let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
+                                    Image(systemName: "clock").font(.system(size: 12, weight: .regular, design: .default))
+                                        .bold()
+                                        .padding(.trailing, -4)
                                     Text(verbatim: adjustedArrival ?? arrivalWithoutSeconds)
+                                        .monospacedDigit()
+                                        .bold()
                                 }
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.tertiary)
