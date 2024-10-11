@@ -9,6 +9,9 @@ import SwiftUI
 
 struct CMAlert: View {
     let alertEntity: GtfsRtAlertEntity
+    
+    @State private var imageViewerPresented = false
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -42,6 +45,9 @@ struct CMAlert: View {
                             Color.clear
                         }
                         .frame(width: 128, height: 80)
+                        .onTapGesture {
+                            lightboxPresented = true
+                        }
                     }
                     Spacer()
                 }
@@ -61,6 +67,11 @@ struct CMAlert: View {
         .background {
             RoundedRectangle(cornerRadius: 20.0)
                 .stroke(.black, lineWidth: 5.0)
+        }
+        .sheet(isPresented: $imageViewerPresented) {
+            if let imageUrl = URL(string: alertEntity.alert.image.localizedImage[0].url) {
+                
+            }
         }
     }
     

@@ -31,7 +31,8 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
         mapView.setCenter(
             CLLocationCoordinate2D(latitude: 38.7, longitude: -9.0),
             zoomLevel: 8.9,
-            animated: false)
+            animated: false
+        )
         
         mapView.isUserInteractionEnabled = isUserInteractionEnabled
         

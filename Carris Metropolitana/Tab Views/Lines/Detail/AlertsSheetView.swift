@@ -40,7 +40,7 @@ struct AlertsSheetView: View {
                             Text("Fechar")
                         }
                     }
-            }
+                }
             }
         }
     }
