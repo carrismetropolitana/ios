@@ -375,17 +375,17 @@ struct AgencyClarificationHelpSheetView: View {
                         .foregroundStyle(.secondary)
                         .font(.footnote)
                         .fontWeight(.heavy)
-                    Text("A Carris Metropolitana faz parte da Carris?")
+                    Text("A Carris\u{00a0}Metropolitana faz parte da CARRIS?")
                         .bold()
                         .font(.title3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }.padding(.horizontal).padding(.top)
                 Spacer()
             }
             Divider()
             
             VStack(spacing: 20.0) {
-                
-                Text("Não.\nEncontra-se na app da Carris Metropolitana, poderá encontrar informação sobre as linhas da CARRIS nas plataformas da mesma.")
+                Text("Não.\nEncontra-se na app da Carris\u{00a0}Metropolitana, poderá encontrar informação sobre as linhas da CARRIS nas plataformas da mesma.")
                     .font(.headline)
                     .bold()
                     .fixedSize(horizontal: false, vertical: true)
