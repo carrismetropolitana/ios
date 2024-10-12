@@ -375,17 +375,17 @@ struct AgencyClarificationHelpSheetView: View {
                         .foregroundStyle(.secondary)
                         .font(.footnote)
                         .fontWeight(.heavy)
-                    Text("A Carris Metropolitana faz parte da Carris?")
+                    Text("A Carris\u{00a0}Metropolitana faz parte da CARRIS?")
                         .bold()
                         .font(.title3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }.padding(.horizontal).padding(.top)
                 Spacer()
             }
             Divider()
             
             VStack(spacing: 20.0) {
-                
-                Text("Não.\nEncontra-se na app da Carris Metropolitana, poderá encontrar informação sobre as linhas da CARRIS nas plataformas da mesma.")
+                Text("Não.\nEncontra-se na app da Carris\u{00a0}Metropolitana, poderá encontrar informação sobre as linhas da CARRIS nas plataformas da mesma.")
                     .font(.headline)
                     .bold()
                     .fixedSize(horizontal: false, vertical: true)
@@ -400,7 +400,7 @@ struct AgencyClarificationHelpSheetView: View {
                         Spacer()
                     }
                     
-                    Text("A Carris Metropolitana e a Carris são entidades e marcas distintas, cada uma com as suas operações e áreas geográficas específicas.\n\nA Carris Metropolitana é a marca estabelecida pela Transportes Metropolitanos de Lisboa (TML), que gere os serviços de transporte público rodoviário em várias regiões municipais e intermunicipais da área metropolitana.\n\nPor sua vez, a Carris opera exclusivamente no município de Lisboa, tal como a MobiCascais em Cascais e os TCB (Transportes Coletivos do Barreiro) no Barreiro.")
+                    Text("A Carris\u{00a0}Metropolitana e a CARRIS são entidades e marcas distintas, cada uma com as suas operações e áreas geográficas específicas.\n\nA Carris\u{00a0}Metropolitana é a marca estabelecida pela Transportes Metropolitanos de Lisboa (TML), que gere os serviços de transporte público rodoviário em várias regiões municipais e intermunicipais da área metropolitana.\n\nPor sua vez, a CARRIS opera exclusivamente no município de Lisboa, tal como a MobiCascais em Cascais e os TCB (Transportes Coletivos do Barreiro) no Barreiro.")
                         .italic()
                         .fixedSize(horizontal: false, vertical: true)
                 }
