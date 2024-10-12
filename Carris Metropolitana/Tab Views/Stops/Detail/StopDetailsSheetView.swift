@@ -93,12 +93,18 @@ struct StopDetailsSheetView: View {
                                     .lineLimit(2)
                                 Spacer()
                                 if let estimatedArrival = eta.estimatedArrivalUnix {
-                                    PulseLabel(accent: .green, label: Text(verbatim: "\(getRoundedMinuteDifferenceFromNow(estimatedArrival)) min"))
+                                    let minutesToArrival = getRoundedMinuteDifferenceFromNow(estimatedArrival)
+                                    PulseLabelMin(accent: .green, minutes: Text(verbatim: "\(minutesToArrival)"))
                                 } else if let scheduledArrival = eta.scheduledArrival {
                                     let timeComponents = scheduledArrival.components(separatedBy: ":")
                                     let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
                                     let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
+                                    Image(systemName: "clock").font(.system(size: 12, weight: .regular, design: .default))
+                                        .bold()
+                                        .padding(.trailing, -4)
                                     Text(verbatim: adjustedArrival ?? arrivalWithoutSeconds)
+                                        .monospacedDigit()
+                                        .bold()
                                 }
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.tertiary)

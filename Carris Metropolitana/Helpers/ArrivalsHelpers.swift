@@ -66,12 +66,12 @@ func filterAndSortCurrentAndFutureStopETAs(_ etas: [RealtimeETA]) -> [RealtimeET
         if let estimatedArrivalA = a.estimatedArrivalUnix, let estimatedArrivalB = b.estimatedArrivalUnix {
             // Both have estimated_arrival, compare them
             return estimatedArrivalA < estimatedArrivalB
-        } else if a.estimatedArrivalUnix != nil {
+        } else if a.estimatedArrivalUnix != nil && b.scheduledArrivalUnix != nil{
             // Only `a` has estimated_arrival, so it comes before `b`
-            return true
-        } else if b.estimatedArrivalUnix != nil {
+            return a.estimatedArrivalUnix! < b.scheduledArrivalUnix!
+        } else if b.estimatedArrivalUnix != nil && a.scheduledArrivalUnix != nil{
             // Only `b` has estimated_arrival, so it comes before `a`
-            return false
+            return a.scheduledArrivalUnix! < b.scheduledArrivalUnix!
         } else {
             // Both have only scheduled_arrival, compare them
             return a.scheduledArrivalUnix! < b.scheduledArrivalUnix!
