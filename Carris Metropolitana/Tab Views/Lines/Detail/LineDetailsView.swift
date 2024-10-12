@@ -243,7 +243,12 @@ private struct LiveVehiclesAndEtasByPatternView: View {
     var body: some View {
         VStack {
             if let shape, let pattern {
-                ShapeAndVehiclesMapView(stops: pattern.path.compactMap {$0.stop}, vehicles: vehicles, shape: shape, lineColor: Color(hex: line.color))
+                ShapeAndVehiclesMapView(
+                    stops: pattern.path.compactMap {$0.stop},
+                    vehicles: vehiclesManager.vehicles.filter {$0.patternId == pattern.id},
+                    shape: shape,
+                    lineColor: Color(hex: line.color)
+                )
                     .frame(height: 300)
                     .overlay {
                         VStack {
@@ -278,13 +283,11 @@ private struct LiveVehiclesAndEtasByPatternView: View {
     private func fetchVehiclesAndEtas() {
         Task {
             if let pattern {
-                vehicles = vehiclesManager.vehicles.filter {$0.patternId == pattern.id}
-                
                 let etasForPattern = try await CMAPI.shared.getETAs(patternId: pattern.id)
                 
                 currentPatternEtas = arrangeByStopIds(etasForPattern)
                 
-                print("Got \(vehicles.count) vehicles and \(currentPatternEtas?.count ?? 0) ETAS for pattern \(pattern.id)")
+                print("Got \(currentPatternEtas?.count ?? 0) ETAS for pattern \(pattern.id)")
             }
         }
     }
