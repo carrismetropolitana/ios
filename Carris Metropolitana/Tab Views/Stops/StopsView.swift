@@ -320,6 +320,8 @@ struct StopsView: View {
                         isSheetPresented = true
                     }
                 }
+                tabCoordinator.mapFlyToCoords = nil
+                tabCoordinator.flownToStopId = nil
                 // Initialize the suggested stops right at tab open - reduces delay in tapping search
                 DispatchQueue.main.async{
                     if(suggestedStops.count == 0){
