@@ -1,7 +1,31 @@
 {
   "images" : [
     {
-      "filename" : "CMAppIcon.png",
+      "filename" : "carris-metropolitana.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "carris-metropolitana-dark.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "carris-metropolitana-tint.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
