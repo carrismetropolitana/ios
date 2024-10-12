@@ -15,13 +15,48 @@ struct PulseLabel: View {
    
    var body: some View {
       HStack(spacing: 2) {
-         Pulse(size: 20, accent: self.accent).padding(-2)
-         label
-            .font(Font.system(size: 16, weight: .medium, design: .default) )
+          Pulse(size: 20, accent: self.accent)
+          Spacer()
+          label
+            .font(Font.system(size: 12, weight: .medium, design: .default) )
             .bold()
             .monospacedDigit()
+            .allowsTightening(true)
+            .lineLimit(1)
             .foregroundColor(self.accent)
-      }
+            .padding(.leading, -15)
+      }.frame(minWidth: 70, maxWidth: 70, alignment: .center)
+   }
+   
+}
+
+struct PulseLabelMin: View {
+   
+   let accent: Color
+   let minutes: Text
+   
+   var body: some View {
+      HStack(spacing: 2) {
+          Pulse(size: 20, accent: self.accent)
+          Spacer()
+          minutes
+              .font(Font.system(size: 16, weight: .medium, design: .default) )
+            .bold()
+            .kerning(-0.2)
+            .lineLimit(1)
+            .foregroundColor(self.accent)
+            .padding(.leading, -15)
+          Spacer()
+              .frame(width:7.5)
+          Text("min")
+              .font(Font.system(size: 16, weight: .medium, design: .default) )
+              .bold()
+              .lineLimit(1)
+              .foregroundColor(self.accent)
+              .kerning(-0.2)
+              .allowsTightening(true)
+              .padding(.leading, -9)
+      }.frame(minWidth: 70, maxWidth: 70, alignment: .center)
    }
    
 }
