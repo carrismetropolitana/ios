@@ -236,16 +236,16 @@ private struct LiveVehiclesAndEtasByPatternView: View {
     let shape: CMShape?
     
     @State private var timer: Timer?
-    @State private var vehicles: [Vehicle] = []
     @State private var currentPatternEtas: [String: [PatternRealtimeETA]]? = nil
     @Binding var selectedStop: Stop?
     
     var body: some View {
         VStack {
             if let shape, let pattern {
+                let filteredVehicles = vehiclesManager.vehicles.filter {$0.patternId == pattern.id}
                 ShapeAndVehiclesMapView(
                     stops: pattern.path.compactMap {$0.stop},
-                    vehicles: vehiclesManager.vehicles.filter {$0.patternId == pattern.id},
+                    vehicles: filteredVehicles,
                     shape: shape,
                     lineColor: Color(hex: line.color)
                 )
@@ -254,7 +254,7 @@ private struct LiveVehiclesAndEtasByPatternView: View {
                         VStack {
                             Spacer()
                             HStack {
-                                CirculatingVehiclesIndicator(vehiclesCount: vehicles.count)
+                                CirculatingVehiclesIndicator(vehiclesCount: filteredVehicles.count)
                                     .padding()
                                 Spacer()
                             }
