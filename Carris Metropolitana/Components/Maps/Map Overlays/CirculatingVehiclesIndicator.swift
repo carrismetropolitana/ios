@@ -31,7 +31,11 @@ struct CirculatingVehiclesIndicator: View {
         .padding(5.0)
         .background {
             Capsule()
-                .fill(.white.shadow(.drop(color: .black.opacity(0.2), radius: 10)))
+                .fill(LinearGradient(
+                    gradient: .init(colors: [.babyBlue, .white]),
+                    startPoint: .init(x: 0, y: 0.2),
+                    endPoint: .init(x: 1, y: 0.8)
+                  ).opacity(0.85).shadow(.drop(color: .black.opacity(0.2), radius: 10)))
         }
     }
 }

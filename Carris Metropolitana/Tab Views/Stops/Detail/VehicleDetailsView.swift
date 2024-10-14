@@ -7,6 +7,9 @@
 
 import SwiftUI
 import TipKit
+import os
+
+let logger = Logger(subsystem: "com.carrismetropolitanana.identifier", category: "VehicleDetailsView")
 
 struct VehicleOccupationTip: Tip {
     let occupation: Int?
@@ -151,14 +154,15 @@ struct VehicleDetailsView: View {
             .onAppear {
                 vehiclesManager.startFetching()
                 Task {
-                    vehiclePattern = try await CMAPI.shared.getPattern(vehicle.patternId)
-                    if let pattern = vehiclePattern {
-                        vehicleStops = pattern.path.compactMap {$0.stop}
-                        vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
-                    }
-                    print(vehiclePattern?.headsign)
-                    vehicleStaticInfo = try await VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
-                    print(vehicleStaticInfo)
+                    logger.log("Vehicle Details: load map data")
+                    async let pattern = CMAPI.shared.getPattern(vehicle.patternId)
+                    async let info = VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
+                    vehiclePattern = try await pattern
+                    async let shape = CMAPI.shared.getShape(vehiclePattern!.shapeId)
+                    vehicleStops = vehiclePattern!.path.compactMap { $0.stop }
+                    vehicleShape = try await shape
+                    vehicleStaticInfo = try await info
+                    logger.log("Vehicle Details: finished map data")
                 }
             }
             .onDisappear {
