@@ -17,6 +17,7 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
     let shape: CMShape?
     var isUserInteractionEnabled: Bool = true
     let lineColor: Color
+    var hasDoneFirstAutoZoomIn: Bool = false
     
     func makeUIView(context: Context) -> MLNMapView {
         
@@ -56,9 +57,21 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
     
     class Coordinator: NSObject, MLNMapViewDelegate {
         var control: ShapeAndVehiclesMapView
-
+        let stops: [Stop]
+        let vehicles: [Vehicle]
+        let shape: CMShape?
+        var isUserInteractionEnabled: Bool = true
+        let lineColor: Color
+        var hasDoneFirstAutoZoomIn: Bool = false
+        
         init(_ control: ShapeAndVehiclesMapView) {
             self.control = control
+            self.stops = control.stops
+            self.vehicles = control.vehicles
+            self.shape = control.shape
+            self.isUserInteractionEnabled = control.isUserInteractionEnabled
+            self.lineColor = control.lineColor
+            self.hasDoneFirstAutoZoomIn = control.hasDoneFirstAutoZoomIn
         }
         
         @objc func handleTap(_ sender: UITapGestureRecognizer) {
@@ -78,6 +91,155 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             if let image = UIImage(named: "CMBusRegular") {
                 style.setImage(image, forName: "cm-bus-regular")
             }
+            print("Requested SAVMV creation with shapepoints: \(shape!.geojson.geometry.coordinates.count)--\(shape?.id)\nwith vehicles: \(vehicles.count)\nwith stops: \(stops.count), (style != nil) == \(style)")
+            // Shape
+            let shapeCoords = shape!.geojson.geometry.coordinates.map { coord -> CLLocationCoordinate2D in
+                return CLLocationCoordinate2D(latitude: coord[1], longitude: coord[0])
+            }
+            print("scs create ----> \(shapeCoords.count), \(shape?.id)")
+            
+            let shapeFeature = MLNPolylineFeature(coordinates: shapeCoords, count: UInt(shapeCoords.count))
+            
+            print("shfs create ----> \(shapeFeature.pointCount), \(shape?.id)")
+            
+            // Vehicles
+            let vehicleFeatures = vehicles.map { vehicle -> MLNPointFeature in
+                let feature = MLNPointFeature()
+                feature.coordinate = CLLocationCoordinate2D(latitude: vehicle.lat, longitude: vehicle.lon)
+                feature.attributes = ["id": vehicle.id, "bearing": vehicle.bearing]
+                return feature
+            }
+            
+            print("vfs create ----> \(vehicleFeatures.count)")
+            
+            // Stops
+            let stopsFeatures = stops.map { stop -> MLNPointFeature in
+                let feature = MLNPointFeature()
+                feature.coordinate = CLLocationCoordinate2D(latitude: Double(stop.lat)!, longitude: Double(stop.lon)!)
+                feature.attributes = ["id": stop.id, "name": stop.name]
+                return feature
+            }
+            
+            // Sources
+            let shapeSource = MLNShapeSource(identifier: "shape-source", features: [shapeFeature], options: nil)
+            let vehiclesSource = MLNShapeSource(identifier: "vehicles-source", features: vehicleFeatures, options: nil)
+            let stopsSource = MLNShapeSource(identifier: "stops-source", features: stopsFeatures, options: nil)
+            
+            
+            // Add sources
+            style.addSource(shapeSource)
+            style.addSource(vehiclesSource)
+            style.addSource(stopsSource)
+            
+            
+            // Shape (Line)
+            let shapeLayer = MLNLineStyleLayer(identifier: "shape-layer", source: shapeSource)
+            
+            shapeLayer.lineJoin = NSExpression(forConstantValue: "round")
+            shapeLayer.lineCap = NSExpression(forConstantValue: "round")
+            shapeLayer.lineColor = NSExpression(forConstantValue: UIColor(lineColor))
+            shapeLayer.lineWidth = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    10: NSExpression(forConstantValue: 4),
+                    20: NSExpression(forConstantValue: 12)
+                ])
+            )
+            
+            // Vehicles (Symbol)
+            let vehiclesLayer = MLNSymbolStyleLayer(identifier: "vehicles-layer", source: vehiclesSource)
+            vehiclesLayer.iconImageName = NSExpression(forConstantValue: "cm-bus-regular")
+            vehiclesLayer.iconAllowsOverlap = NSExpression(forConstantValue: true)
+            vehiclesLayer.iconIgnoresPlacement = NSExpression(forConstantValue: true)
+            vehiclesLayer.iconAnchor = NSExpression(forConstantValue: "center")
+            vehiclesLayer.symbolPlacement = NSExpression(forConstantValue: "point")
+            vehiclesLayer.iconRotationAlignment = NSExpression(forConstantValue: "map")
+            vehiclesLayer.iconScale = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    10: NSExpression(forConstantValue: 0.05),
+                    20: NSExpression(forConstantValue: 0.15)
+                ])
+            )
+            vehiclesLayer.iconOffset = nil // nil defaults to CGVector(dx: 0, dy: 0)
+            vehiclesLayer.iconRotation = NSExpression(forKeyPath: "bearing")
+            
+            
+            // Stops (Circle)
+            let stopsLayer = MLNCircleStyleLayer(identifier: "stops-layer", source: stopsSource)
+            stopsLayer.circleColor = NSExpression(forConstantValue: UIColor(.white))
+            stopsLayer.circleRadius = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    9: NSExpression(
+                        forConditional: NSPredicate(format: "selected == TRUE"),
+                        trueExpression: NSExpression(forConstantValue: 5),
+                        falseExpression: NSExpression(forConstantValue: 1)
+                    ),
+                    26: NSExpression(
+                        forConditional: NSPredicate(format: "selected == TRUE"),
+                        trueExpression: NSExpression(forConstantValue: 25),
+                        falseExpression: NSExpression(forConstantValue: 20)
+                    )
+                ])
+            )
+            stopsLayer.circleStrokeWidth = NSExpression(
+                forMLNInterpolating: .zoomLevelVariable,
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    9: NSExpression(forConstantValue: 0.01),
+                    26: NSExpression(
+                        forConditional: NSPredicate(format: "selected == TRUE"),
+                        trueExpression: NSExpression(forConstantValue: 8),
+                        falseExpression: NSExpression(forConstantValue: 7)
+                    )
+                ])
+            )
+            stopsLayer.circleStrokeColor = NSExpression(forConstantValue: UIColor(lineColor))
+            stopsLayer.circlePitchAlignment = NSExpression(forConstantValue: "map")
+            
+            style.addLayer(shapeLayer)
+            style.insertLayer(stopsLayer, above: shapeLayer)
+            if (vehicleFeatures.count > 0){
+                style.insertLayer(vehiclesLayer, above: stopsLayer)
+            }
+            
+            if (!hasDoneFirstAutoZoomIn) {
+                let boundingBox = shapeCoords.reduce((minLat: Double.greatestFiniteMagnitude, minLon: Double.greatestFiniteMagnitude, maxLat: -Double.greatestFiniteMagnitude, maxLon: -Double.greatestFiniteMagnitude)) { bbox, coord in
+                    return (
+                        minLat: min(bbox.minLat, coord.latitude),
+                        minLon: min(bbox.minLon, coord.longitude),
+                        maxLat: max(bbox.maxLat, coord.latitude),
+                        maxLon: max(bbox.maxLon, coord.longitude)
+                    )
+                }
+                
+                print("Init: Bounding box: \(boundingBox), \(shape?.id)")
+                
+                let boundingBoxCoords = [
+                    CLLocationCoordinate2D(latitude: boundingBox.minLat, longitude: boundingBox.minLon),
+                    CLLocationCoordinate2D(latitude: boundingBox.maxLat, longitude: boundingBox.maxLon)
+                ]
+                print("Init: Bounding box coordinates: \(boundingBoxCoords), \(shape?.id)")
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                    // Weird things (altitude=0m) happen if you don't give it some breathing (async) space
+                    // to set the camera, even though supposedly, it "didFinishLoading"
+                    let camera = mapView.cameraThatFitsCoordinateBounds(
+                        MLNCoordinateBounds(sw: boundingBoxCoords[0], ne: boundingBoxCoords[1]),
+                        edgePadding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 40.0, right: 10.0)
+                    )
+                    mapView.setCamera(camera, animated: true)
+                })
+                
+            }
         }
 
 //        func mapViewDidFinishLoadingMap(_ mapView: MLNMapView) {
@@ -94,14 +256,13 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: MLNMapView, context: Context) {
-        
-        
-        var hasDoneFirstAutoZoomIn = false
+        if uiView.style == nil {
+            return()
+        }
         if let shapeSource = uiView.style?.source(withIdentifier: "shape-source") as? MLNShapeSource {
             uiView.style?.removeSource(shapeSource)
             if let shapeLayer = uiView.style?.layer(withIdentifier: "shape-layer") {
                 uiView.style?.removeLayer(shapeLayer)
-                hasDoneFirstAutoZoomIn = true
             }
         }
         
@@ -109,7 +270,6 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             uiView.style?.removeSource(vehiclesSource)
             if let vehiclesLayer = uiView.style?.layer(withIdentifier: "vehicles-layer") {
                 uiView.style?.removeLayer(vehiclesLayer)
-                hasDoneFirstAutoZoomIn = true
             }
         }
         
@@ -117,7 +277,6 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             uiView.style?.removeSource(stopsSource)
             if let stopsLayer = uiView.style?.layer(withIdentifier: "stops-layer") {
                 uiView.style?.removeLayer(stopsLayer)
-                hasDoneFirstAutoZoomIn = true
             }
         }
         
@@ -274,18 +433,21 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
                         maxLon: max(bbox.maxLon, coord.longitude)
                     )
                 }
-                
+                print("Bounding box: \(boundingBox), \(shape?.id)")
                 let boundingBoxCoords = [
                     CLLocationCoordinate2D(latitude: boundingBox.minLat, longitude: boundingBox.minLon),
                     CLLocationCoordinate2D(latitude: boundingBox.maxLat, longitude: boundingBox.maxLon)
                 ]
                 
-                let camera = uiView.cameraThatFitsCoordinateBounds(
-                    MLNCoordinateBounds(sw: boundingBoxCoords[0], ne: boundingBoxCoords[1]),
-                    edgePadding: UIEdgeInsets(top: 10.0, left: 0.0, bottom: 10.0, right: 0.0)
-                )
-                
-                uiView.setCamera(camera, animated: true)
+                print("Bounding box coordinates: \(boundingBoxCoords), \(shape?.id)")
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                    let camera = uiView.cameraThatFitsCoordinateBounds(
+                        MLNCoordinateBounds(sw: boundingBoxCoords[0], ne: boundingBoxCoords[1]),
+                        edgePadding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 40.0, right: 10.0)
+                    )
+                    uiView.setCamera(camera, animated: true)
+                })
             }
         }
     }
