@@ -90,13 +90,13 @@ struct VehicleIdentifier: View {
                   busNumberView
                    .accessibilityElement(children: .ignore)
                    .accessibilityLabel(Text("Número de frota do veículo"))
-                   .accessibilityValue(Text("\(vehicleId)"))
+                   .accessibilityValue(Text("\(vehicleId ?? "")"))
                    .accessibilityHint(Text("Duplo toque para alternar para mostrar a matrícula"))
                } else {
                   licensePlateView
                    .accessibilityElement(children: .ignore)
                    .accessibilityLabel(Text("Matrícula do veículo"))
-                   .accessibilityValue(Text("\(vehiclePlate)"))
+                   .accessibilityValue(Text("\(vehiclePlate ? "")"))
                    .accessibilityHint(Text("Duplo toque para alternar para mostrar o número de frota"))
                }
             }
@@ -108,7 +108,7 @@ struct VehicleIdentifier: View {
             busNumberView
              .accessibilityElement(children: .ignore)
              .accessibilityLabel(Text("Número de frota do veículo"))
-             .accessibilityValue(Text("\(vehicleId)"))
+             .accessibilityValue(Text("\(vehicleId ? "")"))
              .accessibilityHint(Text("Matrícula do veículo não disponível"))
          }
          
