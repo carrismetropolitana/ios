@@ -54,6 +54,28 @@ struct VehicleOccupationPopoverView: View {
     }
 }
 
+struct VehicleAccessibilityPopoverView: View {
+    let status: Bool
+    
+    var body: some View {
+        HStack(alignment: .top) {
+            Image(systemName: "figure.roll.runningpace")
+            VStack(alignment: .leading) {
+                Text("Acessibilidade do Veículo")
+                    .font(.headline)
+                if status == true {
+                    Text("Este veículo é acessível a passageiros com mobilidade condicionada")
+                        .font(.subheadline)
+                } else {
+                    Text("Informação de acessibilidade indisponível para este veículo.")
+                        .font(.subheadline)
+                }
+            }
+        }
+        .frame(height: 70)
+    }
+}
+
 struct VehicleDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
     
@@ -68,6 +90,7 @@ struct VehicleDetailsView: View {
     @State private var vehicle: Vehicle? = nil
     
     @State private var isOccupationPopoverPresented = false
+    @State private var isAccessiblePopoverPresented = false
     
     var body: some View {
        var vehicleOccupationTip = VehicleOccupationTip(occupation: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
@@ -103,8 +126,20 @@ struct VehicleDetailsView: View {
                 HStack {
                     VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicleStaticInfo?.licensePlate)
                     Pulse(size: 20.0, accent: .green)
-                    Image(systemName: "figure.roll")
+                    
+                    Image(systemName: "figure.roll.runningpace")
                         .foregroundStyle(vehicleStaticInfo?.wheelchair == 1 ? .blue : .secondary)
+                        .accessibilityLabel(Text("Acessibilidade para uso de cadeira de rodas"))
+                        .accessibilityValue(Text("\(vehicleStaticInfo?.wheelchair == 1 ? "Sim, este veículo é acessível" : "Não há informação de acessibilidade disponível")"))
+                        .onTapGesture {
+                            isAccessiblePopoverPresented.toggle()
+                        }
+                        .popover(isPresented: $isAccessiblePopoverPresented){
+                            let statusFlag = vehicleStaticInfo?.wheelchair == 1 ? true : false
+                            VehicleAccessibilityPopoverView(status: statusFlag)
+                                .padding(10)
+                                .presentationCompactAdaptation(.popover)
+                        }
                     OccupationIndicator(occupied: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
                         .onTapGesture {
                             isOccupationPopoverPresented.toggle()
