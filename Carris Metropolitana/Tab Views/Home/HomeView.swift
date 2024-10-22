@@ -51,6 +51,7 @@ struct HomeView: View {
 //                            }
                             .offset(x: cmLogoConsecutiveTaps * 20.0)
                             .accessibilityLabel(Text("Logótipo da Carris Metropolitana"))
+                            .accessibilityHidden(true)
                         Spacer()
                         if debugModeEnabled {
                             DebugMenuButton()
