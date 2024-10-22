@@ -348,6 +348,7 @@ struct StopsView: View {
                         .onTapGesture {
                             isSearchFieldFocused = true
                         }
+                        .accessibilityHidden(true)
                 }
                 TextField("", text: $searchTerm, prompt: Text("Nome ou número da paragem").foregroundColor(.gray).fontWeight(.semibold))
                     .padding(.leading, isSearching ? 18 : 0)
@@ -366,6 +367,7 @@ struct StopsView: View {
                     .buttonStyle(.plain)
                     .padding(.vertical, 18)
                     .padding(.trailing, 18)
+                    .accessibilityHint("Cancelar a pesquisa")
                 }
             }
             .background {
@@ -382,6 +384,7 @@ struct StopsView: View {
                 RoundedRectangle(cornerRadius: 15.0)
                     .fill(.cmListItemBackground)
             }
+            .accessibilityAddTraits(.isSearchField)
             Spacer()
         }
         .padding(.horizontal)
