@@ -383,6 +383,8 @@ struct PatternLegs: View {
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(width: 30.0)
+                                                        .accessibilityLabel(
+                                                            imageResource == .cmFacilityTransitOffice ? Text("Perto do Espaço navegante, Ponto de atendimento ao passageiro") : imageResource == .cmFacilitySubway ? Text("Perto do Metro") : imageResource == .cmFacilityTrain ? Text("Perto do comboio") : imageResource == .cmFacilityLightRail ? Text("Perto do Metro Ligeiro") : imageResource == .cmFacilityBoat ? Text("Perto do Barco") : imageResource == .cmFacilitySchool ? Text("Perto da Escola") : imageResource == .cmFacilityShopping ? Text("Perto do centro comercial") : Text(""))
                                                 }
                                             }
                                         }
