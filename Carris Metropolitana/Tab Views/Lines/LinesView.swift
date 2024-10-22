@@ -133,12 +133,12 @@ struct LinesListView: View {
                                             LineEntry(line: line)
                                         }
                                         .buttonStyle(.plain)
-                                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
+                                        .accessibilityLabel(Text("Linha recente \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
                                     } else {
                                         NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
                                             LineEntry(line: line)
                                         }
-                                        .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
+                                        .accessibilityLabel(Text("Linha recente \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
                                     }
                                 }
                             }
@@ -232,7 +232,7 @@ struct LinesListView: View {
                     NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
                         LineEntry(line: line)
                     }
-                    .accessibilityLabel(Text("Linha \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
+                    .accessibilityLabel(Text("Linha à minha volta \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
                 }
 //                Text("Location")
 //                    .badge(Text("\(location.latitude), \(location.longitude)"))
