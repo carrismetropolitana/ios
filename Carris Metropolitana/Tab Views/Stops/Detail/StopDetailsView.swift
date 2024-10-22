@@ -75,7 +75,7 @@ struct StopDetailsView: View {
                     .accessibilityHidden(true)
                     .background {
                         Color.clear
-                            .accessibilityLabel("Paragem número \(stop.id), \(stop.ttsName ?? stop.name), localizada em \(stopLocationDetails), latitude \(stop.lat), longitude \(stop.lon)")
+                            .accessibilityLabel("Paragem \(stop.ttsName ?? stop.name), localizada em \(stopLocationDetails), número de paragem: \(stop.id), ")
                     }
                     
                     
