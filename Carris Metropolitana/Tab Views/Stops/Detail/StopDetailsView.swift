@@ -102,6 +102,11 @@ struct StopDetailsView: View {
                             iconColor: .yellow,
                             badgeValue: 0
                         )
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(favoritesManager.isFavorited(itemId: stop.id, itemType: .stop) ? Text("Editar paragem favorita") : Text("Marcar como paragem favorita"))
+                        .accessibilityValue(favoritesManager.isFavorited(itemId: stop.id, itemType: .stop) ? Text("Já é favorita") : Text("Não está marcada"))
+                        .accessibilityHint(favoritesManager.isFavorited(itemId: stop.id, itemType: .stop) ? Text("Duplo toque abre o pop-up com as configurações desta paragem favorita e permite remover esta paragem favorita."):Text("Duplo toque abre o pop-up para adicionar esta paragem como favorita."))
+                        .accessibilityAddTraits(.isButton)
                         
                         SquaredButton(action: {
                             if tabCoordinator.selectedTab == .stops {
@@ -113,6 +118,7 @@ struct StopDetailsView: View {
                                 tabCoordinator.flownToStopId = stop.id
                             }
                         }, systemIcon: "map", iconColor: .primary, badgeValue: 0)
+                        .accessibilityLabel(Text("Voar para paragem no mapa"))
                         
 //                        RoundedRectangle(cornerRadius: 10.0)
 //                            .fill(.windowBackground)
@@ -147,6 +153,11 @@ struct StopDetailsView: View {
                             iconColor: .primary,
                             badgeValue: stopAlerts.count
                         )
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(Text("Alertas"))
+                        .accessibilityValue((stopAlerts.count > 0) ? Text("Há \(stopAlerts.count) alertas ativos"):Text("Não há alertas ativos."))
+                        .accessibilityHint(Text("Duplo toque abre o pop-up com a lista de alertas ativos nesta paragem."))
+                        .accessibilityAddTraits(.isButton)
                     }
                     .padding(.top, 10.0)
                 }

@@ -187,6 +187,11 @@ private struct LineDetailsSquaredButtonsRow: View {
                 iconColor: .yellow,
                 badgeValue: 0
             )
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? Text("Editar linha favorita") : Text("Marcar como linha favorita"))
+            .accessibilityValue(favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? Text("Já é favorita") : Text("Não está marcada"))
+            .accessibilityHint(favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? Text("Duplo toque abre o pop-up com as configurações desta linha favorita e permite remover esta linha favorita."):Text("Duplo toque abre o pop-up para adicionar esta linha como favorita."))
+            .accessibilityAddTraits(.isButton)
             SquaredButton(
                 action: {
                     onAlertsSheetPresent()
@@ -197,6 +202,10 @@ private struct LineDetailsSquaredButtonsRow: View {
                 iconColor: .primary,
                 badgeValue: lineAlerts.count
             )
+            .accessibilityElement(children:.ignore)
+            .accessibilityLabel(Text("Alertas"))
+            .accessibilityValue((lineAlerts.count > 0) ? (lineAlerts.count > 1) ? Text("Há \(lineAlerts.count) alertas ativos."):Text("Há \(lineAlerts.count) alerta ativo."):Text("Não há alertas ativos."))
+            .accessibilityHint(Text("Duplo toque abre o pop-up com a lista de alertas ativos nesta linha."))
         }
         .onAppear {
             filterAlerts()
@@ -330,6 +339,7 @@ struct PatternLegs: View {
                 let isLast = pathStepIdx == pattern.path.count - 1
                 
                 let pathStep = pattern.path[pathStepIdx]
+                let pathCount = pattern.path.count
                 let isSelected = selectedStop?.id == pathStep.stop.id // TODO: deprecate this as somethimes stops repeat in a pattern
                 let isSelectedByIndex = selectedStopIndex == pathStepIdx
                 
