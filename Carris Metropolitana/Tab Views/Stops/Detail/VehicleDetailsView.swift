@@ -121,6 +121,14 @@ struct VehicleDetailsView: View {
                             .font(.callout)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Informações do autocarro em circulação"))
+                .accessibilityValue(Text(
+                    (vehiclePattern?.headsign != nil && vehicleStaticInfo != nil && vehicleStaticInfo?.make != nil && vehicleStaticInfo?.model != nil) ? "Autocarro da linha \(vehicle.lineId) com destino a \(vehiclePattern?.headsign ?? "") e veículo \(vehicleStaticInfo?.make ?? "") modelo \(vehicleStaticInfo?.model ?? "")" : (vehiclePattern?.headsign != nil) ? "Autocarro da linha \(vehicle.lineId) com destino a \(vehiclePattern?.headsign ?? "")" : "Autocarro da linha \(vehicle.lineId) sem destino disponível"
+                ))
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityHeading(.h1)
+                .accessibilitySortPriority(100)
                 
                 Divider()
                 HStack {
@@ -141,6 +149,7 @@ struct VehicleDetailsView: View {
                                 .presentationCompactAdaptation(.popover)
                         }
                     OccupationIndicator(occupied: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
+                        .accessibilityElement(children: .combine)
                         .onTapGesture {
                             isOccupationPopoverPresented.toggle()
                         }
@@ -169,6 +178,8 @@ struct VehicleDetailsView: View {
                 
                 if (vehicleStops.count > 0) {
                     OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicle.currentStatus))
+                        .accessibilityElement(children:.contain)
+                        .accessibilityValue(Text("Percurso do autocarro em tempo real: Atualmente na paragem \(vehicleStops.first(where:{$0.id == vehicle.stopId})!.ttsName ?? vehicleStops.first(where:{$0.id == vehicle.stopId})!.name), paragem \(vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!+1) de \(vehicleStops.count) paragens"))
                 }
             
 //                UserFeedbackForm(
@@ -251,6 +262,11 @@ struct OccupationIndicator: View {
                             }
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Ocupação do veículo por contagem automática"))
+                .accessibilityValue(Text((occupied == nil || total == 0) ? "Não há informação da ocupação de passageiros do veículo" : ((occupied ?? 0)*100/total < 35) ? "O veículo tem uma ocupação estimada baixa, pouco cheio" : ((occupied ?? 0)*100/total < 60) ? "O veículo tem uma ocupação estimada média, podendo não ter lugares sentados" : "O veículo tem uma ocupação estimada alta, podendo estar cheio")) // informação de ocupação tem critério mais conservador para pessoas que dela dependam para lugar seguro versus semáforo de cor
+                .accessibilityHint(Text("A informação de ocupação é estimada por contagem automática e sujeita a erros"))
+
         }
 //        .onTapGesture {
 //            isShowingPopover.toggle()
@@ -312,7 +328,7 @@ struct UnavailableBus: View {
                 .resizable()
                 .frame(width: 100, height: 100)
                 .padding(.bottom, 30.0)
-            Text("Veículo indispoível".uppercased())
+            Text("Veículo indisponível".uppercased())
                 .font(.title3)
                 .foregroundStyle(.secondary)
                 .fontWeight(.black)
@@ -362,7 +378,7 @@ struct UnavailableBus: View {
             .resizable()
             .frame(width: 100, height: 100)
             .padding(.bottom, 30.0)
-        Text("Veículo indispoível".uppercased())
+        Text("Veículo indisponível".uppercased())
             .font(.title3)
             .foregroundStyle(.secondary)
             .fontWeight(.black)
