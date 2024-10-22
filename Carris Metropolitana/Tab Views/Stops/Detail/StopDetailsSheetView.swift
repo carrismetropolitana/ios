@@ -32,6 +32,8 @@ struct StopDetailsSheetView: View {
                         Text(stop.name)
                             .bold()
                             .multilineTextAlignment(.leading)
+                            .accessibilityValue(Text(stop.ttsName ?? stop.name))
+                            .accessibilityAddTraits(.isHeader)
                         //                                Text(pattern.municipalities.joined(separator: ", "))
                         //                                    .foregroundStyle(.secondary)
                         HStack(spacing: 20.0) {
@@ -95,16 +97,24 @@ struct StopDetailsSheetView: View {
                                 if let estimatedArrival = eta.estimatedArrivalUnix {
                                     let minutesToArrival = getRoundedMinuteDifferenceFromNow(estimatedArrival)
                                     PulseLabelMin(accent: .green, minutes: Text(verbatim: "\(minutesToArrival)"))
+                                        .accessibilityElement(children: .ignore)
+                                        .accessibilityLabel(Text("Tempo real estimado."))
+                                        .accessibilityValue(Text("Chega dentro de \(minutesToArrival) minutos."))
+                                        .accessibilityHint(Text("Duplo toque para ver detalhes do autocarro em tempo real, como o modelo do veículo, matrícula e características de acessibilidade, quando disponíveis."))
+
                                 } else if let scheduledArrival = eta.scheduledArrival {
                                     let timeComponents = scheduledArrival.components(separatedBy: ":")
                                     let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
                                     let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
+                                    let adjustedArrivalComponents = adjustedArrival?.components(separatedBy: ":")
                                     Image(systemName: "clock").font(.system(size: 12, weight: .regular, design: .default))
                                         .bold()
                                         .padding(.trailing, -4)
                                     Text(verbatim: adjustedArrival ?? arrivalWithoutSeconds)
                                         .monospacedDigit()
                                         .bold()
+                                        .accessibilityLabel(Text("Horário programado"))
+                                        .accessibilityValue(Text("Pelas \(adjustedArrivalComponents?[0] ?? timeComponents[0]) horas e \(timeComponents[1]) minutos"))
                                 }
                                 Image(systemName: "chevron.right")
                                     .foregroundStyle(.tertiary)
