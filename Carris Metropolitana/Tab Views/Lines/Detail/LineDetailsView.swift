@@ -206,6 +206,7 @@ private struct LineDetailsSquaredButtonsRow: View {
             .accessibilityLabel(Text("Alertas"))
             .accessibilityValue((lineAlerts.count > 0) ? (lineAlerts.count > 1) ? Text("Há \(lineAlerts.count) alertas ativos."):Text("Há \(lineAlerts.count) alerta ativo."):Text("Não há alertas ativos."))
             .accessibilityHint(Text("Duplo toque abre o pop-up com a lista de alertas ativos nesta linha."))
+            .accessibilityAddTraits(.isButton)
         }
         .onAppear {
             filterAlerts()
@@ -353,6 +354,8 @@ struct PatternLegs: View {
                                     .bold()
                                     .offset(x: 10, y: -2)
                                     .padding(.top, isSelectedByIndex ? 10 : 0)
+                                    .accessibilityLabel(isSelectedByIndex ? "Paragem selecionada, paragem \(pathStepIdx+1) de \(pathCount)" : "Paragem \(pathStepIdx+1) de \(pathCount), não selecionada")
+                                    .accessibilityHint("Passar o dedo para a direita para detalhes desta paragem")
                                 Spacer()
                             }
                             VStack {
@@ -381,6 +384,7 @@ struct PatternLegs: View {
                                 Text(pathStep.stop.name)
                                     .font(isSelectedByIndex ? .headline : .subheadline)
                                     .fontWeight(isSelectedByIndex ? .bold : .semibold)
+                                    .accessibilityLabel(pathStep.stop.ttsName ?? pathStep.stop.name)
                                 Text(pathStep.stop.locality == pathStep.stop.municipalityName || pathStep.stop.locality == nil ? pathStep.stop.municipalityName : "\(pathStep.stop.locality!), \(pathStep.stop.municipalityName)")
                                     .foregroundStyle(.secondary)
                                 if isSelectedByIndex {
