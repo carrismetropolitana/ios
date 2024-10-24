@@ -187,6 +187,11 @@ private struct LineDetailsSquaredButtonsRow: View {
                 iconColor: .yellow,
                 badgeValue: 0
             )
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? Text("Editar linha favorita") : Text("Marcar como linha favorita"))
+            .accessibilityValue(favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? Text("Já é favorita") : Text("Não está marcada"))
+            .accessibilityHint(favoritesManager.isFavorited(itemId: line.id, itemType: .pattern) ? Text("Duplo toque abre o pop-up com as configurações desta linha favorita e permite remover esta linha favorita."):Text("Duplo toque abre o pop-up para adicionar esta linha como favorita."))
+            .accessibilityAddTraits(.isButton)
             SquaredButton(
                 action: {
                     onAlertsSheetPresent()
@@ -197,6 +202,11 @@ private struct LineDetailsSquaredButtonsRow: View {
                 iconColor: .primary,
                 badgeValue: lineAlerts.count
             )
+            .accessibilityElement(children:.ignore)
+            .accessibilityLabel(Text("Alertas"))
+            .accessibilityValue((lineAlerts.count > 0) ? (lineAlerts.count > 1) ? Text("Há \(lineAlerts.count) alertas ativos."):Text("Há \(lineAlerts.count) alerta ativo."):Text("Não há alertas ativos."))
+            .accessibilityHint(Text("Duplo toque abre o pop-up com a lista de alertas ativos nesta linha."))
+            .accessibilityAddTraits(.isButton)
         }
         .onAppear {
             filterAlerts()
@@ -330,6 +340,7 @@ struct PatternLegs: View {
                 let isLast = pathStepIdx == pattern.path.count - 1
                 
                 let pathStep = pattern.path[pathStepIdx]
+                let pathCount = pattern.path.count
                 let isSelected = selectedStop?.id == pathStep.stop.id // TODO: deprecate this as somethimes stops repeat in a pattern
                 let isSelectedByIndex = selectedStopIndex == pathStepIdx
                 
@@ -343,6 +354,8 @@ struct PatternLegs: View {
                                     .bold()
                                     .offset(x: 10, y: -2)
                                     .padding(.top, isSelectedByIndex ? 10 : 0)
+                                    .accessibilityLabel(isSelectedByIndex ? "Paragem selecionada, paragem \(pathStepIdx+1) de \(pathCount)" : "Paragem \(pathStepIdx+1) de \(pathCount), não selecionada")
+                                    .accessibilityHint("Passar o dedo para a direita para detalhes desta paragem")
                                 Spacer()
                             }
                             VStack {
@@ -371,6 +384,7 @@ struct PatternLegs: View {
                                 Text(pathStep.stop.name)
                                     .font(isSelectedByIndex ? .headline : .subheadline)
                                     .fontWeight(isSelectedByIndex ? .bold : .semibold)
+                                    .accessibilityLabel(pathStep.stop.ttsName ?? pathStep.stop.name)
                                 Text(pathStep.stop.locality == pathStep.stop.municipalityName || pathStep.stop.locality == nil ? pathStep.stop.municipalityName : "\(pathStep.stop.locality!), \(pathStep.stop.municipalityName)")
                                     .foregroundStyle(.secondary)
                                 if isSelectedByIndex {
@@ -383,6 +397,8 @@ struct PatternLegs: View {
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(width: 30.0)
+                                                        .accessibilityLabel(
+                                                            imageResource == .cmFacilityTransitOffice ? Text("Perto do Espaço navegante, Ponto de atendimento ao passageiro") : imageResource == .cmFacilitySubway ? Text("Perto do Metro") : imageResource == .cmFacilityTrain ? Text("Perto do comboio") : imageResource == .cmFacilityLightRail ? Text("Perto do Metro Ligeiro") : imageResource == .cmFacilityBoat ? Text("Perto do Barco") : imageResource == .cmFacilitySchool ? Text("Perto da Escola") : imageResource == .cmFacilityShopping ? Text("Perto do centro comercial") : Text(""))
                                                 }
                                             }
                                         }

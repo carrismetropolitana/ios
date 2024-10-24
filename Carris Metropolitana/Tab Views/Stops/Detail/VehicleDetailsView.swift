@@ -54,6 +54,28 @@ struct VehicleOccupationPopoverView: View {
     }
 }
 
+struct VehicleAccessibilityPopoverView: View {
+    let status: Bool
+    
+    var body: some View {
+        HStack(alignment: .top) {
+            Image(systemName: "figure.roll.runningpace")
+            VStack(alignment: .leading) {
+                Text("Acessibilidade do Veículo")
+                    .font(.headline)
+                if status == true {
+                    Text("Este veículo é acessível a passageiros com mobilidade condicionada")
+                        .font(.subheadline)
+                } else {
+                    Text("Informação de acessibilidade indisponível para este veículo.")
+                        .font(.subheadline)
+                }
+            }
+        }
+        .frame(height: 70)
+    }
+}
+
 struct VehicleDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
     
@@ -68,6 +90,7 @@ struct VehicleDetailsView: View {
     @State private var vehicle: Vehicle? = nil
     
     @State private var isOccupationPopoverPresented = false
+    @State private var isAccessiblePopoverPresented = false
     
     var body: some View {
        var vehicleOccupationTip = VehicleOccupationTip(occupation: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
@@ -98,14 +121,35 @@ struct VehicleDetailsView: View {
                             .font(.callout)
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Informações do autocarro em circulação"))
+                .accessibilityValue(Text(
+                    (vehiclePattern?.headsign != nil && vehicleStaticInfo != nil && vehicleStaticInfo?.make != nil && vehicleStaticInfo?.model != nil) ? "Autocarro da linha \(vehicle.lineId) com destino a \(vehiclePattern?.headsign ?? "") e veículo \(vehicleStaticInfo?.make ?? "") modelo \(vehicleStaticInfo?.model ?? "")" : (vehiclePattern?.headsign != nil) ? "Autocarro da linha \(vehicle.lineId) com destino a \(vehiclePattern?.headsign ?? "")" : "Autocarro da linha \(vehicle.lineId) sem destino disponível"
+                ))
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityHeading(.h1)
+                .accessibilitySortPriority(100)
                 
                 Divider()
                 HStack {
                     VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicleStaticInfo?.licensePlate)
                     Pulse(size: 20.0, accent: .green)
-                    Image(systemName: "figure.roll")
+                    
+                    Image(systemName: "figure.roll.runningpace")
                         .foregroundStyle(vehicleStaticInfo?.wheelchair == 1 ? .blue : .secondary)
+                        .accessibilityLabel(Text("Acessibilidade para uso de cadeira de rodas"))
+                        .accessibilityValue(Text("\(vehicleStaticInfo?.wheelchair == 1 ? "Sim, este veículo é acessível" : "Não há informação de acessibilidade disponível")"))
+                        .onTapGesture {
+                            isAccessiblePopoverPresented.toggle()
+                        }
+                        .popover(isPresented: $isAccessiblePopoverPresented){
+                            let statusFlag = vehicleStaticInfo?.wheelchair == 1 ? true : false
+                            VehicleAccessibilityPopoverView(status: statusFlag)
+                                .padding(10)
+                                .presentationCompactAdaptation(.popover)
+                        }
                     OccupationIndicator(occupied: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
+                        .accessibilityElement(children: .combine)
                         .onTapGesture {
                             isOccupationPopoverPresented.toggle()
                         }
@@ -134,6 +178,8 @@ struct VehicleDetailsView: View {
                 
                 if (vehicleStops.count > 0) {
                     OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicle.currentStatus))
+                        .accessibilityElement(children:.contain)
+                        .accessibilityValue(Text("Percurso do autocarro em tempo real: Atualmente na paragem \(vehicleStops.first(where:{$0.id == vehicle.stopId})!.ttsName ?? vehicleStops.first(where:{$0.id == vehicle.stopId})!.name), paragem \(vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!+1) de \(vehicleStops.count) paragens"))
                 }
             
 //                UserFeedbackForm(
@@ -216,6 +262,11 @@ struct OccupationIndicator: View {
                             }
                     }
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Ocupação do veículo por contagem automática"))
+                .accessibilityValue(Text((occupied == nil || total == 0) ? "Não há informação da ocupação de passageiros do veículo" : ((occupied ?? 0)*100/total < 35) ? "O veículo tem uma ocupação estimada baixa, pouco cheio" : ((occupied ?? 0)*100/total < 60) ? "O veículo tem uma ocupação estimada média, podendo não ter lugares sentados" : "O veículo tem uma ocupação estimada alta, podendo estar cheio")) // informação de ocupação tem critério mais conservador para pessoas que dela dependam para lugar seguro versus semáforo de cor
+                .accessibilityHint(Text("A informação de ocupação é estimada por contagem automática e sujeita a erros"))
+
         }
 //        .onTapGesture {
 //            isShowingPopover.toggle()
@@ -277,7 +328,7 @@ struct UnavailableBus: View {
                 .resizable()
                 .frame(width: 100, height: 100)
                 .padding(.bottom, 30.0)
-            Text("Veículo indispoível".uppercased())
+            Text("Veículo indisponível".uppercased())
                 .font(.title3)
                 .foregroundStyle(.secondary)
                 .fontWeight(.black)
@@ -327,7 +378,7 @@ struct UnavailableBus: View {
             .resizable()
             .frame(width: 100, height: 100)
             .padding(.bottom, 30.0)
-        Text("Veículo indispoível".uppercased())
+        Text("Veículo indisponível".uppercased())
             .font(.title3)
             .foregroundStyle(.secondary)
             .fontWeight(.black)

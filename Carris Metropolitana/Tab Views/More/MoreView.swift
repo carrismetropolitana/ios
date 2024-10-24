@@ -38,6 +38,7 @@ struct MoreView: View {
                             })
                             .padding(.vertical)
                             .accessibilityLabel("Carrossel de notícias")
+                            .accessibilityHidden(false)
                         } else {
                             RoundedRectangle(cornerRadius: 15.0)
                                 .fill(.quaternary)
@@ -219,6 +220,9 @@ struct EntryRectangleWithIcon: View {
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(.cmSystemBorder100, lineWidth: 1)
                 )
+                .accessibilityHint(externalLink ? "Abre ligação externa" : "")
+                .accessibilityAddTraits(externalLink ? .isLink : .init([]))
+
 //            Button {
 //                
 //            } label: {

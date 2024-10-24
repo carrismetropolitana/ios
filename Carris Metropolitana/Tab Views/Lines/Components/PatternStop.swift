@@ -134,10 +134,14 @@ struct PatternStopWithInvisibleLeg: View {
                     .font(.callout)
                     .foregroundStyle(.primary)
                     .lineLimit(1)
+                    .accessibilityLabel(Text("Paragem "))
+                    .accessibilityValue(Text(stop.ttsName ?? stop.name))
                 Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)")
                     .fontWeight(.semibold)
                     .font(.system(size: 14.0))
                     .foregroundStyle(.secondary)
+                    .accessibilityLabel(Text("Situada em "))
+                    .accessibilityValue(Text(stop.locality == stop.municipalityName || stop.locality == nil ? stop.municipalityName : "\(stop.locality!), \(stop.municipalityName)"))
             }
             .padding(.bottom)
             .padding(.leading, 50.0)
@@ -180,6 +184,7 @@ struct PatternStopWithInvisibleLeg: View {
                                     .padding(.bottom, relativePosition == .end ? 10.0 : 0.0)
                                     .padding(.top, isNextStop ? nextStopTopPadding : 0.0)
                                     .frame(width: 10.0)
+                                    .accessibilityLabel(Text("Paragem na espinha da linha"))
                                 if (relativePosition != .end) {
                                     Spacer()
                                 }
@@ -532,6 +537,9 @@ struct OtherTestPreview: View {
                     } else {
                         PatternStopWithInvisibleLeg(stop: stops[stopIndex], active: stopIndex > nextStopIndex-1, expanded: false, isNextStop: stopIndex == nextStopIndex, relativePosition: stopIndex == 0 ? .start : stopIndex == stops.count - 1 ? .end : .middle, text: "\(stopIndex)")
                             .animation(.snappy, value: stopIndex == nextStopIndex)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel(stopIndex == nextStopIndex ? "Próxima paragem deste veículo, paragem \(stopIndex+1) de \(stops.count)." : stopIndex > nextStopIndex ? "Paragem futura deste veículo, paragem \(stopIndex+1) de \(stops.count)." : "Paragem anterior deste veículo, paragem \(stopIndex+1) de \(stops.count).")
+                            .accessibilityAddTraits(stopIndex == nextStopIndex ? .isSelected : .updatesFrequently)
                     }
                 }
             }
@@ -565,6 +573,7 @@ struct OtherTestPreview: View {
                                     .foregroundStyle(.white)
                                     .font(.system(size: 10.0))
                                     .bold()
+                                    .accessibilityLabel(Text("O veículo está a chegar em tempo real à paragem seguinte"))
                             }
                             .scaleEffect(scale)
                             .animation(vehicleStatus == .incomingAt ? Animation.easeInOut(duration: 1).repeatForever(autoreverses: true) : .default, value: scale)

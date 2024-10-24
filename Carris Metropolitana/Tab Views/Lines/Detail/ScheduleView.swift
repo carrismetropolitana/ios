@@ -20,7 +20,9 @@ struct ScheduleView: View {
             VStack {
                 ColumnHeading(text: Text("Hora", comment: "Na primeira coluna dos horários na paragem")
                     .foregroundStyle(.white), cornerRadii: .init(topLeading: 25.0, bottomLeading: 25.0), width: 50.0)
+                    .accessibilityHidden(true)
                 Text(verbatim: "Min")
+                    .accessibilityHidden(true)
             }
             ForEach(scheduleColumns.indices, id: \.self) { colIdx in
                 let isFirst = colIdx == 0
@@ -37,8 +39,10 @@ struct ScheduleView: View {
                         cornerRadii: .init(bottomTrailing: isLast ? 25.0 : 0, topTrailing: isLast ? 25.0 : 0),
                         width: 30.0
                     )
+                    .accessibilityHidden(true)
                     ForEach(col.minutes, id: \.self) { minute in
                         Text(String(minute).paddedWithLeadingZeros(minLength: 2))
+                            .accessibilityLabel("\(col.hour) horas e \(minute) minutos")
                     }
                 }
                 if !nextColumnIsConsecutiveHour {

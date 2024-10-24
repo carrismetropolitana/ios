@@ -44,7 +44,10 @@ struct HorizontalCarousel: View {
                         onItemClick(item)
                     }
                     .containerRelativeFrame(.horizontal)
-                    .accessibilityLabel(Text("Notícia \(item.contentTitle ?? "sem título")"))
+                    .accessibilityLabel(Text("Notícia \(itemIndex+1) de \(items.count)."))
+                    .accessibilityValue(Text("Título da notícia: \(item.contentTitle ?? "sem título")"))
+                    .accessibilityHint("Passe com um dedo para a direita para ver a notícia seguinte. Toque duplo para abrir a notícia.")
+                    .accessibilityHidden(false)
                 }
             }
             .scrollTargetLayout()

@@ -88,8 +88,16 @@ struct VehicleIdentifier: View {
             VStack {
                if (toggleIdentifier) {
                   busNumberView
+                   .accessibilityElement(children: .ignore)
+                   .accessibilityLabel(Text("Número de frota do veículo"))
+                   .accessibilityValue(Text("\(vehicleId ?? "")"))
+                   .accessibilityHint(Text("Duplo toque para alternar para mostrar a matrícula"))
                } else {
                   licensePlateView
+                   .accessibilityElement(children: .ignore)
+                   .accessibilityLabel(Text("Matrícula do veículo"))
+                   .accessibilityValue(Text("\(vehiclePlate ?? "")"))
+                   .accessibilityHint(Text("Duplo toque para alternar para mostrar o número de frota"))
                }
             }
             .onTapGesture {
@@ -98,6 +106,10 @@ struct VehicleIdentifier: View {
             }
          } else {
             busNumberView
+             .accessibilityElement(children: .ignore)
+             .accessibilityLabel(Text("Número de frota do veículo"))
+             .accessibilityValue(Text("\(vehicleId ?? "")"))
+             .accessibilityHint(Text("Matrícula do veículo não disponível"))
          }
          
       } else {
