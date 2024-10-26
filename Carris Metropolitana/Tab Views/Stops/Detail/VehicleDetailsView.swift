@@ -33,7 +33,9 @@ struct VehicleOccupationTip: Tip {
 
 struct VehicleOccupationPopoverView: View {
     let occupation: Int?
-    let total: Int
+    let total: Int?
+    let seated: Int?
+    let standing: Int?
     
     var body: some View {
         HStack(alignment: .top) {
@@ -42,8 +44,11 @@ struct VehicleOccupationPopoverView: View {
                 Text("Ocupação do Veículo")
                     .font(.headline)
                 if let occupation = occupation {
-                    Text("Estão \(occupation) pessoas neste veículo de \(total) lugares.")
+                    Text("Estão \(occupation) pessoas neste veículo \(total != nil ? "de \(total!) lugares." : ".")")
                         .font(.subheadline)
+//                    if let standing, let seated {
+//                        Text("")
+//                    }
                 } else {
                     Text("Informação de ocupação indisponível para este veículo.")                        
                         .font(.subheadline)
@@ -113,7 +118,7 @@ struct VehicleDetailsView: View {
                             isOccupationPopoverPresented.toggle()
                         }
                         .popover(isPresented: $isOccupationPopoverPresented){
-                            VehicleOccupationPopoverView(occupation: nil, total: (vehicle.capacityTotal ?? 0))
+                            VehicleOccupationPopoverView(occupation: vehicle.occupancyEstimated, total: vehicle.capacityTotal, seated: vehicle.capacitySeated, standing: vehicle.capacityStanding)
                                 .padding(10)
                                 .presentationCompactAdaptation(.popover)
                         }
