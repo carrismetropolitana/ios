@@ -23,6 +23,9 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
     private static let vehiclesUrl = "\(baseUrl)/vehicles"
     private static let facilitiesUrl = "\(baseUrl)/datasets/facilities"
     
+    private static let baseUrlV2 = "https://api.cmet.pt"
+    private static let vehiclesUrlV2 = "\(baseUrlV2)/vehicles"
+    
     static let shared = CMAPI()
     
     func getAlerts() async throws -> [GtfsRtAlertEntity] {
@@ -167,6 +170,23 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
         
         do {
             vehicles = try await NetworkService.makeGETRequest(CMAPI.vehiclesUrl, responseType: [Vehicle].self)
+        } catch {
+            print("Failed to fetch vehicles!")
+            print(error)
+        }
+        
+        guard vehicles != nil else {
+            throw CMAPIError.noRouteFound
+        }
+        
+        return vehicles!
+    }
+    
+    func getVehiclesV2() async throws -> [VehicleV2] {
+        var vehicles: [VehicleV2]?
+        
+        do {
+            vehicles = try await NetworkService.makeGETRequest(CMAPI.vehiclesUrlV2, responseType: [VehicleV2].self)
         } catch {
             print("Failed to fetch vehicles!")
             print(error)

@@ -13,7 +13,7 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
     
     // TODO: These no longer need to be bindings
     let stops: [Stop]
-    let vehicles: [Vehicle]
+    let vehicles: [VehicleV2]
     let shape: CMShape?
     var isUserInteractionEnabled: Bool = true
     let lineColor: Color
@@ -159,11 +159,14 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             print("shfs ----> \(shapeFeature.pointCount)")
             
             // Vehicles
-            let vehicleFeatures = vehicles.map { vehicle -> MLNPointFeature in
-                let feature = MLNPointFeature()
-                feature.coordinate = CLLocationCoordinate2D(latitude: vehicle.lat, longitude: vehicle.lon)
-                feature.attributes = ["id": vehicle.id, "bearing": vehicle.bearing]
-                return feature
+            let vehicleFeatures = vehicles.compactMap { vehicle -> MLNPointFeature? in
+                if let vehicleLat = vehicle.lat, let vehicleLon = vehicle.lon {
+                    let feature = MLNPointFeature()
+                    feature.coordinate = CLLocationCoordinate2D(latitude: vehicleLat, longitude: vehicleLon)
+                    feature.attributes = ["id": vehicle.id, "bearing": vehicle.bearing]
+                    return feature
+                }
+                return nil
             }
             
             print("vfs ----> \(vehicleFeatures.count)")

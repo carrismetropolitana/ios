@@ -310,7 +310,7 @@ struct StopsView: View {
 //            }
             .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
             .onAppear {
-                vehiclesManager.stopFetching()
+                vehiclesManager.startFetching()
                 print("From stops view, external tab send mapflytocoords: \(tabCoordinator.mapFlyToCoords)")
                 if let flyToCoordsFromExternalTab = tabCoordinator.mapFlyToCoords,
                    let flownToStopIdFromExternalTab = tabCoordinator.flownToStopId {

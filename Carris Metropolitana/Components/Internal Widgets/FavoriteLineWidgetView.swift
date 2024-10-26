@@ -21,8 +21,8 @@ struct FavoriteLineWidgetView: View {
     
     let onHeaderTap: (_ lineId: String, _ patternId: String) -> Void
     
-    private var filteredVehiclesBinding: Binding<[Vehicle]> {
-        Binding<[Vehicle]>(
+    private var filteredVehiclesBinding: Binding<[VehicleV2]> {
+        Binding<[VehicleV2]>(
             get: {
                 vehiclesManager.vehicles.filter { $0.patternId == patternId }
             },

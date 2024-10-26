@@ -65,7 +65,7 @@ struct VehicleDetailsView: View {
     @State private var vehicleStops: [Stop] = []
     @State private var vehicleShape: CMShape? = nil
     
-    @State private var vehicle: Vehicle? = nil
+    @State private var vehicle: VehicleV2? = nil
     
     @State private var isOccupationPopoverPresented = false
     
@@ -81,7 +81,10 @@ struct VehicleDetailsView: View {
             
             ScrollView {
                 VStack(spacing: 10.0) {
-                    Pill(text: vehicle.lineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor))
+                    // will always be true but let's avoid forced unwrappings on remote values
+                    if let vehicleLineId = vehicle.lineId {
+                        Pill(text: vehicleLineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor))
+                    }
                     Text("para", comment: "Texto entre o número da linha e o headsign de um autocarro na tracking view.")
                         .foregroundStyle(.secondary)
                         .font(.callout)
@@ -101,16 +104,16 @@ struct VehicleDetailsView: View {
                 
                 Divider()
                 HStack {
-                    VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicleStaticInfo?.licensePlate)
+                    VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicle.licensePlate)
                     Pulse(size: 20.0, accent: .green)
                     Image(systemName: "figure.roll")
-                        .foregroundStyle(vehicleStaticInfo?.wheelchair == 1 ? .blue : .secondary)
-                    OccupationIndicator(occupied: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
+                        .foregroundStyle((vehicle.wheelchairAccessible ?? false) ? .blue : .secondary)
+                    OccupationIndicator(occupied: vehicle.occupancyEstimated, total: (vehicle.capacityTotal ?? 0))
                         .onTapGesture {
                             isOccupationPopoverPresented.toggle()
                         }
                         .popover(isPresented: $isOccupationPopoverPresented){
-                            VehicleOccupationPopoverView(occupation: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
+                            VehicleOccupationPopoverView(occupation: nil, total: (vehicle.capacityTotal ?? 0))
                                 .padding(10)
                                 .presentationCompactAdaptation(.popover)
                         }
@@ -133,7 +136,9 @@ struct VehicleDetailsView: View {
                 }
                 
                 if (vehicleStops.count > 0) {
-                    OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicle.currentStatus))
+                    if let vehicleCurrentStatus = vehicle.currentStatus {
+                        OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicleCurrentStatus))
+                    }
                 }
             
 //                UserFeedbackForm(
@@ -151,14 +156,16 @@ struct VehicleDetailsView: View {
             .onAppear {
                 vehiclesManager.startFetching()
                 Task {
-                    vehiclePattern = try await CMAPI.shared.getPattern(vehicle.patternId)
-                    if let pattern = vehiclePattern {
-                        vehicleStops = pattern.path.compactMap {$0.stop}
-                        vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
+                    if let vehiclePatternId = vehicle.patternId {
+                        vehiclePattern = try await CMAPI.shared.getPattern(vehiclePatternId)
+                        if let pattern = vehiclePattern {
+                            vehicleStops = pattern.path.compactMap {$0.stop}
+                            vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
+                        }
+                        print(vehiclePattern?.headsign)
+                        vehicleStaticInfo = try await VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
+                        print(vehicleStaticInfo)
                     }
-                    print(vehiclePattern?.headsign)
-                    vehicleStaticInfo = try await VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
-                    print(vehicleStaticInfo)
                 }
             }
             .onDisappear {
