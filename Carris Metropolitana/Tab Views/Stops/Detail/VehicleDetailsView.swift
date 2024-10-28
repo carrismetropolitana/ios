@@ -60,7 +60,7 @@ struct VehicleOccupationPopoverView: View {
 }
 
 struct VehicleAccessibilityPopoverView: View {
-    let status: Bool
+    let status: Bool?
     
     var body: some View {
         HStack(alignment: .top) {
@@ -68,7 +68,7 @@ struct VehicleAccessibilityPopoverView: View {
             VStack(alignment: .leading) {
                 Text("Acessibilidade do Veículo")
                     .font(.headline)
-                if status == true {
+                if let status, status {
                     Text("Este veículo é acessível a passageiros com mobilidade condicionada")
                         .font(.subheadline)
                 } else {
@@ -131,9 +131,7 @@ struct VehicleDetailsView: View {
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text("Informações do autocarro em circulação"))
-                .accessibilityValue(Text(
-                    (vehiclePattern?.headsign != nil && vehicleStaticInfo != nil && vehicleStaticInfo?.make != nil && vehicleStaticInfo?.model != nil) ? "Autocarro da linha \(vehicle.lineId) com destino a \(vehiclePattern?.headsign ?? "") e veículo \(vehicleStaticInfo?.make ?? "") modelo \(vehicleStaticInfo?.model ?? "")" : (vehiclePattern?.headsign != nil) ? "Autocarro da linha \(vehicle.lineId) com destino a \(vehiclePattern?.headsign ?? "")" : "Autocarro da linha \(vehicle.lineId) sem destino disponível"
-                ))
+                .accessibilityValue(Text(getAccessibilityValueForVehicleInfo(for: vehicle)))
                 .accessibilityAddTraits(.isHeader)
                 .accessibilityHeading(.h1)
                 .accessibilitySortPriority(100)
@@ -146,13 +144,12 @@ struct VehicleDetailsView: View {
                     Image(systemName: "figure.roll.runningpace")
                         .foregroundStyle((vehicle.wheelchairAccessible ?? false) ? .blue : .secondary)
                         .accessibilityLabel(Text("Acessibilidade para uso de cadeira de rodas"))
-                        .accessibilityValue(Text("\(vehicleStaticInfo?.wheelchair == 1 ? "Sim, este veículo é acessível" : "Não há informação de acessibilidade disponível")"))
+                        .accessibilityValue(Text("\((vehicle.wheelchairAccessible ?? false) ? "Sim, este veículo é acessível" : "Não há informação de acessibilidade disponível")"))
                         .onTapGesture {
                             isAccessiblePopoverPresented.toggle()
                         }
                         .popover(isPresented: $isAccessiblePopoverPresented){
-                            let statusFlag = vehicleStaticInfo?.wheelchair == 1 ? true : false
-                            VehicleAccessibilityPopoverView(status: statusFlag)
+                            VehicleAccessibilityPopoverView(status: vehicle.wheelchairAccessible)
                                 .padding(10)
                                 .presentationCompactAdaptation(.popover)
                         }
@@ -239,6 +236,24 @@ struct VehicleDetailsView: View {
         default:
             return nil
         }
+    }
+    
+    func getAccessibilityValueForVehicleInfo(for vehicle: VehicleV2) -> String {
+        let (vehicleMake, vehicleModel, vehicleLineId) = (vehicle.make, vehicle.model, vehicle.lineId)
+        
+        if let headsign = vehiclePattern?.headsign, let vehicleMake, let vehicleModel, let vehicleLineId {
+            return "Autocarro da linha \(vehicleLineId) com destino a \(headsign) e veículo \(vehicleMake) modelo \(vehicleModel)"
+        }
+        
+        if let headsign = vehiclePattern?.headsign, let vehicleLineId {
+            return "Autocarro da linha \(vehicleLineId) com destino a \(headsign)"
+        }
+        
+        if let vehicleLineId {
+            return "Autocarro da linha \(vehicleLineId) sem destino disponível"
+        }
+        
+        return "Autocarro sem informação disponível"
     }
 }
 
