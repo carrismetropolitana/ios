@@ -267,6 +267,55 @@ struct Vehicle: Codable, Identifiable, Equatable {
     let speed: Double
 }
 
+/**
+ The vehicles endpoint now returns all vehicles with metadata including ones without any realtime data.
+ 
+ 
+ */
+struct VehicleV2: Codable, Identifiable, Equatable {
+    let id: String
+    let bikesAllowed: Bool?
+    let capacitySeated: Int?
+    let capacityStanding: Int?
+    let capacityTotal: Int?
+    let emissionClass: String?
+    let licensePlate: String?
+    let make: String?
+    let model: String?
+    let owner: String?
+    let propulsion: String?
+    let registrationDate: String?
+    let wheelchairAccessible: Bool?
+    let agencyId: String?
+    let timestamp: Int?
+    let scheduleRelationship: Int?
+    let tripId: String?
+    let patternId: String?
+    let routeId: String?
+    let lineId: String?
+    let stopId: String?
+    let currentStatus: String?
+    let blockId: String?
+    let shiftId: String?
+    let lat: Double?
+    let lon: Double?
+    let bearing: Int?
+    let speed: Double?
+    let eventId: String?
+    let occupancyEstimated: Int?
+    let occupancyStatus: String?
+    
+    var isRealtime: Bool {
+        return timestamp != nil
+    }
+}
+
+extension Array where Element == VehicleV2 {
+    var realtimeVehicles: [VehicleV2] {
+        return self.filter { $0.isRealtime }
+    }
+}
+
 struct ENCM: Codable, Identifiable {
     let id: String
     let name: String

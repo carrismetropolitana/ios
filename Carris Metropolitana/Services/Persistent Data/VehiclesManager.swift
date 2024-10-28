@@ -8,7 +8,7 @@
 import Foundation
 
 class VehiclesManager: ObservableObject {
-    @Published var vehicles: [Vehicle] = []
+    @Published var vehicles: [VehicleV2] = []
     private var timer: Timer?
 
     init() {
@@ -20,9 +20,9 @@ class VehiclesManager: ObservableObject {
     func fetchVehicles() {
         Task {
             do {
-                let newVehicles = try await CMAPI.shared.getVehicles()
+                let newVehicles = try await CMAPI.shared.getVehiclesV2()
                 DispatchQueue.main.async {
-                    self.vehicles = newVehicles
+                    self.vehicles = newVehicles.realtimeVehicles // we're not using offline vehicles
                     print("Got \(newVehicles.count) new vehicles!, \(Date.now)")
                 }
             } catch {

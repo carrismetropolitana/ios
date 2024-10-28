@@ -33,7 +33,9 @@ struct VehicleOccupationTip: Tip {
 
 struct VehicleOccupationPopoverView: View {
     let occupation: Int?
-    let total: Int
+    let total: Int?
+    let seated: Int?
+    let standing: Int?
     
     var body: some View {
         HStack(alignment: .top) {
@@ -42,8 +44,11 @@ struct VehicleOccupationPopoverView: View {
                 Text("Ocupação do Veículo")
                     .font(.headline)
                 if let occupation = occupation {
-                    Text("Estão \(occupation) pessoas neste veículo de \(total) lugares.")
+                    Text("Estão \(occupation) pessoas neste veículo \(total != nil ? "de \(total!) lugares." : ".")")
                         .font(.subheadline)
+//                    if let standing, let seated {
+//                        Text("")
+//                    }
                 } else {
                     Text("Informação de ocupação indisponível para este veículo.")                        
                         .font(.subheadline)
@@ -87,7 +92,7 @@ struct VehicleDetailsView: View {
     @State private var vehicleStops: [Stop] = []
     @State private var vehicleShape: CMShape? = nil
     
-    @State private var vehicle: Vehicle? = nil
+    @State private var vehicle: VehicleV2? = nil
     
     @State private var isOccupationPopoverPresented = false
     @State private var isAccessiblePopoverPresented = false
@@ -104,7 +109,10 @@ struct VehicleDetailsView: View {
             
             ScrollView {
                 VStack(spacing: 10.0) {
-                    Pill(text: vehicle.lineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor))
+                    // will always be true but let's avoid forced unwrappings on remote values
+                    if let vehicleLineId = vehicle.lineId {
+                        Pill(text: vehicleLineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor))
+                    }
                     Text("para", comment: "Texto entre o número da linha e o headsign de um autocarro na tracking view.")
                         .foregroundStyle(.secondary)
                         .font(.callout)
@@ -132,11 +140,11 @@ struct VehicleDetailsView: View {
                 
                 Divider()
                 HStack {
-                    VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicleStaticInfo?.licensePlate)
+                    VehicleIdentifier(vehicleId: vehicle.id, vehiclePlate: vehicle.licensePlate)
                     Pulse(size: 20.0, accent: .green)
                     
                     Image(systemName: "figure.roll.runningpace")
-                        .foregroundStyle(vehicleStaticInfo?.wheelchair == 1 ? .blue : .secondary)
+                        .foregroundStyle((vehicle.wheelchairAccessible ?? false) ? .blue : .secondary)
                         .accessibilityLabel(Text("Acessibilidade para uso de cadeira de rodas"))
                         .accessibilityValue(Text("\(vehicleStaticInfo?.wheelchair == 1 ? "Sim, este veículo é acessível" : "Não há informação de acessibilidade disponível")"))
                         .onTapGesture {
@@ -148,13 +156,13 @@ struct VehicleDetailsView: View {
                                 .padding(10)
                                 .presentationCompactAdaptation(.popover)
                         }
-                    OccupationIndicator(occupied: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
+                    OccupationIndicator(occupied: vehicle.occupancyEstimated, total: (vehicle.capacityTotal ?? 0))
                         .accessibilityElement(children: .combine)
                         .onTapGesture {
                             isOccupationPopoverPresented.toggle()
                         }
                         .popover(isPresented: $isOccupationPopoverPresented){
-                            VehicleOccupationPopoverView(occupation: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
+                            VehicleOccupationPopoverView(occupation: vehicle.occupancyEstimated, total: vehicle.capacityTotal, seated: vehicle.capacitySeated, standing: vehicle.capacityStanding)
                                 .padding(10)
                                 .presentationCompactAdaptation(.popover)
                         }
@@ -177,9 +185,11 @@ struct VehicleDetailsView: View {
                 }
                 
                 if (vehicleStops.count > 0) {
-                    OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicle.currentStatus))
-                        .accessibilityElement(children:.contain)
-                        .accessibilityValue(Text("Percurso do autocarro em tempo real: Atualmente na paragem \(vehicleStops.first(where:{$0.id == vehicle.stopId})!.ttsName ?? vehicleStops.first(where:{$0.id == vehicle.stopId})!.name), paragem \(vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!+1) de \(vehicleStops.count) paragens"))
+                    if let vehicleCurrentStatus = vehicle.currentStatus {
+                        OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicleCurrentStatus))
+                            .accessibilityElement(children:.contain)
+                            .accessibilityValue(Text("Percurso do autocarro em tempo real: Atualmente na paragem \(vehicleStops.first(where:{$0.id == vehicle.stopId})!.ttsName ?? vehicleStops.first(where:{$0.id == vehicle.stopId})!.name), paragem \(vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!+1) de \(vehicleStops.count) paragens"))
+                    }
                 }
             
 //                UserFeedbackForm(
@@ -197,14 +207,16 @@ struct VehicleDetailsView: View {
             .onAppear {
                 vehiclesManager.startFetching()
                 Task {
-                    vehiclePattern = try await CMAPI.shared.getPattern(vehicle.patternId)
-                    if let pattern = vehiclePattern {
-                        vehicleStops = pattern.path.compactMap {$0.stop}
-                        vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
+                    if let vehiclePatternId = vehicle.patternId {
+                        vehiclePattern = try await CMAPI.shared.getPattern(vehiclePatternId)
+                        if let pattern = vehiclePattern {
+                            vehicleStops = pattern.path.compactMap {$0.stop}
+                            vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
+                        }
+                        print(vehiclePattern?.headsign)
+                        vehicleStaticInfo = try await VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
+                        print(vehicleStaticInfo)
                     }
-                    print(vehiclePattern?.headsign)
-                    vehicleStaticInfo = try await VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
-                    print(vehicleStaticInfo)
                 }
             }
             .onDisappear {
