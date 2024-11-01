@@ -78,6 +78,7 @@
 		79B7C5B72C584075007A2D9D /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7C5B62C584075007A2D9D /* NetworkMonitor.swift */; };
 		79B8BE4B2C9645CF00313253 /* StopsSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8BE4A2C9645CF00313253 /* StopsSearchBar.swift */; };
 		79B8BE4D2C9645FD00313253 /* StopSearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8BE4C2C9645FD00313253 /* StopSearchResultsView.swift */; };
+		79B918532CD2875700016406 /* EventDates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B918522CD2874F00016406 /* EventDates.swift */; };
 		79C6C4FD2C1466AA003277A7 /* VehiclesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */; };
 		79C6C4FF2C146B89003277A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C6C4FE2C146B89003277A7 /* LocationManager.swift */; };
 		79CA0A6C2BA2EC2F000F4900 /* CMAModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CA0A6B2BA2EC2F000F4900 /* CMAModels.swift */; };
@@ -249,6 +250,7 @@
 		79B7C5B62C584075007A2D9D /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		79B8BE4A2C9645CF00313253 /* StopsSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsSearchBar.swift; sourceTree = "<group>"; };
 		79B8BE4C2C9645FD00313253 /* StopSearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopSearchResultsView.swift; sourceTree = "<group>"; };
+		79B918522CD2874F00016406 /* EventDates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDates.swift; sourceTree = "<group>"; };
 		79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclesManager.swift; sourceTree = "<group>"; };
 		79C6C4FE2C146B89003277A7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		79CA0A6B2BA2EC2F000F4900 /* CMAModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMAModels.swift; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				79A1904A2C3EC0A400752D80 /* Navigation.swift */,
+				79B918522CD2874F00016406 /* EventDates.swift */,
 				799023462C9B058F00D30404 /* String.swift */,
 				79A1FAB82C926C9600F25285 /* BundleVersioning.swift */,
 				7996E0592C88FDF3004B5876 /* OtherAgencies.swift */,
@@ -1050,6 +1053,7 @@
 				79C6C4FD2C1466AA003277A7 /* VehiclesManager.swift in Sources */,
 				79DB838F2BA1BA340023DD93 /* CMWHelpers.swift in Sources */,
 				79536F5C2C8610AE008A570B /* FavoriteLinesDisambiguationView.swift in Sources */,
+				79B918532CD2875700016406 /* EventDates.swift in Sources */,
 				798B2E782BA31F8000CBA9DC /* NetworkService.swift in Sources */,
 				79F1D88A2C7AA286005CB830 /* MapFloatingButton.swift in Sources */,
 				79E88CBF2BAAEC3A001F3227 /* SearchInput.swift in Sources */,

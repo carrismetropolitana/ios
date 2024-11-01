@@ -75,6 +75,15 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
+            let now = Date()
+            
+            if now.isHalloweenPeriod {
+                if let image = UIImage(named: "CMPumpkinLongBus") {
+                    style.setImage(image, forName: "cm-bus-regular")
+                    return
+                }
+            }
+            
             if let image = UIImage(named: "CMBusRegular") {
                 style.setImage(image, forName: "cm-bus-regular")
             }
