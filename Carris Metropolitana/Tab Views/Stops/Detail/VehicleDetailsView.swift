@@ -44,7 +44,7 @@ struct VehicleOccupationPopoverView: View {
                 Text("Ocupação do Veículo")
                     .font(.headline)
                 if let occupation = occupation {
-                    Text("Estão \(occupation) pessoas neste veículo \(total != nil ? "de \(total!) lugares." : ".")")
+                    Text("Estão \(occupation) pessoas neste veículo\(total != nil ? " de \(total!) lugares." : ".")")
                         .font(.subheadline)
 //                    if let standing, let seated {
 //                        Text("")
@@ -69,7 +69,7 @@ struct VehicleAccessibilityPopoverView: View {
                 Text("Acessibilidade do Veículo")
                     .font(.headline)
                 if let status, status {
-                    Text("Este veículo é acessível a passageiros com mobilidade condicionada")
+                    Text("Este veículo é acessível a passageiros com mobilidade condicionada.")
                         .font(.subheadline)
                 } else {
                     Text("Informação de acessibilidade indisponível para este veículo.")
@@ -87,7 +87,6 @@ struct VehicleDetailsView: View {
     @EnvironmentObject var vehiclesManager: VehiclesManager
     @EnvironmentObject var linesManager: LinesManager
     let vehicleId: String
-    @State private var vehicleStaticInfo: StaticVehicleInfo? = nil
     @State private var vehiclePattern: Pattern? = nil
     @State private var vehicleStops: [Stop] = []
     @State private var vehicleShape: CMShape? = nil
@@ -98,7 +97,6 @@ struct VehicleDetailsView: View {
     @State private var isAccessiblePopoverPresented = false
     
     var body: some View {
-       var vehicleOccupationTip = VehicleOccupationTip(occupation: nil, total: (vehicleStaticInfo?.availableSeats ?? 0) + (vehicleStaticInfo?.availableStanding ?? 0))
         let vehicle = vehiclesManager.vehicles.first(where: {
             $0.id == vehicleId
         })
@@ -123,8 +121,8 @@ struct VehicleDetailsView: View {
                             .bold()
                     }
                     
-                    if let info = vehicleStaticInfo {
-                        Text(verbatim: "\(info.make) \(info.model)")
+                    if let vehicleMake = vehicle.make, let vehicleModel = vehicle.model {
+                        Text(verbatim: "\(vehicleMake) \(vehicleModel)")
                             .foregroundStyle(.secondary)
                             .font(.callout)
                     }
@@ -153,7 +151,7 @@ struct VehicleDetailsView: View {
                                 .padding(10)
                                 .presentationCompactAdaptation(.popover)
                         }
-                    OccupationIndicator(occupied: vehicle.occupancyEstimated, total: (vehicle.capacityTotal ?? 0))
+                    OccupationIndicator(occupied: vehicle.occupancyEstimated, total: vehicle.capacityTotal)
                         .accessibilityElement(children: .combine)
                         .onTapGesture {
                             isOccupationPopoverPresented.toggle()
@@ -210,9 +208,6 @@ struct VehicleDetailsView: View {
                             vehicleStops = pattern.path.compactMap {$0.stop}
                             vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
                         }
-                        print(vehiclePattern?.headsign)
-                        vehicleStaticInfo = try await VehicleInfoAPI.shared.getVehicleInfo(id: vehicle.id)
-                        print(vehicleStaticInfo)
                     }
                 }
             }
@@ -261,7 +256,7 @@ struct OccupationIndicator: View {
     @State var viewSize: CGSize = .zero
 //    @State private var isShowingPopover = false
     let occupied: Int?
-    let total: Int
+    let total: Int?
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -276,7 +271,10 @@ struct OccupationIndicator: View {
                             .fill(getOccupancyColor())
                             .frame(width: calculateBarWidth())
                         .padding(2)
-                        if occupied != total && occupied ?? 0 < total {
+                        if let occupied,
+                           let total,
+                           occupied != total,
+                           occupied < total {
                             Spacer()
                         }
                     }
@@ -291,7 +289,7 @@ struct OccupationIndicator: View {
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text("Ocupação do veículo por contagem automática"))
-                .accessibilityValue(Text((occupied == nil || total == 0) ? "Não há informação da ocupação de passageiros do veículo" : ((occupied ?? 0)*100/total < 35) ? "O veículo tem uma ocupação estimada baixa, pouco cheio" : ((occupied ?? 0)*100/total < 60) ? "O veículo tem uma ocupação estimada média, podendo não ter lugares sentados" : "O veículo tem uma ocupação estimada alta, podendo estar cheio")) // informação de ocupação tem critério mais conservador para pessoas que dela dependam para lugar seguro versus semáforo de cor
+                .accessibilityValue(Text(getVehicleOccupationAccessibilityValue())) // informação de ocupação tem critério mais conservador para pessoas que dela dependam para lugar seguro versus semáforo de cor
                 .accessibilityHint(Text("A informação de ocupação é estimada por contagem automática e sujeita a erros"))
 
         }
@@ -306,7 +304,8 @@ struct OccupationIndicator: View {
     }
     
     private func calculateBarWidth() -> CGFloat {
-        guard let occupied = occupied else { return 0 }
+        guard let occupied, let total else { return 0 }
+        
         if total == 0 {
             return 0
         } else if total <= occupied {
@@ -317,7 +316,7 @@ struct OccupationIndicator: View {
     }
     
     private func getOccupancyColor() -> Color {
-        guard let occupied = occupied else { return .gray }
+        guard let occupied, let total else { return .gray }
         let occupancyRatio = (Double(occupied) / Double(total)) * 100
         print(occupancyRatio)
         
@@ -329,6 +328,22 @@ struct OccupationIndicator: View {
         default:
             return .red
         }
+    }
+    
+    private func getVehicleOccupationAccessibilityValue() -> String {
+        guard let occupied, let total else {
+            return "Não há informação da ocupação de passageiros do veículo"
+        }
+        
+        if (occupied * 100 / total) < 35 {
+            return "O veículo tem uma ocupação estimada baixa, pouco cheio"
+        }
+        
+        if (occupied * 100 / total) < 60 {
+            return "O veículo tem uma ocupação estimada média, podendo não ter lugares sentados"
+        }
+        
+        return "O veículo tem uma ocupação estimada alta, podendo estar cheio"
     }
 }
 
