@@ -288,7 +288,7 @@ struct VehicleV2: Codable, Identifiable, Equatable {
     let wheelchairAccessible: Bool?
     let agencyId: String?
     let timestamp: Int?
-    let scheduleRelationship: Int?
+    let scheduleRelationship: String?
     let tripId: String?
     let patternId: String?
     let routeId: String?
