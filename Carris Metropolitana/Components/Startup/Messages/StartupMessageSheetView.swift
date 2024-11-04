@@ -83,11 +83,14 @@ struct StartupMessageWebView: UIViewRepresentable {
     }
 }
 
-func addLocaleAndBuild(host: String, path: String) -> URL? {
-    let url = URL(string: "\(host)\(Locale.current.languageCode ?? "pt")\(path)")!
-    if var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+func addLocaleAndBuild(to url: String) -> URL? {
+    let url = URL(string: url)
+    if let url, var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) {
         var queryItems = urlComponents.queryItems ?? []
         queryItems.append(URLQueryItem(name: "build", value: Bundle.main.buildVersionNumber ?? "UNKNOWN"))
+        if let locale = Locale.current.languageCode {
+            queryItems.append(URLQueryItem(name: "locale", value: locale))
+        }
 
         urlComponents.queryItems = queryItems
         

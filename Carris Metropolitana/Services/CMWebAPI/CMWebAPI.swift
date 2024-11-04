@@ -12,8 +12,8 @@ enum CMWebAPIError: Error {
 }
 
 class CMWebAPI {
-    private static let baseUrl = "https://www.carrismetropolitana.pt/api/app-ios"
-    private static let startupMessagesUrl = "\(baseUrl)/v1/startup/message"
+    private static let baseUrl = "https://www.cmet.pt/api/app-ios"
+    private static let startupMessagesUrl = "\(baseUrl)/v2/startup/message"
     
     static let shared = CMWebAPI()
     

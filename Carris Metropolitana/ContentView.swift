@@ -100,7 +100,7 @@ struct ContentView: View {
         }
         .sheet(isPresented: $startupMessageSheetPresented) {
             if let message = applicableStartupMessage,
-               let url = addLocaleAndBuild(host: message.urlHost, path: message.urlPath) {
+               let url = addLocaleAndBuild(to: message.messageUrl) {
                 StartupMessageSheetView(url: url)
                     .interactiveDismissDisabled(message.presentationType == .breaking)
                     .presentationDragIndicator(.visible) // TODO: consider hiding when non dismissable
