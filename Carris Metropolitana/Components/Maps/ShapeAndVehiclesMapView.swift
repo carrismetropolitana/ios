@@ -17,6 +17,8 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
     let shape: CMShape?
     var isUserInteractionEnabled: Bool = true
     let lineColor: Color
+    var showPopupOnVehicleSelect: Bool = false
+    var onVehicleCalloutTap: (_ vehicleId: String) -> Void = {vehicleId in }
     
     func makeUIView(context: Context) -> MLNMapView {
         
@@ -37,12 +39,12 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
         mapView.isUserInteractionEnabled = isUserInteractionEnabled
         
         // Add a single tap gesture recognizer. This gesture requires the built-in MGLMapView tap gestures (such as those for zoom and annotation selection) to fail. Apparently... Test if true or not
-//        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handleTap(_:)))
-//        for recognizer in mapView.gestureRecognizers! where recognizer is UITapGestureRecognizer {
-//             tap.require(toFail: recognizer)
-//         }
-//        mapView.addGestureRecognizer(tap)
-//
+        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handleTap(_:)))
+        for recognizer in mapView.gestureRecognizers! where recognizer is UITapGestureRecognizer {
+             tap.require(toFail: recognizer)
+         }
+        mapView.addGestureRecognizer(tap)
+
 
         // needed to respond to map events
         mapView.delegate = context.coordinator
@@ -65,13 +67,29 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             print("was asked to handle tap")
             let mapView = sender.view as! MLNMapView
             let point = sender.location(in: mapView)
-            let features = mapView.visibleFeatures(at: point, styleLayerIdentifiers: ["stops-layer"])
-
-            if let feature = features.last { // if there are multiple overlapping select the last
-                if let stopId = feature.attribute(forKey: "id") as? String {
-//                    control.selectedStopId = stopId
+//            let features = mapView.visibleFeatures(at: point, styleLayerIdentifiers: ["stops-layer"])
+//
+//            if let feature = features.last { // if there are multiple overlapping select the last
+//                
+//                if let stopId = feature.attribute(forKey: "id") as? String {
+////                    control.selectedStopId = stopId
+//                }
+//            }
+            
+            print("[SAVMV] — Got a tap.")
+            
+            let vehicleFeatures = mapView.visibleFeatures(at: point, styleLayerIdentifiers: ["vehicles-layer"])
+            if let feature = vehicleFeatures.last {
+                print("[SAVMV] — Found vehicle at tap coordinates")
+                if control.showPopupOnVehicleSelect {
+                    print("[SAVMV] — Showing callout on vehicle tap because setting was true.")
+                    showPopup(feature: feature, mapView: mapView)
+                    return
                 }
             }
+            
+            // If no features were found, deselect the selected annotation, if any.
+            mapView.deselectAnnotation(mapView.selectedAnnotations.first, animated: true)
         }
         
         func mapView(_ mapView: MLNMapView, didFinishLoading style: MLNStyle) {
@@ -87,6 +105,10 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             if let image = UIImage(named: "CMBusRegular") {
                 style.setImage(image, forName: "cm-bus-regular")
             }
+            
+            if let image = UIImage(named: "CMBusDelay") {
+                style.setImage(image, forName: "cm-bus-delay")
+            }
         }
 
 //        func mapViewDidFinishLoadingMap(_ mapView: MLNMapView) {
@@ -96,6 +118,63 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
 //                }
 //            }
 //        }
+        
+        private func showPopup(feature: MLNFeature, mapView: MLNMapView) {
+            let point = MLNPointFeature()
+            point.title = "Autocarro"
+            point.subtitle = feature.attributes["id"] as? String
+            point.coordinate = feature.coordinate
+            
+            mapView.selectAnnotation(point, animated: true, completionHandler: nil)
+        }
+        
+        func mapView(_: MLNMapView, annotationCanShowCallout annotation: MLNAnnotation) -> Bool {
+            return !(annotation is MLNUserLocation) // we have other features here besides vehicles but since the callout is only shown for features on the vehicles-layer it's okay too keep it like this for now
+        }
+        
+        func mapView(_ mapView: MLNMapView, viewFor annotation: MLNAnnotation) -> MLNAnnotationView? {
+            guard !(annotation is MLNUserLocation) else {
+                return nil
+            }
+
+            let reuseIdentifier = "vehicleAnnotation"
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
+
+            if annotationView == nil {
+                annotationView = MLNAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+            }
+
+            return annotationView
+        }
+    
+        // wow
+        func mapView(_ mapView: MLNMapView, rightCalloutAccessoryViewFor annotation: MLNAnnotation) -> UIView? {
+            let configuration = UIImage.SymbolConfiguration(weight: .medium)
+            let chevronImage = UIImage(systemName: "chevron.right", withConfiguration: configuration)
+            let chevronImageView = UIImageView(image: chevronImage)
+            chevronImageView.tintColor = .black
+            
+            let containerButton = UIButton(frame: CGRect(x: 0, y: 0, width: chevronImageView.frame.width + 20, height: chevronImageView.frame.height + 20))
+            containerButton.addSubview(chevronImageView)
+            chevronImageView.center = containerButton.center
+            
+            // Make the button's background clear
+            containerButton.backgroundColor = .clear
+            
+            return containerButton
+        }
+        
+        func mapView(_ mapView: MLNMapView, tapOnCalloutFor annotation: MLNAnnotation) {
+            // double optional
+            if let optionalTappedVehicleId = annotation.subtitle,
+               let tappedVehicleId = optionalTappedVehicleId  { // a little finnicky, maybe filter features and find the one whose coordinates are the same as annotation's and get the id from there?
+                control.onVehicleCalloutTap(tappedVehicleId)
+                
+                // not really needed since we're not removing the annotation but still
+                mapView.deselectAnnotation(annotation, animated: true)
+            }
+        }
+        
     }
     
     func makeCoordinator() -> ShapeAndVehiclesMapView.Coordinator {
@@ -172,7 +251,7 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
                 if let vehicleLat = vehicle.lat, let vehicleLon = vehicle.lon {
                     let feature = MLNPointFeature()
                     feature.coordinate = CLLocationCoordinate2D(latitude: vehicleLat, longitude: vehicleLon)
-                    feature.attributes = ["id": vehicle.id, "bearing": vehicle.bearing]
+                    feature.attributes = ["id": vehicle.id, "bearing": vehicle.bearing ?? 0, "delay": Date.now.timeIntervalSince1970 - Double(vehicle.timestamp ?? 0)]
                     return feature
                 }
                 return nil
@@ -218,7 +297,11 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             
             // Vehicles (Symbol)
             let vehiclesLayer = MLNSymbolStyleLayer(identifier: "vehicles-layer", source: vehiclesSource)
-            vehiclesLayer.iconImageName = NSExpression(forConstantValue: "cm-bus-regular")
+            vehiclesLayer.iconImageName = NSExpression(
+                forMLNConditional: NSPredicate(format: "delay < 40"),
+                trueExpression: NSExpression(forConstantValue: "cm-bus-regular"),
+                falseExpression: NSExpression(forConstantValue: "cm-bus-delay")
+            )
             vehiclesLayer.iconAllowsOverlap = NSExpression(forConstantValue: true)
             vehiclesLayer.iconIgnoresPlacement = NSExpression(forConstantValue: true)
             vehiclesLayer.iconAnchor = NSExpression(forConstantValue: "center")

@@ -249,6 +249,9 @@ private struct LiveVehiclesAndEtasByPatternView: View {
     @State private var currentPatternEtas: [String: [PatternRealtimeETA]]? = nil
     @Binding var selectedStop: Stop?
     
+    @State private var shouldPresentVehicleDetailsView: Bool = false
+    @State private var vehicleIdToBePresented: String? = nil
+    
     var body: some View {
         VStack {
             if let shape, let pattern {
@@ -257,19 +260,24 @@ private struct LiveVehiclesAndEtasByPatternView: View {
                     stops: pattern.path.compactMap {$0.stop},
                     vehicles: filteredVehicles,
                     shape: shape,
-                    lineColor: Color(hex: line.color)
+                    lineColor: Color(hex: line.color),
+                    showPopupOnVehicleSelect: true,
+                    onVehicleCalloutTap: { vehicleId in
+                        vehicleIdToBePresented = vehicleId
+                        shouldPresentVehicleDetailsView = true
+                    }
                 )
-                    .frame(height: 300)
-                    .overlay {
-                        VStack {
+                .frame(height: 300)
+                .overlay {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            CirculatingVehiclesIndicator(vehiclesCount: filteredVehicles.count)
+                                .padding()
                             Spacer()
-                            HStack {
-                                CirculatingVehiclesIndicator(vehiclesCount: filteredVehicles.count)
-                                    .padding()
-                                Spacer()
-                            }
                         }
                     }
+                }
             }
             
             
@@ -287,6 +295,12 @@ private struct LiveVehiclesAndEtasByPatternView: View {
         }
         .onDisappear {
             stopFetchingTimer()
+        }
+        .navigationDestination(isPresented: $shouldPresentVehicleDetailsView) {
+            if let vehicleId = vehicleIdToBePresented {
+                VehicleDetailsView(vehicleId: vehicleId)
+                    .onDisappear { vehicleIdToBePresented = nil }
+            }
         }
     }
     

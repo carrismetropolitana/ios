@@ -88,7 +88,7 @@ struct StopDetailsSheetView: View {
                     } label: {
                         VStack {
                             HStack {
-                                Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor)) // TODO: match line colors to these
+                                Pill(text: eta.lineId, color: Color(hex: fullLine!.color), textColor: Color(hex: fullLine!.textColor))
                                 Text(eta.headsign)
                                     .font(Font.system(size: 15, weight: .regular, design: .default))
                                     .multilineTextAlignment(.leading)
