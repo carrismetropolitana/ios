@@ -93,7 +93,7 @@ func filterAndSortCurrentAndFuturePatternETAs(_ etas: [PatternRealtimeETA]) -> [
         
         let estimatedArrivalAfterMidnight = tripHasEstimatedArrival && Int($0.estimatedArrival!.prefix(2))! > 23
         let scheduledArrivalAfterMidnight = tripHasScheduledArrival && Int($0.scheduledArrival!.prefix(2))! > 23
-    
+        
         
         if tripScheduledArrivalIsInThePast {
             return false
@@ -152,7 +152,8 @@ func filterAndSortCurrentAndFuturePatternETAs(_ etas: [PatternRealtimeETA]) -> [
         }
     }
     
-    return sorted}
+    return sorted
+}
 
 func arrangeByStopIds(_ patternEtas: [PatternRealtimeETA]) -> [String: [PatternRealtimeETA]] {
     var arrangedDict = [String: [PatternRealtimeETA]]()

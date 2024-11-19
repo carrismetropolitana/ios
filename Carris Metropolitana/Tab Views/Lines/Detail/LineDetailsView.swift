@@ -159,7 +159,7 @@ struct LineDetailsView: View {
             vehicles = []
             Task {
                 if let pattern = selectedPattern {
-                    shape = (try await CMAPI.shared.getShape(selectedPattern!.shapeId))
+                    shape = (try await CMAPI.shared.getShape(pattern.shapeId))
                 }
             }
         }
@@ -286,10 +286,16 @@ private struct LiveVehiclesAndEtasByPatternView: View {
                     .padding(.vertical)
             }
         }
+        .onChange(of: pattern) {
+            currentPatternEtas = nil
+            stopFetchingTimer()
+            fetchEtas()
+            startFetchingTimer()
+        }
         .onAppear {
             vehiclesManager.startFetching()
             
-            fetchVehiclesAndEtas()
+            fetchEtas()
             
             startFetchingTimer()
         }
@@ -304,9 +310,10 @@ private struct LiveVehiclesAndEtasByPatternView: View {
         }
     }
     
-    private func fetchVehiclesAndEtas() {
+    private func fetchEtas() {
         Task {
             if let pattern {
+                print("[FUNCTION::LiveVehiclesAndEtasByPatternView::fetchEtas] — Fetching ETAs for pattern id: \(pattern.id)")
                 let etasForPattern = try await CMAPI.shared.getETAs(patternId: pattern.id)
                 
                 currentPatternEtas = arrangeByStopIds(etasForPattern)
@@ -319,7 +326,7 @@ private struct LiveVehiclesAndEtasByPatternView: View {
     private func startFetchingTimer() {
         // Create a timer to trigger fetching every 5 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
-            fetchVehiclesAndEtas()
+            fetchEtas()
         }
     }
     
@@ -345,7 +352,7 @@ struct PatternLegs: View {
     @State private var selectedSchedulesDate = Date()
     @Binding var selectedStop: Stop? // would be ok to just keep state inside this component but maybe in the future we may need to access from parent so lets keep it this way
     @State private var selectedStopIndex: Int = 0
-    fileprivate let etasWithStopIds: [String: [PatternRealtimeETA]]?
+    let etasWithStopIds: [String: [PatternRealtimeETA]]?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0)  {
@@ -425,20 +432,18 @@ struct PatternLegs: View {
                                 
                                 if let etas = etasWithStopIds?[pathStep.stop.id] {
                                     let nextEtas = filterAndSortCurrentAndFuturePatternETAs(etas)
-                                    var nextEtaIsRealtime = false
                                     HStack(spacing: 20.0) {
                                         if let nextEtaEstimatedArrival = nextEtas.first?.estimatedArrivalUnix {
                                             HStack {
                                                 let minutesToArrival = getRoundedMinuteDifferenceFromNow(nextEtaEstimatedArrival)
                                                 
                                                 
-                                                PulseLabel(accent: .green, label: Text(minutesToArrival <= 1 ? "A chegar" : "\(String(minutesToArrival)) minutos"))
+                                                PulseLabel(accent: .green, label: Text(minutesToArrival <= 1 ? "A chegar" : "\(String(minutesToArrival)) min"))
                                             }
-                                            let _ = nextEtaIsRealtime = true
                                         }
                                         if isSelectedByIndex {
                                             if nextEtas.count > 1 {
-                                                NextEtasView(nextEtas: Array(nextEtaIsRealtime ? nextEtas.dropFirst().prefix(3) : nextEtas.prefix(3)))
+                                                NextEtasView(nextEtas: Array(nextEtas.first?.estimatedArrivalUnix != nil ? nextEtas.dropFirst().prefix(3) : nextEtas.prefix(3)))
                                             } else {
                                                 Text("Sem próximas passagens.")
                                                     .font(.subheadline)
@@ -561,15 +566,12 @@ struct NextEtasView: View {
                 let timeComponents = estimatedArrival.components(separatedBy: ":")
                 Text(verbatim: "\(timeComponents[0]):\(timeComponents[1])")
                     .foregroundStyle(.green)
-            }
-            
-            if let scheduledArrival = eta.scheduledArrival {
+            } else if let scheduledArrival = eta.scheduledArrival {
                 let timeComponents = scheduledArrival.components(separatedBy: ":")
                 let arrivalWithoutSeconds = "\(timeComponents[0]):\(timeComponents[1])"
                 let adjustedArrival = adjustTimeFormat(time: arrivalWithoutSeconds)
                 Text(verbatim: adjustedArrival ?? arrivalWithoutSeconds)
             }
-            
         }
     }
 }
