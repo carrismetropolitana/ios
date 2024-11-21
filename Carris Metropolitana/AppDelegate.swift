@@ -27,24 +27,23 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         return true
     }
     
-//    func applicationDidBecomeActive(_ application: UIApplication) {
-//        clearBadge()
-//    }
-//
-//    func applicationWillEnterForeground(_ application: UIApplication) {
-//        clearBadge()
-//    }
-//    
-//    func clearBadge() {
-//        DispatchQueue.main.async {
-//            UIApplication.shared.applicationIconBadgeNumber = -1
-//            UNUserNotificationCenter.current().setBadgeCount(-1) { (error) in
-//                if let error = error {
-//                    print("Error clearing badge: \(error.localizedDescription)")
-//                }
-//            }
-//        }
-//    }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        clearBadge()
+    }
+
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        clearBadge()
+    }
+    
+    func clearBadge() {
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().setBadgeCount(0) { (error) in
+                if let error = error {
+                    print("Error clearing badge: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
