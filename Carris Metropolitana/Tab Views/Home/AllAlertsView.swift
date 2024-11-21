@@ -23,13 +23,9 @@ struct AllAlertsView: View {
 //            .navigationTitle("Alertas de serviço")
 //        }
         ZStack {
-            AlertsWebView(onExternalURLOpen: {url in}, onImageClick: { imageUrl in
-                imageUrlToBePresented = imageUrl
-                imageViewerSheetPresented = true
-            })
+            AlertsWebView(onExternalURLOpen: {url in}, imageUrlToBePresented: $imageUrlToBePresented)
             .padding(.top)
             .background(.cmSystemBackground200)
-            .ignoresSafeArea()
             
             VStack {
                 HStack {
@@ -46,6 +42,11 @@ struct AllAlertsView: View {
                 Spacer()
             }
             .padding(20)
+        }
+        .onChange(of: imageUrlToBePresented) {
+            if let _ = imageUrlToBePresented {
+                imageViewerSheetPresented = true
+            }
         }
         .sheet(isPresented: $imageViewerSheetPresented) {
             if let imageUrlToBePresented {
@@ -65,7 +66,8 @@ struct AllAlertsView: View {
 struct AlertsWebView: UIViewRepresentable {
     let url: URL = URL(string: "https://cmet.pt/app-ios/alerts?locale=\(Locale.current.language.languageCode?.identifier ?? "pt")")!
     let onExternalURLOpen: (_ externalURL : URL) -> Void
-    let onImageClick: (_ imageUrl: URL) -> Void
+    
+    @Binding var imageUrlToBePresented: URL?
 
     func makeUIView(context: Context) -> WKWebView {
         let configuration = WKWebViewConfiguration()
@@ -86,6 +88,11 @@ struct AlertsWebView: UIViewRepresentable {
     }
     
     func updateUIView(_ webView: WKWebView, context: Context) {
+    }
+    
+    func setImageUrlToBePresented(imageUrl: URL) {
+        print("setting image url to be presented, \(imageUrl)")
+        imageUrlToBePresented = imageUrl
     }
     
     func makeCoordinator() -> Coordinator {
@@ -111,7 +118,7 @@ struct AlertsWebView: UIViewRepresentable {
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             if message.name == "onImageClick" {
                 if let messageBody = message.body as? String, let imageUrl = URL(string: messageBody) {
-                    parent.onImageClick(imageUrl)
+                    parent.setImageUrlToBePresented(imageUrl: imageUrl)
                 }
             }
         }
