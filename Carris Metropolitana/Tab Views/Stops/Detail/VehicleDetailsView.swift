@@ -96,6 +96,9 @@ struct VehicleDetailsView: View {
     @State private var isOccupationPopoverPresented = false
     @State private var isAccessiblePopoverPresented = false
     
+    @State private var vehicleUpdatedSecondsAgo: Int?
+    @State private var timer: Timer?
+    
     var body: some View {
         let vehicle = vehiclesManager.vehicles.first(where: {
             $0.id == vehicleId
@@ -124,8 +127,18 @@ struct VehicleDetailsView: View {
                     if let vehicleMake = vehicle.make, let vehicleModel = vehicle.model {
                         Text(verbatim: "\(vehicleMake) \(vehicleModel)")
                             .foregroundStyle(.secondary)
+                            .bold()
                             .font(.callout)
                     }
+                    
+                    if let vehicleUpdatedSecondsAgo {
+                        Text("Visto há \(getHumanReadableTimestamp(from: vehicleUpdatedSecondsAgo))")
+                            .textCase(.uppercase)
+                            .font(.footnote)
+                            .foregroundStyle(.tertiary)
+                            .bold()
+                    }
+                    
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text("Informações do autocarro em circulação"))
@@ -199,6 +212,11 @@ struct VehicleDetailsView: View {
             }
             .navigationTitle("Autocarro")
             .contentMargins(.top, 20.0, for: .scrollContent)
+            .onChange(of: vehicle) {
+                if let timestamp = vehicle.timestamp {
+                    vehicleUpdatedSecondsAgo = Int(Date.now.timeIntervalSince1970) - timestamp
+                }
+            }
             .onAppear {
                 vehiclesManager.startFetching()
                 Task {
@@ -210,9 +228,16 @@ struct VehicleDetailsView: View {
                         }
                     }
                 }
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {_ in
+                    if vehicleUpdatedSecondsAgo != nil {
+                        vehicleUpdatedSecondsAgo! += 1
+                    }
+                }
             }
             .onDisappear {
                 // vehiclesManager.stopFetching()
+                timer?.invalidate()
+                timer = nil
             }
         }
         else {
@@ -249,6 +274,16 @@ struct VehicleDetailsView: View {
         }
         
         return "Autocarro sem informação disponível"
+    }
+}
+
+func getHumanReadableTimestamp(from seconds: Int) -> String {
+    let mins = seconds / 60
+    let secs = seconds % 60
+    if mins > 0 {
+        return "\(mins) minuto\(mins != 1 ? "s" : "") \(secs) segundo\(secs != 1 ? "s" : "")"
+    } else {
+        return "\(secs) segundo\(secs != 1 ? "s" : "")"
     }
 }
 
