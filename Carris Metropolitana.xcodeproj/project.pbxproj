@@ -41,6 +41,7 @@
 		7960AC852C48438300E0B615 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7960AC842C48438300E0B615 /* GoogleService-Info.plist */; };
 		7960AC882C48446B00E0B615 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 7960AC872C48446B00E0B615 /* FirebaseMessaging */; };
 		7960AC8A2C488CC300E0B615 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960AC892C488CC300E0B615 /* AppDelegate.swift */; };
+		796FE7232CE024870011C144 /* AllAlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796FE7222CE024830011C144 /* AllAlertsView.swift */; };
 		7971D1D22BB3668500112BBC /* ShapeAndVehiclesMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */; };
 		7971D1D42BB42D6A00112BBC /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D32BB42D6A00112BBC /* ScheduleView.swift */; };
 		7971D1D62BB4506800112BBC /* AboutStopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7971D1D52BB4506800112BBC /* AboutStopView.swift */; };
@@ -213,6 +214,7 @@
 		7956B0552CB93F8300106A5F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7960AC842C48438300E0B615 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7960AC892C488CC300E0B615 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		796FE7222CE024830011C144 /* AllAlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllAlertsView.swift; sourceTree = "<group>"; };
 		7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeAndVehiclesMapView.swift; sourceTree = "<group>"; };
 		7971D1D32BB42D6A00112BBC /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		7971D1D52BB4506800112BBC /* AboutStopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutStopView.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 			children = (
 				79DB837C2BA19B8C0023DD93 /* HomeView.swift */,
 				798B2E792BA3317D00CBA9DC /* UnregisteredUserView.swift */,
+				796FE7222CE024830011C144 /* AllAlertsView.swift */,
 				79E88CB82BAAE172001F3227 /* PersonalUserView.swift */,
 				790817DC2BEE2F7700EC0C82 /* UserProfileSheetView.swift */,
 				79A89F3D2BDBDBD100DB5068 /* LoginSheetView.swift */,
@@ -1091,6 +1094,7 @@
 				797C32E72C2A308900E5860D /* ImageViewer.swift in Sources */,
 				79FA6A252C1DF5B600E043C8 /* LinesManager.swift in Sources */,
 				791915782BA38D25009E5B29 /* LineDetailsView.swift in Sources */,
+				796FE7232CE024870011C144 /* AllAlertsView.swift in Sources */,
 				79AC71F12CB9136800BA7EDF /* MediaUIView.swift in Sources */,
 				79D227D62BA532F70068B5B4 /* ENCMView.swift in Sources */,
 				79CA0A712BA2F4E4000F4900 /* FavoriteStopWidgetView.swift in Sources */,

@@ -19,6 +19,8 @@ struct HomeView: View {
     @State private var cmLogoConsecutiveTaps: CGFloat = .zero
     @State private var timer: Timer?
     
+    @State private var alertsSheetPresented: Bool = false
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -56,6 +58,15 @@ struct HomeView: View {
                         if debugModeEnabled {
                             DebugMenuButton()
                         }
+                        SquaredButton(
+                            action: {
+                                alertsSheetPresented = true
+                            },
+                            systemIcon: "exclamationmark.triangle",
+                            iconColor: .primary,
+                            badgeValue: 0
+                        )
+                        .scaleEffect(0.8)
     //                    WifiConnectButton()
                     }
                     .padding()
@@ -78,6 +89,9 @@ struct HomeView: View {
 //        .sheet(isPresented: $isEasterEggVisible) {
 //            EasterEggView()
 //        }
+        .sheet(isPresented: $alertsSheetPresented) {
+            AllAlertsView()
+        }
         .onChange(of: cmLogoConsecutiveTaps) {
             if timer == nil {
                 if cmLogoConsecutiveTaps == 1 {
