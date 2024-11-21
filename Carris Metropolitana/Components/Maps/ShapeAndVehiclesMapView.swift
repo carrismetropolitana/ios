@@ -318,6 +318,15 @@ struct ShapeAndVehiclesMapView: UIViewRepresentable {
             )
             vehiclesLayer.iconOffset = nil // nil defaults to CGVector(dx: 0, dy: 0)
             vehiclesLayer.iconRotation = NSExpression(forKeyPath: "bearing")
+            vehiclesLayer.iconOpacity = NSExpression(
+                forMLNInterpolating: NSExpression(forKeyPath: "delay"),
+                curveType: .linear,
+                parameters: nil,
+                stops: NSExpression(forConstantValue: [
+                    60: NSExpression(forConstantValue: 1.0),
+                    180: NSExpression(forConstantValue: 0.0)
+                ])
+            )
             
             
             // Stops (Circle)
