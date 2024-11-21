@@ -312,7 +312,7 @@ struct VehicleV2: Codable, Identifiable, Equatable {
 
 extension Array where Element == VehicleV2 {
     var realtimeVehicles: [VehicleV2] {
-        return self.filter { $0.isRealtime }
+        return self.filter { $0.isRealtime && Int(Date.now.timeIntervalSince1970) - $0.timestamp! <= 180 }
     }
 }
 
