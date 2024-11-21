@@ -8,7 +8,7 @@
 import Foundation
 
 class CMWordpressAPI {
-    private static let baseUrl = "https://www.carrismetropolitana.pt/wp-json/wp/v2"
+    private static let baseUrl = "https://backoffice.carrismetropolitana.pt/wp-json/wp/v2"
     private static let newsUrl = "\(baseUrl)/noticia"
     private static let faqsUrl = "\(baseUrl)/faq"
     private static let mediaUrl = "\(baseUrl)/media"
@@ -37,7 +37,7 @@ class CMWordpressAPI {
         
         do {
             let mediaResponse = try await NetworkService.makeGETRequest("\(CMWordpressAPI.mediaUrl)/\(mediaId)", responseType: Media.self)
-            mediaUrl = URL(string: mediaResponse.guid.rendered)
+            mediaUrl = URL(string: mediaResponse.sourceUrl)
         } catch {
             print("Failed to get media \(mediaId)!")
             print(error)

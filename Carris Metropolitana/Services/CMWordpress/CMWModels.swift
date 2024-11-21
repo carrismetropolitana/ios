@@ -39,6 +39,7 @@ struct News: Codable, Identifiable, Equatable {
 struct Media: Codable {
     let id: Int
     let guid: HasRenderedValue
+    let sourceUrl: String
 }
 
 struct FAQ: Codable, Identifiable { // cache this and then periodically fetch with If-Modified-Since (apparently not supported by default on WP...)
