@@ -116,7 +116,7 @@
 		79DB838F2BA1BA340023DD93 /* CMWHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB838E2BA1BA340023DD93 /* CMWHelpers.swift */; };
 		79DC32052C0DD4FA00BC2D97 /* CMUserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */; };
 		79DE904D2C493C5D00D3E859 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE904C2C493C5D00D3E859 /* NotificationService.swift */; };
-		79DE90512C493C5D00D3E859 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		79DE90512C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 79DE904A2C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		79DE90582C493DFE00D3E859 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 79DE90572C493DFE00D3E859 /* FirebaseMessaging */; };
 		79E88CB72BAAD538001F3227 /* CustomizeWidgetsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CB62BAAD538001F3227 /* CustomizeWidgetsSheetView.swift */; };
 		79E88CB92BAAE172001F3227 /* PersonalUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E88CB82BAAE172001F3227 /* PersonalUserView.swift */; };
@@ -169,7 +169,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				79D3B1732C77E56400E0AE52 /* VehicleLivePatternExtension.appex in Embed Foundation Extensions */,
-				79DE90512C493C5D00D3E859 /* NotificationServiceExtension.appex in Embed Foundation Extensions */,
+				79DE90512C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -214,6 +214,7 @@
 		7956B0552CB93F8300106A5F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7960AC842C48438300E0B615 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7960AC892C488CC300E0B615 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		796AAC492CF5416F005B77A7 /* CarrisMetropolitanaNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CarrisMetropolitanaNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		796FE7222CE024830011C144 /* AllAlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllAlertsView.swift; sourceTree = "<group>"; };
 		7971D1D12BB3668500112BBC /* ShapeAndVehiclesMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeAndVehiclesMapView.swift; sourceTree = "<group>"; };
 		7971D1D32BB42D6A00112BBC /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
@@ -290,7 +291,7 @@
 		79DB838B2BA1B6320023DD93 /* CMWModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWModels.swift; sourceTree = "<group>"; };
 		79DB838E2BA1BA340023DD93 /* CMWHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMWHelpers.swift; sourceTree = "<group>"; };
 		79DC32042C0DD4FA00BC2D97 /* CMUserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMUserAPI.swift; sourceTree = "<group>"; };
-		79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		79DE904A2C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CarrisMetropolitanaNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		79DE904C2C493C5D00D3E859 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		79DE904E2C493C5D00D3E859 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79E88CB62BAAD538001F3227 /* CustomizeWidgetsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeWidgetsSheetView.swift; sourceTree = "<group>"; };
@@ -629,7 +630,7 @@
 				794FDB602CAC38D600F3936D /* .gitignore */,
 				794FDB612CAC3A6700F3936D /* ExternalAssets */,
 				79DB83682BA19A5D0023DD93 /* Carris Metropolitana */,
-				79DE904B2C493C5D00D3E859 /* NotificationServiceExtension */,
+				79DE904B2C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension */,
 				79D3B1652C77E56300E0AE52 /* VehicleLivePattern */,
 				79DB83672BA19A5D0023DD93 /* Products */,
 				79DE90562C493DFE00D3E859 /* Frameworks */,
@@ -640,7 +641,7 @@
 			isa = PBXGroup;
 			children = (
 				79DB83662BA19A5D0023DD93 /* Carris Metropolitana.app */,
-				79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */,
+				79DE904A2C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension.appex */,
 				79D3B1602C77E56300E0AE52 /* VehicleLivePatternExtension.appex */,
 			);
 			name = Products;
@@ -764,13 +765,14 @@
 			path = CMAPI;
 			sourceTree = "<group>";
 		};
-		79DE904B2C493C5D00D3E859 /* NotificationServiceExtension */ = {
+		79DE904B2C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension */ = {
 			isa = PBXGroup;
 			children = (
+				796AAC492CF5416F005B77A7 /* CarrisMetropolitanaNotificationServiceExtension.entitlements */,
 				79DE904C2C493C5D00D3E859 /* NotificationService.swift */,
 				79DE904E2C493C5D00D3E859 /* Info.plist */,
 			);
-			path = NotificationServiceExtension;
+			path = CarrisMetropolitanaNotificationServiceExtension;
 			sourceTree = "<group>";
 		};
 		79DE90562C493DFE00D3E859 /* Frameworks */ = {
@@ -856,9 +858,9 @@
 			productReference = 79DB83662BA19A5D0023DD93 /* Carris Metropolitana.app */;
 			productType = "com.apple.product-type.application";
 		};
-		79DE90492C493C5D00D3E859 /* NotificationServiceExtension */ = {
+		79DE90492C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 79DE90552C493C5D00D3E859 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */;
+			buildConfigurationList = 79DE90552C493C5D00D3E859 /* Build configuration list for PBXNativeTarget "CarrisMetropolitanaNotificationServiceExtension" */;
 			buildPhases = (
 				79DE90462C493C5D00D3E859 /* Sources */,
 				79DE90472C493C5D00D3E859 /* Frameworks */,
@@ -868,12 +870,12 @@
 			);
 			dependencies = (
 			);
-			name = NotificationServiceExtension;
+			name = CarrisMetropolitanaNotificationServiceExtension;
 			packageProductDependencies = (
 				79DE90572C493DFE00D3E859 /* FirebaseMessaging */,
 			);
 			productName = NotificationServiceExtension;
-			productReference = 79DE904A2C493C5D00D3E859 /* NotificationServiceExtension.appex */;
+			productReference = 79DE904A2C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -918,7 +920,7 @@
 			projectRoot = "";
 			targets = (
 				79DB83652BA19A5D0023DD93 /* Carris Metropolitana */,
-				79DE90492C493C5D00D3E859 /* NotificationServiceExtension */,
+				79DE90492C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension */,
 				79D3B15F2C77E56300E0AE52 /* VehicleLivePatternExtension */,
 			);
 		};
@@ -1128,7 +1130,7 @@
 		};
 		79DE90502C493C5D00D3E859 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 79DE90492C493C5D00D3E859 /* NotificationServiceExtension */;
+			target = 79DE90492C493C5D00D3E859 /* CarrisMetropolitanaNotificationServiceExtension */;
 			targetProxy = 79DE904F2C493C5D00D3E859 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1402,12 +1404,13 @@
 		79DE90532C493C5D00D3E859 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CarrisMetropolitanaNotificationServiceExtension/CarrisMetropolitanaNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_FILE = CarrisMetropolitanaNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CarrisMetropolitanaNotificationServiceExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1427,12 +1430,13 @@
 		79DE90542C493C5D00D3E859 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CarrisMetropolitanaNotificationServiceExtension/CarrisMetropolitanaNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = QGATT2W97P;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationServiceExtension;
+				INFOPLIST_FILE = CarrisMetropolitanaNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CarrisMetropolitanaNotificationServiceExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1479,7 +1483,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		79DE90552C493C5D00D3E859 /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */ = {
+		79DE90552C493C5D00D3E859 /* Build configuration list for PBXNativeTarget "CarrisMetropolitanaNotificationServiceExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				79DE90532C493C5D00D3E859 /* Debug */,

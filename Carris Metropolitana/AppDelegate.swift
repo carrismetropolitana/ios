@@ -27,24 +27,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         return true
     }
     
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        clearBadge()
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        clearBadge()
-    }
-    
-    func clearBadge() {
-        DispatchQueue.main.async {
-            UNUserNotificationCenter.current().setBadgeCount(0) { (error) in
-                if let error = error {
-                    print("Error clearing badge: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         print("Device push notification (APNs) token: \(tokenString)")
@@ -58,6 +40,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     @objc func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Received FCM token: \(String(describing: fcmToken))")
         messaging.subscribe(toTopic: "cm.everyone") // general topic for broadcasting messages to every user
+        messaging.subscribe(toTopic: "cm.devTopic")
+    }
+    
+    // Show native notification with app open
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound, .badge])
     }
     
 //    private func setupNetworkMonitoring() {

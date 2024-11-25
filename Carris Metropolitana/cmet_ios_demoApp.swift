@@ -11,6 +11,8 @@ import SwiftUI
 struct cmet_ios_demoApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
+    @Environment(\.scenePhase) var scenePhase
+    
     @StateObject private var alertsManager = AlertsManager()
     @StateObject private var vehiclesManager = VehiclesManager()
     @StateObject private var linesManager = LinesManager()
@@ -36,6 +38,13 @@ struct cmet_ios_demoApp: App {
                     .environmentObject(favoritesManager)
                     .onAppear {
                         UINavigationBar.appearance().prefersLargeTitles = true
+                    }
+                    .onChange(of: scenePhase) { oldPhase, newPhase in
+                        // right now we assume the user has seen notifs if they enter or leave the app
+                        if let groupUserDefaults = UserDefaults(suiteName: "group.pt.carrismetropolitana.app") {
+                            groupUserDefaults.set(0, forKey: "badgeCount")
+                        }
+                        UNUserNotificationCenter.current().setBadgeCount(0)
                     }
                     .zIndex(0)
                 
