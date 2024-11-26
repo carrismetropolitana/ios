@@ -40,7 +40,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     @objc func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("Received FCM token: \(String(describing: fcmToken))")
         messaging.subscribe(toTopic: "cm.everyone") // general topic for broadcasting messages to every user
-        messaging.subscribe(toTopic: "cm.devTopic")
     }
     
     // Show native notification with app open
