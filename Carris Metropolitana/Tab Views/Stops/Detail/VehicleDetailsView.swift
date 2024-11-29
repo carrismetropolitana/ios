@@ -194,7 +194,7 @@ struct VehicleDetailsView: View {
                 
                 if (vehicleStops.count > 0) {
                     if let vehicleCurrentStatus = vehicle.currentStatus {
-                        OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicleCurrentStatus))
+                        OtherTestPreview(stops: vehicleStops, nextStopIndex: vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!, vehicleStatus: getVehicleStatus(for: vehicleCurrentStatus), lineColor: Color(hex: line?.color ?? "FFDD00"))
                             .accessibilityElement(children:.contain)
                             .accessibilityValue(Text("Percurso do autocarro em tempo real: Atualmente na paragem \(vehicleStops.first(where:{$0.id == vehicle.stopId})!.ttsName ?? vehicleStops.first(where:{$0.id == vehicle.stopId})!.name), paragem \(vehicleStops.firstIndex(where: {$0.id == vehicle.stopId})!+1) de \(vehicleStops.count) paragens"))
                     }

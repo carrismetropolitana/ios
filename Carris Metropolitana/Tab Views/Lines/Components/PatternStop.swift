@@ -477,6 +477,7 @@ struct OtherTestPreview: View {
     let stops: [Stop]
     let nextStopIndex: Int
     let vehicleStatus: VehicleStatus?
+    let lineColor: Color
     
     @State private var circlePosition: CGFloat = 0
     @State private var ____test_isRandomStopActive = true
@@ -550,7 +551,7 @@ struct OtherTestPreview: View {
                         .frame(width: 15.0)
                         .overlay {
                             RoundedRectangle(cornerRadius: 10.0)
-                                .fill(.red)
+                                .fill(lineColor)
                                 .frame(width: 15.0)
                                 .padding(.horizontal)
                                 .padding(.top, getActiveLegTopPadding())
