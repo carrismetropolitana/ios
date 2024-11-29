@@ -111,7 +111,7 @@ struct LineDetailsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                ShareLink(item: URL(string: "https://beta.carrismetropolitana.pt/lines/\(line.id)")!) {
+                ShareLink(item: URL(string: "https://carrismetropolitana.pt/lines/\(line.id)")!) {
                     Image(systemName: "square.and.arrow.up")
                 }
             }

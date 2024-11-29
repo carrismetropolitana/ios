@@ -436,7 +436,7 @@ struct StopDetailsView: View {
         .navigationTitle("Paragem")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                ShareLink(item: URL(string: "https://beta.carrismetropolitana.pt/stops/\(stop.id)")!) {
+                ShareLink(item: URL(string: "https://carrismetropolitana.pt/stops/\(stop.id)")!) {
                     Image(systemName: "square.and.arrow.up")
                 }
             }
