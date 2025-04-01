@@ -28,13 +28,14 @@ struct ENCMView: View {
 
 
 struct ENCMWebView: UIViewRepresentable {
-    let url: URL = URL(string: "https://cmet.pt/app-ios/stores?locale=\(Locale.current.language.languageCode?.identifier ?? "pt")")!
+    let url: URL = URL(string: "https://www.carrismetropolitana.pt/app-ios/stores?locale=\(Locale.current.language.languageCode?.identifier ?? "pt")")!
     let onExternalURLOpen: (_ externalURL : URL) -> Void
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
         webView.navigationDelegate = context.coordinator
-        webView.underPageBackgroundColor = .clear
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
         
         let request = URLRequest(url: url)
         webView.load(request)

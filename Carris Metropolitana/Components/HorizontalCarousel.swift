@@ -33,6 +33,7 @@ struct HorizontalCarousel: View {
                     let item = items[itemIndex]
                     AsyncImage(url: item.imageURL) {
                         image in image.resizable().aspectRatio(contentMode: .fit)
+                            .background(.white) // white bg for transparent images
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 15.0)
                             .fill(.quaternary)

@@ -24,8 +24,9 @@ struct AllAlertsView: View {
 //        }
         ZStack {
             AlertsWebView(onExternalURLOpen: {url in}, imageUrlToBePresented: $imageUrlToBePresented)
-            .padding(.top)
-            .background(.cmSystemBackground200)
+                .padding(.top)
+                .background(.cmSystemBackground200)
+                .ignoresSafeArea()
             
             VStack {
                 HStack {
@@ -64,7 +65,7 @@ struct AllAlertsView: View {
     }
 }
 struct AlertsWebView: UIViewRepresentable {
-    let url: URL = URL(string: "https://cmet.pt/app-ios/alerts?locale=\(Locale.current.language.languageCode?.identifier ?? "pt")")!
+    let url: URL = URL(string: "https://www.carrismetropolitana.pt/app-ios/alerts?locale=\(Locale.current.language.languageCode?.identifier ?? "pt")")!
     let onExternalURLOpen: (_ externalURL : URL) -> Void
     
     @Binding var imageUrlToBePresented: URL?
@@ -78,7 +79,10 @@ struct AlertsWebView: UIViewRepresentable {
         
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
-        webView.underPageBackgroundColor = .clear
+        
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        
         webView.scrollView.contentInsetAdjustmentBehavior = .never
         
         let request = URLRequest(url: url)
