@@ -23,7 +23,7 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
     private static let vehiclesUrl = "\(baseUrl)/vehicles"
     private static let facilitiesUrl = "\(baseUrl)/datasets/facilities"
     
-    private static let baseUrlV2 = "https://api.cmet.pt"
+    private static let baseUrlV2 = "https://api.carrismetropolitana.pt"
     private static let vehiclesUrlV2 = "\(baseUrlV2)/vehicles"
     
     static let shared = CMAPI()

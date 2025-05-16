@@ -65,7 +65,7 @@ struct AllAlertsView: View {
     }
 }
 struct AlertsWebView: UIViewRepresentable {
-    let url: URL = URL(string: "https://www.carrismetropolitana.pt/app-ios/alerts?locale=\(Locale.current.language.languageCode?.identifier ?? "pt")")!
+    let url: URL = URL(string: "https://carrismetropolitana.pt/app-ios/alerts?locale=\(Locale.current.language.languageCode?.identifier ?? "pt")")!
     let onExternalURLOpen: (_ externalURL : URL) -> Void
     
     @Binding var imageUrlToBePresented: URL?
