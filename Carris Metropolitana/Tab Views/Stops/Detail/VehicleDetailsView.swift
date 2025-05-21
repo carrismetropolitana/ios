@@ -82,7 +82,6 @@ struct VehicleAccessibilityPopoverView: View {
 }
 
 struct VehicleDetailsView: View {
-    @Environment(\.presentationMode) var presentationMode
     
     @EnvironmentObject var vehiclesManager: VehiclesManager
     @EnvironmentObject var linesManager: LinesManager
@@ -113,6 +112,8 @@ struct VehicleDetailsView: View {
                     // will always be true but let's avoid forced unwrappings on remote values
                     if let vehicleLineId = vehicle.lineId {
                         Pill(text: vehicleLineId, color: Color(hex: line!.color), textColor: Color(hex: line!.textColor))
+                            .shadow(color: Color(hex: line!.color).opacity(vehicle.doorStatus == .open ? 1 : 0), radius: vehicle.doorStatus == .open ? 5 : 0)
+                            .animation(.easeInOut(duration: 0.3), value: vehicle.doorStatus)
                     }
                     Text("para", comment: "Texto entre o número da linha e o headsign de um autocarro na tracking view.")
                         .foregroundStyle(.secondary)

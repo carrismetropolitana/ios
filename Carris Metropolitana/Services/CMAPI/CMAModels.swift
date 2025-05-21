@@ -304,6 +304,12 @@ struct VehicleV2: Codable, Identifiable, Equatable {
     let eventId: String?
     let occupancyEstimated: Int?
     let occupancyStatus: String?
+    let doorStatus: DoorStatus?
+    
+    enum DoorStatus: String, Codable {
+        case open = "OPEN"
+        case closed = "CLOSED"
+    }
     
     var isRealtime: Bool {
         return timestamp != nil
