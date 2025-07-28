@@ -37,26 +37,24 @@ struct Line: Codable, Identifiable {
 
 
 
-struct Route: Codable { // TODO: chng to Route
+struct Route: Codable {
     let id: String
     let lineId: String
     let shortName: String
     let longName: String
+    let ttsName: String?
     let color: String
     let textColor: String
-    let patterns: [String]
-    let municipalities: [String]
-    let localities: [String?]
+    
+    let patternIds: [String]
+    let municipalityIds: [String]
+    let districtIds: [String]
+    let localityIds: [String]
+    let regionIds: [String]
+    
     let facilities: [Facility]
     
-//    enum CodingKeys: String, CodingKey {
-//        case id, color
-//        case lineId = "line_id"
-//        case shortName = "short_name"
-//        case longName = "long_name"
-//        case textColor = "text_color"
-//        case patterns, municipalities, localities, facilities
-//    }
+    let stopIds: [String]
 }
 
 struct Stop: Codable, Identifiable, Hashable {

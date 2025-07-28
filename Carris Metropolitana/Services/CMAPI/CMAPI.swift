@@ -26,6 +26,7 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
     private static let baseUrlV2 = "https://api.carrismetropolitana.pt/v2"
     private static let vehiclesUrlV2 = "\(baseUrlV2)/vehicles"
     private static let linesUrlV2 = "\(baseUrlV2)/lines"
+    private static let routesUrlV2 = "\(baseUrlV2)/routes"
     
     static let shared = CMAPI()
     
@@ -75,20 +76,17 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
         return lines
     }
     
-    func getRoute(_ routeId: String) async throws -> Route {
-        var route: Route?
+
+    func getRoutes() async -> [Route] {
+        var routes: [Route] = []
         do {
-            route = try await NetworkService.makeGETRequest("\(CMAPI.routesUrl)/\(routeId)", responseType: Route.self)
+            routes = try await NetworkService.makeGETRequest(CMAPI.routesUrlV2, responseType: [Route].self)
         } catch {
-            print("Failed to fetch route \(routeId)!")
+            print("Failed to fetch routes!")
             print(error)
         }
         
-        guard route != nil else {
-            throw CMAPIError.noRouteFound
-        }
-        
-        return route!
+        return routes
     }
     
     /**

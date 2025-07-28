@@ -25,6 +25,7 @@
 		791A70742C3DBA4000E789E5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */; };
 		791C21642CA44F11009D8966 /* CirculatingVehiclesIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C21632CA44F11009D8966 /* CirculatingVehiclesIndicator.swift */; };
 		791E09952BA53D9D002899EC /* SFSafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791E09942BA53D9D002899EC /* SFSafariView.swift */; };
+		791EC59B2E37FE7300344E46 /* RoutesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791EC59A2E37FE7300344E46 /* RoutesManager.swift */; };
 		792F244C2C263A8A000EA6E6 /* POCNavigationStackBug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */; };
 		79323FAB2C49A14700AE9D50 /* VehicleLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */; };
 		794588B32C77882B000AE50A /* ViewHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794588B22C77882B000AE50A /* ViewHeight.swift */; };
@@ -195,6 +196,7 @@
 		791A70732C3DBA4000E789E5 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		791C21632CA44F11009D8966 /* CirculatingVehiclesIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirculatingVehiclesIndicator.swift; sourceTree = "<group>"; };
 		791E09942BA53D9D002899EC /* SFSafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSafariView.swift; sourceTree = "<group>"; usesTabs = 0; };
+		791EC59A2E37FE7300344E46 /* RoutesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesManager.swift; sourceTree = "<group>"; };
 		792F244B2C263A8A000EA6E6 /* POCNavigationStackBug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCNavigationStackBug.swift; sourceTree = "<group>"; };
 		79323FAA2C49A14700AE9D50 /* VehicleLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleLookup.swift; sourceTree = "<group>"; };
 		794588B22C77882B000AE50A /* ViewHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHeight.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				797D32152C1379460063F57C /* AlertsManager.swift */,
 				79E9D4F62C2F9CF700C6D181 /* StopsManager.swift */,
 				79FA6A242C1DF5B600E043C8 /* LinesManager.swift */,
+				791EC59A2E37FE7300344E46 /* RoutesManager.swift */,
 				79C6C4FC2C1466AA003277A7 /* VehiclesManager.swift */,
 				79C6C4FE2C146B89003277A7 /* LocationManager.swift */,
 			);
@@ -1087,6 +1090,7 @@
 				7956B04C2CB9191700106A5F /* DisplayType.swift in Sources */,
 				797C32E52C2A25B500E5860D /* CustomerSupportView.swift in Sources */,
 				799C0D442BB8C50C005A7512 /* LoadingBar.swift in Sources */,
+				791EC59B2E37FE7300344E46 /* RoutesManager.swift in Sources */,
 				79536F5F2C8611C3008A570B /* DownloadOfflineDataPromptView.swift in Sources */,
 				7956B04A2CB918FA00106A5F /* MediaUIImageTransferable.swift in Sources */,
 				79E9D4F72C2F9CF700C6D181 /* StopsManager.swift in Sources */,

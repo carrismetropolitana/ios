@@ -16,6 +16,7 @@ struct cmet_ios_demoApp: App {
     @StateObject private var alertsManager = AlertsManager()
     @StateObject private var vehiclesManager = VehiclesManager()
     @StateObject private var linesManager = LinesManager()
+    @StateObject private var routesManager = RoutesManager()
     @StateObject private var stopsManager = StopsManager()
     
     @StateObject private var favoritesManager = FavoritesManager()
@@ -34,6 +35,7 @@ struct cmet_ios_demoApp: App {
                     .environmentObject(vehiclesManager)
                     .environmentObject(locationManager)
                     .environmentObject(linesManager)
+                    .environmentObject(routesManager)
                     .environmentObject(stopsManager)
                     .environmentObject(favoritesManager)
                     .onAppear {

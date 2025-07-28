@@ -10,6 +10,8 @@ import MapKit
 
 
 struct LineDetailsView: View {
+    @EnvironmentObject var routesManager: RoutesManager
+    
     @State private var timer: Timer?
     let line: Line
     let overrideDisplayedPatternId: String?
@@ -75,7 +77,7 @@ struct LineDetailsView: View {
                                 Text("Selecionar destino")
                                 Picker("Selecionar destino", selection: $selectedPattern) {
                                     ForEach(patterns, id: \.id) { pattern in 
-                                        let route = routes.first { $0.patterns.contains(pattern.id) }
+                                        let route = routes.first { $0.patternIds.contains(pattern.id) }
                                         Button {} label: {
                                             Text(pattern.headsign)
                                             if let route {
@@ -131,12 +133,13 @@ struct LineDetailsView: View {
             if patterns.count == 0 {
                 Task {
                     for routeId in line.routeIds {
-                        let route: Route = try await CMAPI.shared.getRoute(routeId)
-                        routes.append(route)
-                        
-                        for patternId in route.patterns {
-                            let pattern: Pattern = try await CMAPI.shared.getPattern(patternId)
-                            patterns.append(pattern)
+                        if let route = routesManager.routes.first(where: { $0.id == routeId }) {
+                            routes.append(route)
+                            
+                            for patternId in route.patternIds {
+                                let pattern: Pattern = try await CMAPI.shared.getPattern(patternId)
+                                patterns.append(pattern)
+                            }
                         }
                     }
                     
