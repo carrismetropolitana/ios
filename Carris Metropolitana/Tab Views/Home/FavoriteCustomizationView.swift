@@ -294,7 +294,7 @@ struct FavoriteCustomizationView: View {
                             Task {
                                 var patterns: [Pattern] = []
                                 
-                                for patternId in line.patterns {
+                                for patternId in line.patternIds {
                                     let pattern = try await CMAPI.shared.getPattern(patternId)
                                     patterns.append(pattern)
                                 }
@@ -327,7 +327,7 @@ struct FavoriteCustomizationView: View {
                             Task {
                                 var patterns: [Pattern] = []
                                 
-                                for patternId in line.patterns {
+                                for patternId in line.patternIds {
                                     let pattern = try await CMAPI.shared.getPattern(patternId)
                                     patterns.append(pattern)
                                 }
@@ -373,7 +373,7 @@ struct FavoriteCustomizationView: View {
                     Task {
                         var patterns: [Pattern] = []
                         
-                        for patternId in line.patterns {
+                        for patternId in line.patternIds {
                             let pattern = try await CMAPI.shared.getPattern(patternId)
                             patterns.append(pattern)
                         }

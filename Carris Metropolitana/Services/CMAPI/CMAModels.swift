@@ -15,37 +15,27 @@ enum Facility: String, Codable, Hashable {
     case bikeSharing = "bike_sharing"
 }
 
-struct Line: Codable, Identifiable
-{
+struct Line: Codable, Identifiable {
     let id: String
-    let shortName: String
-    let longName: String
-    let color: String
-    let textColor: String
-    let routes: [String]
-    let patterns: [String]
-    let municipalities: [String]
-    let localities: [String?]
-    let facilities: [Facility]
-}
-
-struct LineV2: Codable, Identifiable {
-    var id: String {
-        return lineId
-    }
-    
-    let lineId: String
     let shortName: String
     let longName: String
     let ttsName: String?
     let color: String
     let textColor: String
+    
     let routeIds: [String]
     let patternIds: [String]
     let municipalityIds: [String]
-    let localities: [String?]
+    let districtIds: [String]
+    let localityIds: [String]
+    let regionIds: [String]
+    
     let facilities: [Facility]
+    
+    let stopIds: [String]
 }
+
+
 
 struct Route: Codable { // TODO: chng to Route
     let id: String

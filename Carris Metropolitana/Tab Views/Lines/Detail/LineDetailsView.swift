@@ -130,7 +130,7 @@ struct LineDetailsView: View {
             LinesSearchHistoryManager.shared.addSearchResult(line.id)
             if patterns.count == 0 {
                 Task {
-                    for routeId in line.routes {
+                    for routeId in line.routeIds {
                         let route: Route = try await CMAPI.shared.getRoute(routeId)
                         routes.append(route)
                         
@@ -221,14 +221,14 @@ private struct LineDetailsSquaredButtonsRow: View {
             var isLineAffected = false
             for informedEntity in $0.alert.informedEntity {
                 if let routeId = informedEntity.routeId {
-                    if (line.routes.contains(routeId)) {
+                    if (line.routeIds.contains(routeId)) {
                         isLineAffected = true
                     }
                 }
                 
                 // show only line alerts or stops in line alerts too??
 //                if let stopId = informedEntity.stopId {
-//                    if (line.patterns.)
+//                    if (line.patternIds.)
 //                }
             }
             
