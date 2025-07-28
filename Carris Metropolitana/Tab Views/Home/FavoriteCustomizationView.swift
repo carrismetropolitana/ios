@@ -36,20 +36,18 @@ struct FavoriteCustomizationView: View {
     @Binding var isSelfPresented: Bool
 
     var body: some View {
-        GeometryReader { geo in
-            List {
-                selectionSection
-                patternSection
-                notificationsSection
-                saveDeleteButtons(width: geo.size.width)
-            }
-            .navigationTitle(title)
-            .onAppear(perform: loadInitialState)
-            .onChange(of: selectedStopId) { _ in fetchPatternsForStop() }
-            .onChange(of: selectedLineId) { _ in fetchPatternsForLine() }
-            .onChange(of: selectedPatternIds) { print("selected: \(selectedPatternIds)") }
-            .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
+        List {
+            selectionSection
+            patternSection
+            notificationsSection
+            saveDeleteButtons
         }
+        .navigationTitle(title)
+        .onAppear(perform: loadInitialState)
+        .onChange(of: selectedStopId) { fetchPatternsForStop() }
+        .onChange(of: selectedLineId) { fetchPatternsForLine() }
+        .onChange(of: selectedPatternIds) { print("selected: \(selectedPatternIds)") }
+        .errorBanner(isPresented: $isErrorBannerPresented, title: $errorTitle, message: $errorMessage)
     }
 
     private var title: String {
@@ -113,22 +111,30 @@ struct FavoriteCustomizationView: View {
         }
     }
 
-    private func saveDeleteButtons(width: CGFloat) -> some View {
+    private var saveDeleteButtons: some View {
         Section(footer:
             VStack(spacing: 20) {
-                Button("Guardar") { save() }
-                    .buttonStyle(.borderedProminent)
-                    .frame(maxWidth: .infinity)
-                    .padding(5)
+                Button { save() } label: {
+                    Text("Guardar")
+                        .font(.title2)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding(5.0)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.blue)
 
-                Button("Eliminar") { delete() }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.red)
-                    .frame(maxWidth: .infinity)
-                    .padding(5)
+                Button { save() } label: {
+                    Text("Eliminar")
+                        .font(.title2)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding(5.0)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.red)
             }
             .padding(.top)
-            .frame(width: width * 0.9)
         ) { EmptyView() }
     }
 
