@@ -85,8 +85,10 @@ struct VehicleDetailsView: View {
     
     @EnvironmentObject var vehiclesManager: VehiclesManager
     @EnvironmentObject var linesManager: LinesManager
+    @EnvironmentObject var stopsManager: StopsManager
+    
     let vehicleId: String
-    @State private var vehiclePattern: Pattern? = nil
+    @State private var vehiclePattern: CMPattern? = nil
     @State private var vehicleStops: [Stop] = []
     @State private var vehicleShape: CMShape? = nil
     
@@ -222,9 +224,14 @@ struct VehicleDetailsView: View {
                 vehiclesManager.startFetching()
                 Task {
                     if let vehiclePatternId = vehicle.patternId {
-                        vehiclePattern = try await CMAPI.shared.getPattern(vehiclePatternId)
+                        vehiclePattern = await CMAPI.shared.getPatternVersions(vehiclePatternId).first { $0.isValidOnCurrentDate() }
+
                         if let pattern = vehiclePattern {
-                            vehicleStops = pattern.path.compactMap {$0.stop}
+                            vehicleStops = pattern.path.compactMap { path in
+                                return stopsManager.stops.first { stop in
+                                    return stop.id == path.stopId
+                                }
+                            }
                             vehicleShape = try await CMAPI.shared.getShape(pattern.shapeId)
                         }
                     }

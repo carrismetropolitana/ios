@@ -24,14 +24,14 @@ struct StopDetailsView: View {
     @GestureState private var zoom = 1.0
     @State var offset: CGSize = .zero
     
-    @State private var stopPatterns: [Pattern] = []
+    @State private var stopPatterns: [CMPattern] = []
 
     
     let stop: Stop
     
     @Binding var mapFlyToCoords: CLLocationCoordinate2D?
     
-   @State private var images: [IMLPicture] = []
+    @State private var images: [IMLPicture] = []
     @State private var intermodalAttributionExpanded = false
     @State private var visibleImageId = 0
     
@@ -39,16 +39,15 @@ struct StopDetailsView: View {
     
     var body: some View {
         let stopAlerts = alertsManager.alerts.filter {
-            var isStopAffected = false
             for informedEntity in $0.informedEntity {
                 if let stopId = informedEntity.stopId {
                     if (stopId == stop.id) {
-                        isStopAffected = true
+                        return true
                     }
                 }
             }
             
-            return isStopAffected
+            return false
         }
         
         ScrollView {
@@ -449,7 +448,7 @@ struct StopDetailsView: View {
         }
         .sheet(isPresented: $isFavoriteCustomizationSheetPresented) {
             NavigationStack {
-                FavoriteCustomizationView(type: .stop, isSelfPresented: $isFavoriteCustomizationSheetPresented, overrideItemId: stop.id)
+                FavoriteCustomizationView(type: .stop, overrideItemId: stop.id, isSelfPresented: $isFavoriteCustomizationSheetPresented)
             }
         }
         .onAppear {
@@ -464,13 +463,14 @@ struct StopDetailsView: View {
                 
                 visibleImageId = images.first?.id ?? 0
                 
-                var patterns: [Pattern] = []
+                var patterns: [CMPattern] = []
                 
                 if let patternIds = stop.patterns {
                     for patternId in patternIds {
-                        let pattern = try await CMAPI.shared.getPattern(patternId)
-                        
-                        patterns.append(pattern)
+                        let patternVersions = await CMAPI.shared.getPatternVersions(patternId)
+                        if let pattern = patternVersions.first(where: { $0.isValidOnCurrentDate() }) {
+                            patterns.append(pattern)
+                        }
                     }
                     
                     stopPatterns = patterns
@@ -501,7 +501,7 @@ struct AboutStopItem: View {
 }
 
 struct StopPatternEntry: View {
-    let pattern: Pattern
+    let pattern: CMPattern
     var body: some View {
         HStack {
                 HStack {

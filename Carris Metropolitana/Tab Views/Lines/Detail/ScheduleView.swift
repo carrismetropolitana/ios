@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ScheduleColumn {
     let hour: Int
+    let hour24: Int
     var minutes: [Int]
 }
 
@@ -78,22 +79,22 @@ extension String {
 
 #Preview {
     ScheduleView(scheduleColumns: [
-        .init(hour: 6, minutes: [45]),
-        .init(hour: 7, minutes: [10, 35]),
-        .init(hour: 8, minutes: [0, 20, 40]),
-        .init(hour: 9, minutes: [0, 30]),
-        .init(hour: 10, minutes: [0, 30]),
-        .init(hour: 11, minutes: [15]),
-        .init(hour: 12, minutes: [0]),
-        .init(hour: 13, minutes: [0, 45]),
-        .init(hour: 14, minutes: [30]),
-        .init(hour: 15, minutes: [30]),
-        .init(hour: 16, minutes: [30]),
-        .init(hour: 17, minutes: [0, 30]),
-        .init(hour: 18, minutes: [0, 20, 40]),
-        .init(hour: 19, minutes: [0, 30]),
-        .init(hour: 20, minutes: [15]),
-        .init(hour: 21, minutes: [0, 45]),
-        .init(hour: 22, minutes: [30])
+        .init(hour: 6, hour24: 6, minutes: [45]),
+        .init(hour: 7, hour24: 7, minutes: [10, 35]),
+        .init(hour: 8, hour24: 8, minutes: [0, 20, 40]),
+        .init(hour: 9, hour24: 9, minutes: [0, 30]),
+        .init(hour: 10, hour24: 10, minutes: [0, 30]),
+        .init(hour: 11, hour24: 11, minutes: [15]),
+        .init(hour: 12, hour24: 12, minutes: [0]),
+        .init(hour: 1, hour24: 13, minutes: [0, 45]),
+        .init(hour: 2, hour24: 14, minutes: [30]),
+        .init(hour: 3, hour24: 15, minutes: [30]),
+        .init(hour: 4, hour24: 16, minutes: [30]),
+        .init(hour: 5, hour24: 17, minutes: [0, 30]),
+        .init(hour: 6, hour24: 18, minutes: [0, 20, 40]),
+        .init(hour: 7, hour24: 19, minutes: [0, 30]),
+        .init(hour: 8, hour24: 20, minutes: [15]),
+        .init(hour: 9, hour24: 21, minutes: [0, 45]),
+        .init(hour: 10, hour24: 22, minutes: [30])
     ])
 }

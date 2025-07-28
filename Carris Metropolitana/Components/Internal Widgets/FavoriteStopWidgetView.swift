@@ -16,7 +16,7 @@ struct FavoriteStopWidgetView: View {
     let patternIds: [String]
 //    let estimates: [RealtimeETA]
     
-    @State private var fullPatterns: [Pattern] = []
+    @State private var fullPatterns: [CMPattern] = []
     
     @State private var timer: Timer?
     
@@ -156,7 +156,7 @@ struct FavoriteStopWidgetView: View {
 //            Rectangle()
 //                .fill(.gray.opacity(0.1))
 //                .frame(height: 3.0)
-//            
+//
 //            NavigationLink(destination: SmartNotificationCustomizationView()) {
 //                HStack(alignment: .center) {
 //                    Pill(text: "2042", color: Color(hex: "C61D23"), textColor: .white, size: 60)
@@ -204,10 +204,12 @@ struct FavoriteStopWidgetView: View {
     }
     
     func loadPatterns() async throws {
-        var patterns: [Pattern] = []
+        var patterns: [CMPattern] = []
         for patternId in patternIds {
-            let pattern = try await CMAPI.shared.getPattern(patternId)
-            patterns.append(pattern)
+            let patternVersions = await CMAPI.shared.getPatternVersions(patternId)
+            if let pattern = patternVersions.first(where: { $0.isValidOnCurrentDate() }) {
+                patterns.append(pattern)
+            }
         }
         
         fullPatterns = patterns

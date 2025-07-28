@@ -188,9 +188,9 @@ func getDestinationForNewWidgetLink(widget: Widget, isSheetOpen: Binding<Bool>) 
 func getDestinationForWidgetEditLink(favorite: FavoriteItem, isSheetOpen: Binding<Bool>) -> some View {
     switch favorite.type {
     case .stop:
-        return AnyView(FavoriteCustomizationView(type: .stop, isSelfPresented: isSheetOpen, overrideFavoriteItem: favorite))
+        return AnyView(FavoriteCustomizationView(type: .stop, overrideFavoriteItem: favorite, isSelfPresented: isSheetOpen))
     case .pattern:
-        return AnyView(FavoriteCustomizationView(type: .line, isSelfPresented: isSheetOpen, overrideFavoriteItem: favorite))
+        return AnyView(FavoriteCustomizationView(type: .line, overrideFavoriteItem: favorite, isSelfPresented: isSheetOpen))
 //    case .smartNotification:
 //        return AnyView(SmartNotificationCustomizationView())
     }

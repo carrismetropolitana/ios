@@ -17,7 +17,6 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
     private static let linesUrl = "\(baseUrl)/lines"
     private static let routesUrl = "\(baseUrl)/routes"
     private static let patternsUrl = "\(baseUrl)/patterns"
-    private static let patternsV2Url = "\(baseUrl)/v2/patterns"
     private static let shapesUrl = "\(baseUrl)/shapes"
     private static let stopsUrl = "\(baseUrl)/stops"
     private static let vehiclesUrl = "\(baseUrl)/vehicles"
@@ -28,6 +27,9 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
     private static let vehiclesUrlV2 = "\(baseUrlV2)/vehicles"
     private static let linesUrlV2 = "\(baseUrlV2)/lines"
     private static let routesUrlV2 = "\(baseUrlV2)/routes"
+    private static let patternsUrlV2 = "\(baseUrlV2)/patterns"
+    private static let shapesUrlV2 = "\(baseUrlV2)/shapes"
+    
     
     static let shared = CMAPI()
     
@@ -79,27 +81,7 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
         
         return routes
     }
-    
-    /**
-     Returns the pattern valid for the current date.
-     
-     This should be used
-     */
-    func getPattern(_ patternId: String) async throws -> Pattern {
-        var pattern: Pattern?
-        do {
-            pattern = try await NetworkService.makeGETRequest("\(CMAPI.patternsUrl)/\(patternId)", responseType: Pattern.self)
-        } catch {
-            print("Failed to fetch pattern \(patternId)!")
-            print(error)
-        }
-        
-        guard pattern != nil else {
-            throw CMAPIError.noRouteFound
-        }
-        
-        return pattern!
-    }
+
     
     /**
      Returns an array of patterns that are valid on different dates.
@@ -107,17 +89,17 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
      
      Pattern.isValidForDay is used to determine if a pattern is valid in a specific date.
      */
-    func getPatternVersions(_ patternId: String) async throws -> [Pattern] {
-        var patterns: [Pattern]?
+    func getPatternVersions(_ patternId: String) async -> [CMPattern] {
+        var patterns: [CMPattern]?
         do {
-            patterns = try await NetworkService.makeGETRequest("\(CMAPI.patternsV2Url)/\(patternId)", responseType: [Pattern].self)
+            patterns = try await NetworkService.makeGETRequest("\(CMAPI.patternsUrlV2)/\(patternId)", responseType: [CMPattern].self)
         } catch {
             print("Failed to fetch pattern versions for \(patternId)!")
             print(error)
         }
         
         guard patterns != nil else {
-            throw CMAPIError.noRouteFound
+            return []
         }
         
         return patterns!
@@ -211,9 +193,9 @@ class CMAPI { // this also does not support Last-Modified-Since so i guess just 
         var shape: CMShape?
         
         do {
-            shape = try await NetworkService.makeGETRequest("\(CMAPI.shapesUrl)/\(shapeId)", responseType: CMShape.self)
+            shape = try await NetworkService.makeGETRequest("\(CMAPI.shapesUrlV2)/\(shapeId)", responseType: CMShape.self)
         } catch {
-            print("Failed to fetch ENCMs!")
+            print("Failed to fetch shape \(shapeId)!")
             print(error)
         }
         

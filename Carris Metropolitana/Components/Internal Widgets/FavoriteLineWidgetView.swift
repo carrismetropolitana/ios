@@ -12,9 +12,10 @@ struct FavoriteLineWidgetView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var vehiclesManager: VehiclesManager
+    @EnvironmentObject var stopsManager: StopsManager
     
     let patternId: String
-    @State private var pattern: Pattern? = nil
+    @State private var pattern: CMPattern? = nil
     @State private var shape: CMShape? = nil
     
     @State private var filteredVehicles: [Vehicle] = []
@@ -25,16 +26,6 @@ struct FavoriteLineWidgetView: View {
         Binding<[VehicleV2]>(
             get: {
                 vehiclesManager.vehicles.filter { $0.patternId == patternId }
-            },
-            set: { newValue in
-            }
-        )
-    }
-    
-    private var patternStopsBinding: Binding<[Stop]> {
-        Binding<[Stop]>(
-            get: {
-                pattern!.path.compactMap { $0.stop }
             },
             set: { newValue in
             }
@@ -103,7 +94,11 @@ struct FavoriteLineWidgetView: View {
             } label : {
                 if let pattern, let shape {
                     ShapeAndVehiclesMapView(
-                        stops: pattern.path.compactMap { $0.stop },
+                        stops: pattern.path.compactMap { path in
+                            return stopsManager.stops.first { stop in
+                                return stop.id == path.stopId
+                            }
+                        },
                         vehicles: vehiclesManager.vehicles.filter { $0.patternId == patternId },
                         shape: shape,
                         isUserInteractionEnabled: false,
@@ -131,8 +126,10 @@ struct FavoriteLineWidgetView: View {
         )
         .onAppear {
             Task {
-                pattern = try await CMAPI.shared.getPattern(patternId)
-                shape = try await CMAPI.shared.getShape(pattern!.shapeId)
+                pattern = await CMAPI.shared.getPatternVersions(patternId).first { $0.isValidOnDate(date: Date.now) }
+                if let pattern {
+                    shape = try await CMAPI.shared.getShape(pattern.shapeId)
+                }
 //                filteredVehicles = vehiclesManager.vehicles.filter { $0.patternId == patternId }
             }
         }

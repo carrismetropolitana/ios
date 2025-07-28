@@ -19,10 +19,10 @@ struct LineDetailsView: View {
     @State private var isAlertsSheetPresented = false
     @State private var isFavoriteCustomizationSheetPresented = false
     
-    @State private var selectedPattern: Pattern?
+    @State private var selectedPattern: CMPattern?
     @State private var selectedStop: Stop?
     @State private var routes: [Route] = []
-    @State private var patterns: [Pattern] = []
+    @State private var patterns: [CMPattern] = []
     @State private var currentPatternEtas: [String: [PatternRealtimeETA]]? = nil
     @State private var unfilteredVehicles: [Vehicle] = []
     @State private var vehicles: [Vehicle] = []
@@ -41,7 +41,7 @@ struct LineDetailsView: View {
         GeometryReader { geo in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if let selectedPattern = selectedPattern {
+                    if let selectedPattern {
                         VStack(alignment: .leading) {
                             
                             VStack(alignment: .leading, spacing: 10) {
@@ -84,7 +84,7 @@ struct LineDetailsView: View {
                                                 Text(route.longName)
                                             }
                                         }
-                                        .tag(pattern as Pattern?) // https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
+                                        .tag(pattern as CMPattern?) // https://stackoverflow.com/questions/59348093/picker-for-optional-data-type-in-swiftui/59348094#59348094
                                     }
                                 }
                                 .frame(maxWidth: .infinity)
@@ -125,24 +125,14 @@ struct LineDetailsView: View {
         }
         .sheet(isPresented: $isFavoriteCustomizationSheetPresented) {
             NavigationStack {
-                FavoriteCustomizationView(type: .line, isSelfPresented: $isFavoriteCustomizationSheetPresented, overrideItemId: line.id)
+                FavoriteCustomizationView(type: .line, overrideItemId: line.id, isSelfPresented: $isFavoriteCustomizationSheetPresented)
             }
         }
         .onAppear {
             LinesSearchHistoryManager.shared.addSearchResult(line.id)
             if patterns.count == 0 {
                 Task {
-                    for routeId in line.routeIds {
-                        if let route = routesManager.routes.first(where: { $0.id == routeId }) {
-                            routes.append(route)
-                            
-                            for patternId in route.patternIds {
-                                let pattern: Pattern = try await CMAPI.shared.getPattern(patternId)
-                                patterns.append(pattern)
-                            }
-                        }
-                    }
-                    
+                    await loadPatterns()
                     
                     if let _ = overrideDisplayedPatternId {
                         selectedPattern = patterns.first {
@@ -163,6 +153,21 @@ struct LineDetailsView: View {
             Task {
                 if let pattern = selectedPattern {
                     shape = (try await CMAPI.shared.getShape(pattern.shapeId))
+                }
+            }
+        }
+    }
+    
+    private func loadPatterns() async {
+        for routeId in line.routeIds {
+            if let route = routesManager.routes.first(where: { $0.id == routeId }) {
+                routes.append(route)
+                
+                for patternId in route.patternIds {
+                    let patternVersions = await CMAPI.shared.getPatternVersions(patternId)
+                    if let pattern = patternVersions.first(where: { $0.isValidOnCurrentDate() }) {
+                        patterns.append(pattern)
+                    }
                 }
             }
         }
@@ -242,9 +247,10 @@ private struct LineDetailsSquaredButtonsRow: View {
 
 private struct LiveVehiclesAndEtasByPatternView: View {
     @EnvironmentObject var vehiclesManager: VehiclesManager
+    @EnvironmentObject var stopsManager: StopsManager
     
     let line: Line
-    let pattern: Pattern?
+    let pattern: CMPattern?
     let shape: CMShape?
     
     @State private var timer: Timer?
@@ -259,7 +265,11 @@ private struct LiveVehiclesAndEtasByPatternView: View {
             if let shape, let pattern {
                 let filteredVehicles = vehiclesManager.vehicles.filter {$0.patternId == pattern.id}
                 ShapeAndVehiclesMapView(
-                    stops: pattern.path.compactMap {$0.stop},
+                    stops: pattern.path.compactMap { path in
+                        return stopsManager.stops.first { stop in
+                            return stop.id == path.stopId
+                        }
+                    },
                     vehicles: filteredVehicles,
                     shape: shape,
                     lineColor: Color(hex: line.color),
@@ -349,7 +359,7 @@ struct PatternLegs: View {
     
     @State private var sheetHeight: CGFloat = .zero
     
-    let pattern: Pattern
+    let pattern: CMPattern
     @State private var isSheetPresented = false
     @State private var selectedSchedulesDate = Date()
     @Binding var selectedStop: Stop? // would be ok to just keep state inside this component but maybe in the future we may need to access from parent so lets keep it this way
@@ -363,11 +373,11 @@ struct PatternLegs: View {
                 let isLast = pathStepIdx == pattern.path.count - 1
                 
                 let pathStep = pattern.path[pathStepIdx]
+                let pathStepStop = stopsManager.stops.first { $0.id == pathStep.stopId }!
                 let pathCount = pattern.path.count
-                let isSelected = selectedStop?.id == pathStep.stop.id // TODO: deprecate this as somethimes stops repeat in a pattern
                 let isSelectedByIndex = selectedStopIndex == pathStepIdx
                 
-//                let etas = etasWithStopIds.first(where: {$0.stopId == pathStep.stop.id})?.etas
+//                let etas = etasWithStopIds.first(where: {$0.stopId == pathStepStop.id})?.etas
                 
                 HStack {
                     HStack {
@@ -404,16 +414,16 @@ struct PatternLegs: View {
                         }
                         VStack(alignment: .leading) {
                             VStack(alignment: .leading) {
-                                Text(pathStep.stop.name)
+                                Text(pathStepStop.name)
                                     .font(isSelectedByIndex ? .headline : .subheadline)
                                     .fontWeight(isSelectedByIndex ? .bold : .semibold)
-                                    .accessibilityLabel(pathStep.stop.ttsName ?? pathStep.stop.name)
-                                Text(pathStep.stop.locality == pathStep.stop.municipalityName || pathStep.stop.locality == nil ? pathStep.stop.municipalityName : "\(pathStep.stop.locality!), \(pathStep.stop.municipalityName)")
+                                    .accessibilityLabel(pathStepStop.ttsName ?? pathStepStop.name)
+                                Text(pathStepStop.locality == pathStepStop.municipalityName || pathStepStop.locality == nil ? pathStepStop.municipalityName : "\(pathStepStop.locality!), \(pathStepStop.municipalityName)")
                                     .foregroundStyle(.secondary)
                                 if isSelectedByIndex {
-                                    if pathStep.stop.facilities.count > 0 {
+                                    if pathStepStop.facilities.count > 0 {
                                         HStack {
-                                            ForEach(pathStep.stop.facilities, id: \.self) { facility in
+                                            ForEach(pathStepStop.facilities, id: \.self) { facility in
                                                 let imageResource = getImageResourceForFacility(facility)
                                                 if let imageResource = imageResource {
                                                     Image(imageResource)
@@ -432,7 +442,7 @@ struct PatternLegs: View {
                                     }
                                 }
                                 
-                                if let etas = etasWithStopIds?[pathStep.stop.id] {
+                                if let etas = etasWithStopIds?[pathStepStop.id] {
                                     let nextEtas = filterAndSortCurrentAndFuturePatternETAs(etas)
                                     HStack(spacing: 20.0) {
                                         if let nextEtaEstimatedArrival = nextEtas.first?.estimatedArrivalUnix {
@@ -476,7 +486,7 @@ struct PatternLegs: View {
                                         .buttonStyle(StopOptionsButtonStyle())
                                         
                                         
-                                        NavigationLink(destination: StopDetailsView(stop: stopsManager.stops.first(where: { $0.id == pathStep.stop.id })!, mapFlyToCoords: .constant(nil))) {
+                                        NavigationLink(destination: StopDetailsView(stop: stopsManager.stops.first(where: { $0.id == pathStepStop.id })!, mapFlyToCoords: .constant(nil))) {
                                             HStack {
                                                 Image(systemName: "mappin.and.ellipse")
                                                 Text("Sobre a Paragem")
@@ -507,16 +517,16 @@ struct PatternLegs: View {
                 .background(.cmSystemBackground200)
                 .clipped()
                 .shadow(color: .black.opacity(0.1), radius: isSelectedByIndex ? 20 : 0)
-                .zIndex((isSelected || isSelectedByIndex) ? 1 : 0)
+                .zIndex(isSelectedByIndex ? 1 : 0)
                 .onTapGesture {
-                    selectedStop = pathStep.stop
+                    selectedStop = pathStepStop
                     selectedStopIndex = pathStepIdx
                     
                 }
             }
         }
         .onChange(of: pattern) {
-            selectedStop = pattern.path.first?.stop // sunset this param;; selction is handled by index in pattern and NOT stop id as they might repeat
+            selectedStop = stopsManager.stops.first { $0.id == pattern.path.first?.stopId } // sunset this param;; selction is handled by index in pattern and NOT stop id as they might repeat
             selectedStopIndex = 0
         }
         .sheet(isPresented: $isSheetPresented) {
@@ -539,7 +549,7 @@ struct PatternLegs: View {
                 }
                 .padding(.horizontal)
                 
-                let scheduleColumns = schedulizeTripsForDateAndStop(stopId: pattern.path[selectedStopIndex].stop.id, trips: pattern.trips, date: selectedSchedulesDate)
+                let scheduleColumns = schedulizeTripsForDateAndStop(stopId: pattern.path[selectedStopIndex].stopId, trips: pattern.trips, date: selectedSchedulesDate)
                 if scheduleColumns.count > 0 {
                     ScheduleView(scheduleColumns: scheduleColumns)
                         .padding()
@@ -611,7 +621,7 @@ func getImageResourceForFacility(_ facility: Facility) -> ImageResource? {
     }
 }
 
-func schedulizeTripsForDateAndStop(stopId: String, trips: [Trip], date: Date) -> [ScheduleColumn] {
+func schedulizeTripsForDateAndStop(stopId: String, trips: [CMPattern.Trip], date: Date) -> [ScheduleColumn] {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyyMMdd"
 
@@ -621,14 +631,16 @@ func schedulizeTripsForDateAndStop(stopId: String, trips: [Trip], date: Date) ->
     var schedules: [ScheduleColumn] = []
     
     for trip in trips {
-        if trip.dates.contains(formattedDate) {
+        if trip.validOn.contains(formattedDate) {
             for tripStep in trip.schedule {
                 if tripStep.stopId == stopId {
                     let timeComponents = tripStep.arrivalTime.components(separatedBy: ":")
+                    let timeComponents24 = tripStep.arrivalTime24H.components(separatedBy: ":")
+                    
                     if let scheduleIdx = schedules.firstIndex(where: {$0.hour == Int(timeComponents[0])}) {
                         schedules[scheduleIdx].minutes.append(Int(timeComponents[1])!)
                     } else {
-                        schedules.append(.init(hour: Int(timeComponents[0])!, minutes: [
+                        schedules.append(.init(hour: Int(timeComponents24[0])!, hour24: Int(timeComponents[0])!, minutes: [
                             Int(timeComponents[1])!
                         ]))
                     }
@@ -639,7 +651,7 @@ func schedulizeTripsForDateAndStop(stopId: String, trips: [Trip], date: Date) ->
     }
     
     let sortedSchedules = schedules.sorted {
-        $0.hour < $1.hour
+        $0.hour24 < $1.hour24
     }
     
     return sortedSchedules

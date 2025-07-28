@@ -8,13 +8,17 @@
 import Foundation
 import MapKit
 
-extension Pattern {
+extension CMPattern {
     func isValidOnDate(date: Date) -> Bool {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
         let stringifiedDate = dateFormatter.string(from: date)
         
         return self.validOn.contains(stringifiedDate)
+    }
+    
+    func isValidOnCurrentDate() -> Bool {
+        return self.isValidOnDate(date: Date.now)
     }
 }
 

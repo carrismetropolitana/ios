@@ -57,6 +57,7 @@ struct Route: Codable {
     let stopIds: [String]
 }
 
+// v1
 struct Stop: Codable, Identifiable, Hashable {
     let id: String
     let name: String
@@ -119,71 +120,83 @@ struct Stop: Codable, Identifiable, Hashable {
 //        }
 }
 
-struct PathEntry: Codable, Hashable  {
-    let stop: Stop
-    let stopSequence: Int
-    let allowPickup: Bool
-    let allowDropOff: Bool
-    let distanceDelta: Double
-    
-//    enum CodingKeys: String, CodingKey {
-//        case stop
-//        case stopSequence = "stop_sequence"
-//        case allowPickup = "allow_pickup"
-//        case allowDropOff = "allow_drop_off"
-//        case distanceDelta = "distance_delta"
-//    }
-}
-
-struct ScheduleEntry: Codable, Hashable {
-    let stopId: String
-    let stopSequence: Int
-    let arrivalTime: String
-    let arrivalTimeOperation: String
-    // let travelTime: String // TODO: ATTN -- or Int in case of 0 (first stop); currently ignored as its not used anywhere yet
-}
-
-struct Trip: Codable, Hashable {
-    let id: String? // TODO: ask about this (also no path was available, maybe some parsing was happening at the time?)
-    let calendarId: String
-    let calendarDescription: String
-    let dates: [String]
-    let schedule: [ScheduleEntry]
-}
-
-
-struct Pattern: Codable, Identifiable, Hashable {
+struct CMPattern: Codable, Identifiable, Hashable, Equatable {
     let id: String
     let lineId: String
     let routeId: String
+    
     let shortName: String
-    let direction: Int
-    let headsign: String
+    let longName: String
+    
     let color: String
     let textColor: String
-    let validOn: [String]
-    let municipalities: [String]
-    let localities: [String?]
-    let facilities: [String]
+    
+    let directionId: Int
+    let headsign: String
+    let ttsHeadsign: String
+
+    let municipalityIds: [String]
+    let districtIds: [String]
+    let localityIds: [String]
+    let regionIds: [String]
+    
+    let facilities: [Facility]
+    
     let shapeId: String
+    
     let path: [PathEntry]
     let trips: [Trip]
+    let validOn: [String]
+    
+    let versionId: String
+    
+    
+    struct PathEntry: Codable, Hashable  {
+        let stopSequence: Int
+        let stopId: String
+        let allowPickup: Bool
+        let allowDropOff: Bool
+        let distance: Double
+        let distanceDelta: Double
+    }
+
+    struct ScheduleEntry: Codable, Hashable {
+        let stopId: String
+        let stopSequence: Int
+        let arrivalTime: String
+        let arrivalTime24H: String
+    }
+
+
+    struct Trip: Codable, Hashable {
+        let schedule: [ScheduleEntry]
+        
+        let tripIds: [String]
+        let serviceIds: [String]
+        
+        let validOn: [String]
+        let versionId: String
+    }
 }
 
 
 struct GeoJSON: Codable { // TODO: figure out if can use MKGeoJSONObject or MKGeoJSONFeature
-    let type = "Feature"
+    let type: String
 //    let properties
     let geometry: Geometry
     
     struct Geometry: Codable {
-        let type = "LineString"
+        let type: String
         let coordinates: [[Double]]
     }
 }
 
 struct CMShape: Codable { // stick all this into a common parent
-    let id: String
+    var id: String {
+        return shapeId
+    }
+    
+    let shapeId: String
     let points: [ShapePoint]
     let geojson: GeoJSON
     let _extension: Int
@@ -198,7 +211,7 @@ struct CMShape: Codable { // stick all this into a common parent
     
     
     enum CodingKeys: String, CodingKey {
-        case id, points, geojson
+        case shapeId, points, geojson
         case _extension = "extension"
     }
 }
