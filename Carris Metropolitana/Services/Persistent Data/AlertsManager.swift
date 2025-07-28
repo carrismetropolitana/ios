@@ -8,7 +8,7 @@
 import Foundation
 
 class AlertsManager: ObservableObject {
-    @Published var alerts: [GtfsRtAlertEntity] = []
+    @Published var alerts: [GtfsRtAlert] = []
 
 
     init() {
@@ -20,15 +20,10 @@ class AlertsManager: ObservableObject {
 
     func fetchAlerts() {
         Task {
-            do {
-                let newAlerts = try await CMAPI.shared.getAlerts()
-                DispatchQueue.main.async {
-                    self.alerts = newAlerts
-                    print("Got \(newAlerts.count) new alerts!")
-                }
-            } catch {
-                print("Failed to fetch alerts!")
-                print(error)
+            let newAlerts = await CMAPI.shared.getAlerts()
+            DispatchQueue.main.async {
+                self.alerts = newAlerts
+                print("Got \(newAlerts.count) new alerts!")
             }
         }
     }

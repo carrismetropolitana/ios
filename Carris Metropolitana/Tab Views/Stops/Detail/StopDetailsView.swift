@@ -40,7 +40,7 @@ struct StopDetailsView: View {
     var body: some View {
         let stopAlerts = alertsManager.alerts.filter {
             var isStopAffected = false
-            for informedEntity in $0.alert.informedEntity {
+            for informedEntity in $0.informedEntity {
                 if let stopId = informedEntity.stopId {
                     if (stopId == stop.id) {
                         isStopAffected = true

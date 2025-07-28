@@ -33,7 +33,7 @@ struct LineDetailsView: View {
     
     @State private var isMapExpanded = false
     
-    @State private var lineAlerts: [GtfsRtAlertEntity] = []
+    @State private var lineAlerts: [GtfsRtAlert] = []
     
 //    @State private var _______tempForUiDemoPurposes_isFavorited = false
     
@@ -174,7 +174,7 @@ private struct LineDetailsSquaredButtonsRow: View {
     @EnvironmentObject var favoritesManager: FavoritesManager
     
     let line: Line
-    @Binding var lineAlerts: [GtfsRtAlertEntity]
+    @Binding var lineAlerts: [GtfsRtAlert]
     
     let onFavoriteCustomizationSheetPresent: () -> Void
     let onAlertsSheetPresent: () -> Void
@@ -221,11 +221,10 @@ private struct LineDetailsSquaredButtonsRow: View {
     
     private func filterAlerts() {
         lineAlerts = alertsManager.alerts.filter {
-            var isLineAffected = false
-            for informedEntity in $0.alert.informedEntity {
+            for informedEntity in $0.informedEntity {
                 if let routeId = informedEntity.routeId {
                     if (line.routeIds.contains(routeId)) {
-                        isLineAffected = true
+                        return true
                     }
                 }
                 
@@ -235,7 +234,7 @@ private struct LineDetailsSquaredButtonsRow: View {
 //                }
             }
             
-            return isLineAffected
+            return false
         }
 
     }

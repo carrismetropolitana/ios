@@ -342,122 +342,107 @@ struct ENCM: Codable, Identifiable {
     let expectedWaitTime: Int
     let activeCounters: Int
     let isOpen: Bool
-
-//    enum CodingKeys: String, CodingKey {
-//        case id, name, lat, lon, phone, email, url, address
-//        case postalCode = "postal_code"
-//        case locality, parishID = "parish_id", parishName = "parish_name"
-//        case municipalityID = "municipality_id", municipalityName = "municipality_name"
-//        case districtID = "district_id", districtName = "district_name"
-//        case regionID = "region_id", regionName = "region_name"
-//        case hoursMonday = "hours_monday"
-//        case hoursTuesday = "hours_tuesday"
-//        case hoursWednesday = "hours_wednesday"
-//        case hoursThursday = "hours_thursday"
-//        case hoursFriday = "hours_friday"
-//        case hoursSaturday = "hours_saturday"
-//        case hoursSunday = "hours_sunday"
-//        case hoursSpecial = "hours_special"
-//        case stops, currentlyWaiting = "currently_waiting", expectedWaitTime = "expected_wait_time", activeCounters = "active_counters", isOpen = "is_open"
-//    }
 }
 
-struct GtfsRt: Codable {
-    let header: Header
-    let entity: [GtfsRtAlertEntity] // We only use GTFS-RT for alerts
-    
-    
-    struct Header: Codable {
-        let gtfsRealtimeVersion: String
-        let incrementality: String
-        let timestamp: Int
-    }
-    
-//    struct Entity: Codable {
-//        let alert: GtfsRtAlert // We only use GTFSRT for alerts
-//    }
-}
-
-struct GtfsRtAlertEntity: Identifiable, Codable, Equatable {
-    static func == (lhs: GtfsRtAlertEntity, rhs: GtfsRtAlertEntity) -> Bool {
+struct GtfsRtAlert: Identifiable, Codable, Equatable {
+    static func == (lhs: GtfsRtAlert, rhs: GtfsRtAlert) -> Bool {
         lhs.id == rhs.id
     }
     
-    let id: String
-    let alert: GtfsRtAlert
+    var id: String {
+        return alertId
+    }
     
-    struct GtfsRtAlert: Codable {
-        let activePeriod: [ActivePeriod]
-        let cause: Cause
-        let descriptionText: TranslatedString
-        let effect: Effect
-        let headerText: TranslatedString
-        let informedEntity: [EntitySelector]
-        let url: TranslatedString
-        let image: TranslatedImage
-        
-        struct ActivePeriod: Codable {
-            let start: Int
-            let end: Int
+    let alertId: String
+    let activePeriod: [ActivePeriod]
+    let cause: Cause
+    let descriptionText: TranslatedString
+    let effect: Effect
+    let headerText: TranslatedString
+    let informedEntity: [EntitySelector]
+    let url: TranslatedString
+    let image: TranslatedImage?
+    
+    struct ActivePeriod: Codable {
+        let start: Int?
+        let end: Int?
+
+        private enum CodingKeys: String, CodingKey {
+            case start, end
         }
-        
-        struct TranslatedString: Codable {
-            let translation: [Translation]
-            
-            struct Translation: Codable {
-                let text: String
-                let language: String
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+
+            func decodeInt(forKey key: CodingKeys) throws -> Int? {
+                if let intVal = try? container.decode(Int.self, forKey: key) {
+                    return intVal
+                } else if let doubleVal = try? container.decode(Double.self, forKey: key) {
+                    return Int(doubleVal)
+                } else {
+                    return nil
+                }
             }
-        }
-        
-        struct TranslatedImage: Codable {
-            let localizedImage: [LocalizedImage]
-            
-            struct LocalizedImage: Codable {
-                let url: String
-                let mediaType: String
-                let language: String
-            }
-        }
-        
-        struct EntitySelector: Codable {
-            let agencyId: String?
-            let routeId: String?
-            let routeType: Int?
-            let directionId: Int?
-            //        let trip: TripDescriptor? // @see GTFS-RT Reference, not used in CM
-            let stopId: String?
-        }
-        
-        enum Cause: String, Codable {
-            case unknownCause = "UNKNOWN_CAUSE"
-            case otherCause = "OTHER_CAUSE"
-            case technicalProblem = "TECHNICAL_PROBLEM"
-            case strike = "STRIKE"
-            case demonstration = "DEMONSTRATION"
-            case accident = "ACCIDENT"
-            case holiday = "HOLIDAY"
-            case weather = "WEATHER"
-            case maintenance = "MAINTENANCE"
-            case construction = "CONSTRUCTION"
-            case policeActivity = "POLICE_ACTIVITY"
-            case medicalEmergency = "MEDICAL_EMERGENCY"
-        }
-        
-        enum Effect: String, Codable {
-            case noService = "NO_SERVICE"
-            case reducedService = "REDUCED_SERVICE"
-            case significantDelays = "SIGNIFICANT_DELAYS"
-            case detour = "DETOUR"
-            case additionalService = "ADDITIONAL_SERVICE"
-            case modifiedService = "MODIFIED_SERVICE"
-            case otherEffect = "OTHER_EFFECT"
-            case unknownEffect = "UNKNOWN_EFFECT"
-            case stopMoved = "STOP_MOVED"
-            case noEffect = "NO_EFFECT"
-            case accessibilityIssue = "ACCESSIBILITY_ISSUE"
+
+            start = try decodeInt(forKey: .start)
+            end = try decodeInt(forKey: .end)
         }
     }
+    
+    struct TranslatedString: Codable {
+        let translation: [Translation]
+        
+        struct Translation: Codable {
+            let text: String
+            let language: String
+        }
+    }
+    
+    struct TranslatedImage: Codable {
+        let localizedImage: [LocalizedImage]
+        
+        struct LocalizedImage: Codable {
+            let url: String
+            let mediaType: String
+            let language: String
+        }
+    }
+    
+    struct EntitySelector: Codable {
+        let agencyId: String?
+        let routeId: String?
+        let routeType: Int?
+        let directionId: Int?
+        //        let trip: TripDescriptor? // @see GTFS-RT Reference, not used in CM
+        let stopId: String?
+    }
+    
+    enum Cause: String, Codable {
+        case unknownCause = "UNKNOWN_CAUSE"
+        case otherCause = "OTHER_CAUSE"
+        case technicalProblem = "TECHNICAL_PROBLEM"
+        case strike = "STRIKE"
+        case demonstration = "DEMONSTRATION"
+        case accident = "ACCIDENT"
+        case holiday = "HOLIDAY"
+        case weather = "WEATHER"
+        case maintenance = "MAINTENANCE"
+        case construction = "CONSTRUCTION"
+        case policeActivity = "POLICE_ACTIVITY"
+        case medicalEmergency = "MEDICAL_EMERGENCY"
+    }
+    
+    enum Effect: String, Codable {
+        case noService = "NO_SERVICE"
+        case reducedService = "REDUCED_SERVICE"
+        case significantDelays = "SIGNIFICANT_DELAYS"
+        case detour = "DETOUR"
+        case additionalService = "ADDITIONAL_SERVICE"
+        case modifiedService = "MODIFIED_SERVICE"
+        case otherEffect = "OTHER_EFFECT"
+        case unknownEffect = "UNKNOWN_EFFECT"
+        case stopMoved = "STOP_MOVED"
+        case noEffect = "NO_EFFECT"
+        case accessibilityIssue = "ACCESSIBILITY_ISSUE"
+    }
 }
-
-

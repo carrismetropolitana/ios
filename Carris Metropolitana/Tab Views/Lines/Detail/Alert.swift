@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct CMAlert: View {
-    let alertEntity: GtfsRtAlertEntity
+    let alert: GtfsRtAlert
     
     @State private var imageViewerPresented = false
     
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Image(systemName: getSystemIconForAlertEffect(alertEntity.alert.effect))
-                Text(getTextForAlertEffect(alertEntity.alert.effect))
+                Image(systemName: getSystemIconForAlertEffect(alert.effect))
+                Text(getTextForAlertEffect(alert.effect))
                     .bold()
                     .font(.title3)
                 Spacer()
@@ -29,16 +29,16 @@ struct CMAlert: View {
             .background(UnevenRoundedRectangle(cornerRadii: .init(topLeading: 20.0, topTrailing: 20.0)).fill(.black))
             VStack {
                 HStack {
-                    Text(alertEntity.alert.headerText.translation[0].text)
+                    Text(alert.headerText.translation[0].text)
                         .font(.title3)
                         .bold()
                     Spacer()
                 }
                 .padding(.vertical)
-                Text(alertEntity.alert.descriptionText.translation[0].text)
+                Text(alert.descriptionText.translation[0].text)
                 
                 HStack {
-                    if let imageUrl = URL(string: alertEntity.alert.image.localizedImage[0].url) {
+                    if let image = alert.image, let imageUrl = URL(string: image.localizedImage[0].url) {
                         AsyncImage(url: imageUrl) { image in
                             image.resizable().scaledToFit()
                         } placeholder: {
@@ -54,11 +54,23 @@ struct CMAlert: View {
                 }
                 
                 HStack {
-                    Text("Publicado a \(getFormattedDateFromUnixTimestamp(TimeInterval(alertEntity.alert.activePeriod[0].start)))".uppercased())
+                    if let start = alert.activePeriod[0].start {
+                        (
+                            Text("INÍCIO: ").foregroundStyle(.secondary) +
+                            Text(getFormattedDateFromUnixTimestamp(TimeInterval(start)).uppercased()).foregroundStyle(.primary)
+                        )
                         .font(.caption)
                         .bold()
-                        .foregroundStyle(.secondary)
+                    }
                     Spacer()
+                    if let end = alert.activePeriod[0].end {
+                        (
+                            Text("FIM: ").foregroundStyle(.secondary) +
+                            Text(getFormattedDateFromUnixTimestamp(TimeInterval(end)).uppercased()).foregroundStyle(.primary)
+                        )
+                        .font(.caption)
+                        .bold()
+                    }
                 }
                 .padding(.vertical, 10.0)
                 .padding(.bottom, 5.0)
@@ -70,7 +82,7 @@ struct CMAlert: View {
                 .stroke(.black, lineWidth: 5.0)
         }
         .sheet(isPresented: $imageViewerPresented) {
-            if let imageUrl = URL(string: alertEntity.alert.image.localizedImage[0].url) {
+            if let image = alert.image, let imageUrl = URL(string: image.localizedImage[0].url) {
                 let imageAttachment = MediaAttachment(
                     id: imageUrl.relativePath,
                     type: "image",
@@ -85,7 +97,7 @@ struct CMAlert: View {
     }
     
     
-    func getSystemIconForAlertEffect(_ alertEffect: GtfsRtAlertEntity.GtfsRtAlert.Effect) -> String {
+    func getSystemIconForAlertEffect(_ alertEffect: GtfsRtAlert.Effect) -> String {
         switch alertEffect {
         case .noService:
             return "xmark.circle"
@@ -113,7 +125,7 @@ struct CMAlert: View {
         }
     }
     
-    func getTextForAlertEffect(_ alertEffect: GtfsRtAlertEntity.GtfsRtAlert.Effect) -> String {
+    func getTextForAlertEffect(_ alertEffect: GtfsRtAlert.Effect) -> String {
         switch alertEffect {
         case .noService:
             return "Serviço Impedido"
@@ -155,11 +167,10 @@ func getFormattedDateFromUnixTimestamp(_ timestamp: TimeInterval) -> String {
 }
 
 #Preview {
-    CMAlert(alertEntity: .init(
-            id: "1234",
+    CMAlert(
             alert: .init(
-                activePeriod: [
-                    .init(start: 1717200000, end: 1718409600)],
+                alertId: "1234",
+                activePeriod: [],
                 cause: .strike,
                 descriptionText: .init(
                     translation: [.init(
@@ -188,7 +199,6 @@ func getFormattedDateFromUnixTimestamp(_ timestamp: TimeInterval) -> String {
                     )]
                 ), image: .init(localizedImage: [.init(url: "https://www.carrismetropolitana.pt/wp-content/uploads/2024/06/XI-Triatlo-Jovem-de-Amora.png", mediaType: "", language: "")])
             )
-        )
     )
     .padding()
 }
