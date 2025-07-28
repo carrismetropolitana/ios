@@ -222,29 +222,29 @@ struct LinesListView: View {
     }
     
     private func aroundMeLines(_ location: CLLocationCoordinate2D) -> some View {
-        let linesAroundUser = closestStops(to: location, stops: stopsManager.stops, maxResults: 3, needsLines: true).compactMap { $0.lines![0] }.uniqueHashableElementsPreservingOrder()
-        return (
-            Section(header: Text("À Minha Volta").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
-                
-                //                        ForEach(closestStops(to: location, stops: [Stop]))
-                ForEach (linesAroundUser, id: \.self) { lineId in
-                    let line = linesManager.lines.first { $0.id == lineId }!
-                    NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
-                        LineEntry(line: line)
-                    }
-                    .accessibilityLabel(Text("Linha à minha volta \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
-                }
-//                Text("Location")
-//                    .badge(Text("\(location.latitude), \(location.longitude)"))
-            }
-            .textCase(nil)
-            .listRowBackground(Color.cmSystemBackground100)
-            .listRowSeparatorTint(Color.cmSystemBorder100)
+        let linesAroundUser = closestStops(to: location, stops: stopsManager.stops, maxResults: 3, needsLines: true)
+            .compactMap { $0.lines?[0] }
+            .uniqueHashableElementsPreservingOrder()
 
-        )
+        if linesAroundUser.count > 0 {
+            return AnyView(
+                Section(header: Text("À Minha Volta").bold().font(.title2).foregroundStyle(.windowBackground).offset(x: -15).colorInvert()) {
+                    ForEach(linesAroundUser, id: \.self) { lineId in
+                        let line = linesManager.lines.first { $0.id == lineId }!
+                        NavigationLink(destination: LineDetailsView(line: line, overrideDisplayedPatternId: nil)) {
+                            LineEntry(line: line)
+                        }
+                        .accessibilityLabel(Text("Linha à minha volta \(line.shortName), \(line.longName)", comment: "Botão, Detalhes da linha. As variáveis são o shortName e o longName da linha, respetivamente."))
+                    }
+                }
+                .textCase(nil)
+                .listRowBackground(Color.cmSystemBackground100)
+                .listRowSeparatorTint(Color.cmSystemBorder100)
+            )
+        } else {
+            return AnyView(EmptyView())
+        }
     }
-    
-    
 }
 
 extension Array where Element: Hashable {
@@ -433,25 +433,34 @@ extension Double {
 }
 
 
-func closestStops(to location: CLLocationCoordinate2D, stops: [Stop], maxResults: Int = 3, needsLines: Bool? = nil) -> [Stop] {
-    var sortedStops = stops.sorted {
-        let location1 = CLLocationCoordinate2D(latitude: Double($0.lat) ?? 0, longitude: Double($0.lon) ?? 0)
-        let location2 = CLLocationCoordinate2D(latitude: Double($1.lat) ?? 0, longitude: Double($1.lon) ?? 0)
-        return location.distance(to: location1) < location.distance(to: location2)
-    }
-    
-    if let needsLines = needsLines {
-        if needsLines {
-            sortedStops = sortedStops.filter {
-                if let lines = $0.lines {
-                    return lines.count > 0
-                }
-                return false
-            }
+func closestStops(
+    to location: CLLocationCoordinate2D,
+    stops: [Stop],
+    maxResults: Int = 3,
+    maxDistance: CLLocationDistance = 1000, // meters
+    needsLines: Bool? = nil
+) -> [Stop] {
+    let filteredStops = stops.compactMap { stop -> (stop: Stop, distance: CLLocationDistance)? in
+        guard
+            let lat = Double(stop.lat),
+            let lon = Double(stop.lon)
+        else {
+            return nil
         }
+        let stopLocation = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        let distance = location.distance(to: stopLocation)
+        guard distance <= maxDistance else { return nil }
+        if needsLines == true, (stop.lines?.isEmpty ?? true) {
+            return nil
+        }
+        return (stop, distance)
     }
-    
-    return Array(sortedStops.prefix(maxResults))
+
+    let sorted = filteredStops.sorted { $0.distance < $1.distance }
+        .prefix(maxResults)
+        .map { $0.stop }
+
+    return Array(sorted)
 }
 
 struct HeightPreferenceKey: PreferenceKey {
