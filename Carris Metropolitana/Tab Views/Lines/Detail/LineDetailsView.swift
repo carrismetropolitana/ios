@@ -317,7 +317,6 @@ private struct LiveVehiclesAndEtasByPatternView: View {
         .navigationDestination(isPresented: $shouldPresentVehicleDetailsView) {
             if let vehicleId = vehicleIdToBePresented {
                 VehicleDetailsView(vehicleId: vehicleId)
-                    .onDisappear { vehicleIdToBePresented = nil }
             }
         }
     }
